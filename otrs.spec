@@ -10,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.3.2
 %define	vrel	01
-Release:	0.7
+Release:	0.8
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -262,20 +262,24 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %attr(644,otrs,http) %{otrsdir}/Kernel/System/*.pm
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Auth
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/AuthSession
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Crypt
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerAuth
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Log
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerUser
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerUser/Preferences
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User/Preferences
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Email
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/GenericAgent
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Log
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster/Filter
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Stats
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/CustomerPermission
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Permission
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Number
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User/Preferences
 %attr(755,root,root) %dir %{otrsdir}/bin
 %attr(700,otrs,root) %{otrsdir}/bin/*.pl
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
