@@ -2,6 +2,9 @@
 # - separate 3 subpackages: common files, administration and client frontend
 # - logrotate file
 # - put all configs to /etc/otrs
+# - all otrs-var into /var/lib/otrs
+# - put cron in ptoper place
+# - write not so brain-damage init-script...
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
@@ -131,8 +134,8 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf,%{name},logrotate.d}} \
-	$RPM_BUILD_ROOT/var/log/otrs
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf,%{name}/Config,logrotate.d} \
+	$RPM_BUILD_ROOT{/var/log/otrs,%{_bindir},%{otrsdir}}
 
 # copy files
 rm -Rf Kernel/cpan-lib/
@@ -161,9 +164,11 @@ touch $RPM_BUILD_ROOT/var/log/otrs/otrs.log
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmailrc
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter
-ln -s /etc/%{name}/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
-ln -s /etc/%{name}/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
-ln -s /etc/%{name}/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
+mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm $RPM_BUILD_ROOT/etc/%{name}
+ln -sf /etc/%{name}/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
+ln -sf /etc/%{name}/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
+ln -sf /etc/%{name}/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
+ln -sf /etc/%{name}/Config.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm
 
 #Final cleanups:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
@@ -212,11 +217,12 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %doc scripts/test
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
 %attr(751,otrs,http) %dir /etc/%{name}
+%attr(751,otrs,http) %dir /etc/%{name}/Config/
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/procmailrc
 %attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/fetchmailrc
 %attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/mailfilter
+%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/Config.pm
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
-%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config.pm
 %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/GenericAgent.pm
 %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
 %attr(754,root,root) /etc/rc.d/init.d/otrs
@@ -226,6 +232,7 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %{otrsdir}/.fetchmailrc
 %{otrsdir}/.mailfilter
 %dir %{otrsdir}/Kernel
+%{otrsdir}/Kernel/Config.pm
 %dir %{otrsdir}/Kernel/Config
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/Modules.pm
