@@ -5,7 +5,7 @@
  # OTRS home (root) directory
  #
 -OTRS_ROOT=/opt/otrs
-+OTRS_ROOT=/home/services/otrs
++OTRS_ROOT=/usr/share/otrs
  
  # if one of this is false, it will not be checked at the startup!
  # Note: (may be the database isn't on the same host! --> DB_RUNNING=0) 
