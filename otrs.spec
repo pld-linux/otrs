@@ -241,6 +241,7 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %dir %{otrsdir}/Kernel/Config
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/Modules.pm
+%{otrsdir}/Kernel/Config/GenericAgent.pm
 %{otrsdir}/Kernel/Language.pm
 %attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*.pm
 %attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*/*.pm
