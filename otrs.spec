@@ -1,7 +1,7 @@
 # TODO:
 # - separate 3 subpackages: common files, administration and client frontend
 # - all otrs-var into /var/lib/otrs
-# - put cron in ptoper place
+# - put cron in proper place
 # - write not so brain-damage init-script...
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
