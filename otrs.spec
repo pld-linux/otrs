@@ -1,13 +1,15 @@
 Summary:	The Open Ticket Request System.
 Name:		otrs
-Version:	1.0.1
+Version:	1.0.2
 License:	GPL
 Group:		Applications/Mail
 Provides:	otrs
-Requires:	perl perl-DBI perl-DBD-MySQL perl-Digest-MD5 perl-URI perl-MIME-Base64 mod_perl apache mysql mysqlclient9 mysql-server fetchmail procmail sendmail
-Autoreqprov:	on
+Requires:	perl perl-DBI perl-DBD-MySQL perl-Digest-MD5 perl-URI perl-MIME-Base64 
+Requires:	mod_perl apache mysql mysqlclient mysql-server 
+Requires:	fetchmail procmail smtpdaemon
 Release:	01
-Source0:	%{name}-%{version}-%{release}.tar.bz2
+Epoch:		1
+Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{release}.tar.bz2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -89,18 +91,21 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 # delete old RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 # set DESTROOT
-#export DESTROOT="/opt/OpenTRS/"
-export DESTROOT="/opt/otrs/"
+export DESTROOT="/home/services/otrs/"
 # create RPM_BUILD_ROOT DESTROOT
 install -d $RPM_BUILD_ROOT/$DESTROOT/
+
 # copy files
 cp -R . $RPM_BUILD_ROOT/$DESTROOT
-# install init-Script
+
+# install init-Script & apache2 config
 install -d -m 755 $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d -m 755 $RPM_BUILD_ROOT/etc/sysconfig
+install -d -m 755 $RPM_BUILD_ROOT/etc/httpd/httpd.conf
 
 install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
+install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_otrs.conf
 
 %post
 # useradd
@@ -109,27 +114,23 @@ echo -n "Check OTRS user (/etc/passwd)... "
 if cat /etc/passwd | grep $OTRSUSER > /dev/null ; then
     echo "$OTRSUSER exists."
     # update home dir
-    usermod -d /opt/otrs $OTRSUSER
+    usermod -d /home/services/otrs $OTRSUSER
 else
-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -G apache -c 'OTRS System User' && echo "$OTRSUSER added."
+    useradd $OTRSUSER -u 31 -d /home/services/otrs/ -s /bin/false -G http -c 'OTRS System User' && echo "$OTRSUSER added."
 fi
 
 # set permission
-/opt/otrs/bin/SetPermissions.sh /opt/otrs $OTRSUSER apache apache apache
+/home/services/otrs/bin/SetPermissions.sh /home/services/otrs $OTRSUSER http http http
 # set Config.pm permission to be writable for the webserver
-chown apache /opt/otrs/Kernel/Config.pm
-
-# add httpd.include.conf to /etc/httpd/conf/httpd.conf
-APACHERC=/etc/httpd/conf/httpd.conf
-OTRSINCLUDE=/opt/otrs/scripts/apache-httpd.include.conf
-
-cat $APACHERC | grep -v "httpd.include.conf" > /tmp/httpd.conf.tmp && \
-echo "Include $OTRSINCLUDE" >> /tmp/httpd.conf.tmp && mv /tmp/httpd.conf.tmp $APACHERC
+chown apache /home/services/otrs/Kernel/Config.pm
 
 # note
 HOST=`hostname -f`
 echo ""
 echo "Next steps: "
+echo ""
+echo "[otrs sysconfig]"
+echo "edit /etc/sysconfig/otrs"
 echo ""
 echo "[httpd services]"
 echo " Restart httpd 'service httpd restart'"
@@ -154,40 +155,41 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%config(noreplace) /opt/otrs/Kernel/Config.pm
-%config(noreplace) /opt/otrs/Kernel/Config/GenericAgent.pm
-%config(noreplace) /opt/otrs/Kernel/Config/ModulesCusto*.pm
-%config(noreplace) /opt/otrs/var/log/TicketCounter.log
-%config(noreplace) /opt/otrs/.procmailrc
-%config(noreplace) /opt/otrs/.fetchmailrc
-%config(noreplace) /opt/otrs/.mailfilter
-%config(noreplace) /opt/otrs/Kernel/Output/HTML/Standard/*.dtl
-%config(noreplace) /opt/otrs/Kernel/Output/HTML/Lite/*.dtl
-%config(noreplace) /opt/otrs/Kernel/Language/*.pm
-%config(noreplace) /opt/otrs/var/cron/*
+%config(noreplace) /home/services/otrs/Kernel/Config.pm
+%config(noreplace) /home/services/otrs/Kernel/Config/GenericAgent.pm
+%config(noreplace) /home/services/otrs/Kernel/Config/ModulesCusto*.pm
+%config(noreplace) /home/services/otrs/var/log/TicketCounter.log
+%config(noreplace) /home/services/otrs/.procmailrc
+%config(noreplace) /home/services/otrs/.fetchmailrc
+%config(noreplace) /home/services/otrs/.mailfilter
+%config(noreplace) /home/services/otrs/Kernel/Output/HTML/Standard/*.dtl
+%config(noreplace) /home/services/otrs/Kernel/Output/HTML/Lite/*.dtl
+%config(noreplace) /home/services/otrs/Kernel/Language/*.pm
+%config(noreplace) /home/services/otrs/var/cron/*
 %config(noreplace) /etc/sysconfig/otrs
 
 /etc/rc.d/init.d/otrs
+/etc/httpd/httpd.conf/88_otrs.conf
 
-/opt/otrs/RELEASE
-/opt/otrs/Kernel/Config/Defaults.pm
-/opt/otrs/Kernel/Config/Modules.pm
-/opt/otrs/Kernel/Language.pm
-/opt/otrs/Kernel/Modules/*
-/opt/otrs/Kernel/Output/HTML/*.pm
-/opt/otrs/Kernel/System/*
-/opt/otrs/bin/*
-/opt/otrs/scripts/*
-/opt/otrs/var/article/
-/opt/otrs/var/httpd/
-/opt/otrs/var/sessions/
-/opt/otrs/var/spool/
-/opt/otrs/var/tmp/
-/opt/otrs/var/pics/stats/
+/home/services/otrs/RELEASE
+/home/services/otrs/Kernel/Config/Defaults.pm
+/home/services/otrs/Kernel/Config/Modules.pm
+/home/services/otrs/Kernel/Language.pm
+/home/services/otrs/Kernel/Modules/*
+/home/services/otrs/Kernel/Output/HTML/*.pm
+/home/services/otrs/Kernel/System/*
+/home/services/otrs/bin/*
+/home/services/otrs/scripts/*
+/home/services/otrs/var/article/
+/home/services/otrs/var/httpd/
+/home/services/otrs/var/sessions/
+/home/services/otrs/var/spool/
+/home/services/otrs/var/tmp/
+/home/services/otrs/var/pics/stats/
 
-/opt/otrs/install*
+/home/services/otrs/install*
 
-/opt/otrs/Kernel/cpan-lib*
+/home/services/otrs/Kernel/cpan-lib*
 
 # redhat doc dir
 %doc INSTAL* UPGRADING TODO COPYING CHANGES READM* doc/*
