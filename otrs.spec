@@ -10,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.3.2
 %define	vrel	01
-Release:	0.6
+Release:	0.7
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -210,17 +210,13 @@ if [ -f /var/lock/subsys/httpd ]; then
 	/etc/rc.d/init.d/httpd restart 1>&2
 fi
 # note
-echo "Next steps: "
-echo ""
-echo "[otrs sysconfig]"
-echo "edit /etc/sysconfig/otrs"
-echo ""
 echo "[install the OTRS database]"
-echo " Use a webbrowser and open this link:"
-echo " http://`hostname -f`/otrs/installer.pl"
-echo ""
-echo "[OTRS services]"
-echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
+echo " Use a webbrowser and open this link: http://`hostname -f`/otrs/installer.pl"
+
+%triggerpostun -- %{name} < 1.3.0
+echo "WARNING: you need to prepare %{name} upgrade! Database format has changed."
+echo "To do that make:"
+echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p <otrs_db>" 
 
 %files
 %defattr(644,root,root,755)
