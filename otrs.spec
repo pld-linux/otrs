@@ -69,15 +69,14 @@ Feature list:
   address or x-header, autoresponders for customers, notifications to
   the agent
 - tickets with customizable views, locking, replying, autoresponders,
-  history, ability to add notes, email bouncing/forwarding,
-  priorities, time accounting, content full-text search
+  history, ability to add notes, email bouncing/forwarding, priorities,
+  time accounting, content full-text search
 - system with creation and configuration of user accounts, groups,
   standard responses, signatures, notifications for administrators and
   problem reporters, deadlines for trouble tickets, settable ticket
-  number format, different levels of permissions/access-rights,
-  central database (MySQL, PostgreSQL, ...), user authentication
-  against database or LDAP directory, easy addons and frontends
-  development.
+  number format, different levels of permissions/access-rights, central
+  database (MySQL, PostgreSQL, ...), user authentication against
+  database or LDAP directory, easy addons and frontends development.
 
 %description -l pl
 OTRS (Open source Ticket Request System) to wolnodostêpny system
@@ -97,8 +96,8 @@ Lista mo¿liwo¶ci:
   powiadomieniami dla agentów
 - bilety z konfigurowalnymi widokami, blokowaniem, odpowiadaniem,
   autoresponderami, histori±, mo¿liwo¶ci± dodawania notatek,
-  odbijaniem/przekierowywaniem poczty, priorytetami, rozliczaniem
-  czasu, pe³notekstowym przeszukiwaniem zawarto¶ci
+  odbijaniem/przekierowywaniem poczty, priorytetami, rozliczaniem czasu,
+  pe³notekstowym przeszukiwaniem zawarto¶ci
 - system z tworzeniem i konfiguracj± kont u¿ytkowników, grup,
   standardowych odpowiedzi, sygnaturek, powiadomieniami dla
   administratorów i zg³aszaj±cych problemy, ostatecznymi terminami dla
@@ -149,7 +148,7 @@ install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 %if %{without apache1}
 	#apache2
-	install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_%{name}.conf
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/httpd.conf/88_%{name}.conf
 %endif
 %if %{with apache1}
 	#apache 1
@@ -220,13 +219,13 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %doc INSTALL* UPGRADING TODO CHANGES README* doc/
 %doc scripts/test Kernel/Config/GenericAgent.pm.examples
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
-%attr(751,otrs,http) %dir /etc/%{name}
-%attr(751,otrs,http) %dir /etc/%{name}/Config/
-%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/procmailrc
-%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/fetchmailrc
-%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/mailfilter
-%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/Config.pm
-%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/GenericAgent.pm
+%attr(751,otrs,http) %dir %{_sysconfdir}/%{name}
+%attr(751,otrs,http) %dir %{_sysconfdir}/%{name}/Config/
+%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/procmailrc
+%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/fetchmailrc
+%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/mailfilter
+%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/Config.pm
+%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/GenericAgent.pm
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
 %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
@@ -299,8 +298,8 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 
 %if %{without apache1}
 	#apache2
-%config(noreplace) /etc/httpd/httpd.conf/88_%{name}.conf
-%endif 
+%config(noreplace) %{_sysconfdir}/httpd/httpd.conf/88_%{name}.conf
+%endif
 %if %{with apache1}
 	#apache1
 %config(noreplace) /etc/httpd/%{name}.conf
