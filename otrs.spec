@@ -22,7 +22,7 @@ Source3:	%{name}-PLD-Config.pm
 Source4:	%{name}-logrotate
 Patch0:		%{name}-conf.patch
 Patch1:		%{name}-default_conf.patch
-Patch2:		%{name}-apache2.patch
+Patch2:		%{name}-apache.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
 PreReq:		apache
