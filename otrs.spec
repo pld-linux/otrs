@@ -1,7 +1,5 @@
 # TODO:
 # - separate 3 subpackages: common files, administration and client frontend
-# - logrotate file
-# - put all configs to /etc/otrs
 # - all otrs-var into /var/lib/otrs
 # - put cron in ptoper place
 # - write not so brain-damage init-script...
@@ -12,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.4
 %define	vrel	01
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -22,6 +20,7 @@ Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-PLD-Config.pm
 Source4:	%{name}-pl.pm
+Source5:	%{name}-logrotate
 Patch0:		%{name}-conf.patch
 Patch1:		%{name}-default_conf.patch
 BuildRequires:	rpm-perlprov
@@ -50,6 +49,9 @@ Requires:	smtpdaemon
 Buildarch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# This auto don't work , i'm lame
+%define		_noautoreq	'perl(Kernel::.*)'
+%define		_noautoprov	'perl(Kernel::.*)'
 %define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
 
@@ -134,7 +136,7 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf,%{name}/Config,logrotate.d} \
+install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,httpd/httpd.conf,%{name}/Config,logrotate.d} \
 	$RPM_BUILD_ROOT{/var/log/otrs,%{_bindir},%{otrsdir}}
 
 # copy files
@@ -156,6 +158,8 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 	install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %endif
 
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+
 # logs in proper place:
 touch $RPM_BUILD_ROOT/var/log/otrs/TicketCounter.log
 touch $RPM_BUILD_ROOT/var/log/otrs/otrs.log
@@ -165,11 +169,12 @@ mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmail
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter
 mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm $RPM_BUILD_ROOT/etc/%{name}
+mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}
 ln -sf ../../../etc/otrs/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
 ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
 ln -sf ../../../etc/otrs/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
 ln -sf ../../../../etc/otrs/Config.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm
-
+ln -sf ../../../../../etc/otrs/GenericAgent.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/GenericAgent.pm
 
 #Final cleanups:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
@@ -215,7 +220,7 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %files
 %defattr(644,root,root,755)
 %doc INSTALL* UPGRADING TODO CHANGES README* doc/
-%doc scripts/test
+%doc scripts/test Kernel/Config/GenericAgent.pm.examples
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
 %attr(751,otrs,http) %dir /etc/%{name}
 %attr(751,otrs,http) %dir /etc/%{name}/Config/
@@ -223,10 +228,11 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/fetchmailrc
 %attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/mailfilter
 %attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/Config.pm
+%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/GenericAgent.pm
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
-%config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/GenericAgent.pm
 %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
-%attr(754,root,root) /etc/rc.d/init.d/otrs
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(640,root,root) /etc/logrotate.d/%{name}
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
 %{otrsdir}/.procmailrc
