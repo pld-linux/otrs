@@ -139,7 +139,8 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,httpd/httpd.conf,%{name}/Config,logrotate.d} \
-	$RPM_BUILD_ROOT{/var/log/{,archiv/}%{name},%{_bindir},%{otrsdir}}
+	$RPM_BUILD_ROOT{/var/log/{,archiv/}%{name},%{_bindir},%{otrsdir}} \
+	$RPM_BUILD_ROOT/var/lib/%{name}/{article,pics/stats}
 
 # copy files
 rm -Rf Kernel/cpan-lib/
@@ -287,7 +288,12 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %attr(644,otrs,http) %{otrsdir}/scripts/*.sql
 %attr(755,otrs,http) %{otrsdir}/scripts/apache2-perl-startup
 %attr(644,otrs,http) %{otrsdir}/scripts/database/*
-%attr(775,otrs,http) %dir %{otrsdir}/var/
+%attr(751,otrs,http) %dir /var/log/%{name}
+%attr(751,otrs,http) %dir /var/log/archiv/%{name}
+%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/otrs.log
+%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/TicketCounter.log
+# This entries should be changed into links and proper trigger to move data:
+%attr(751,otrs,http) %dir %{otrsdir}/var/
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
 %attr(755,otrs,http) %{otrsdir}/var/httpd
@@ -296,10 +302,15 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %attr(2775,otrs,http) %{otrsdir}/var/tmp
 %attr(755,otrs,http) %dir %{otrsdir}/var/pics
 %attr(755,otrs,http) %{otrsdir}/var/pics/stats
-%attr(751,otrs,http) %dir /var/log/%{name}
-%attr(751,otrs,http) %dir /var/log/archiv/%{name}
-%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/otrs.log
-%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/TicketCounter.log
+# attempt to move to /var/lib:
+%attr(751,otrs,http) %dir /var/lib/%{name}
+%attr(2775,otrs,http) %dir /var/lib/%{name}/article
+%attr(755,otrs,http) %dir /var/lib/%{name}/cron
+%attr(751,otrs,http) %dir /var/lib/%{name}/pics
+%attr(751,otrs,http) %dir /var/lib/%{name}/pics/stats
+%attr(755,otrs,http) %dir /var/lib/%{name}/sessions
+%attr(755,otrs,http) %dir /var/lib/%{name}/spool
+%attr(2775,otrs,http) %dir /var/lib/%{name}/tmp
 
 %if %{without apache1}
 	#apache2
