@@ -1,15 +1,15 @@
---- ./Kernel/Config/Defaults.pm.org	Mon Apr 26 13:56:11 2004
-+++ ./Kernel/Config/Defaults.pm	Mon Apr 26 13:56:02 2004
-@@ -303,7 +303,7 @@
- #    $Self->{LogModule} = 'Kernel::System::Log::File';
+--- otrs/Kernel/Config/Defaults.pm.orig	2004-09-16 08:06:01.000000000 +0000
++++ otrs/Kernel/Config/Defaults.pm	2004-10-14 06:27:08.016383496 +0000
+@@ -549,7 +549,7 @@
+ #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
  
      # param for LogModule Kernel::System::Log::File (required!)
--    $Self->{'LogModule::LogFile'} = '/tmp/otrs.log'; 
-+    $Self->{'LogModule::LogFile'} = '/var/log/otrs/otrs.log'; 
+-    $Self->{'LogModule::LogFile'} = '/tmp/otrs.log';
++    $Self->{'LogModule::LogFile'} = '/var/log/otrs/otrs.log';
  
-     # param if the date (yyyy-mm) should be added as suffix to 
+     # param if the date (yyyy-mm) should be added as suffix to
      # logfile [0|1]
-@@ -358,7 +358,7 @@
+@@ -610,7 +610,7 @@
      # root directory
      $Self->{Home} = '/opt/otrs';
      # counter log

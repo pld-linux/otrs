@@ -8,14 +8,14 @@
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
-Version:	1.2.4
+Version:	1.3.1
 %define	vrel	01
 Release:	0.6
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	7c2c55a5104044635220593e0511540c
+# Source0-md5:	18205697842efc22fac0b7af2790093e
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-PLD-Config.pm
