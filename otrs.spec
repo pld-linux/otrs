@@ -6,18 +6,18 @@
 # - put cron in ptoper place
 # - write not so brain-damage init-script...
 %bcond_with	apache1		# build for work with apache1 conf system
-%include	/usr/lib/rpm/macros.perl
+#%include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
-Version:	1.2.2
+Version:	1.2.4
 %define	vrel	01
-Release:	0.9
+Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	ef154439ec31224f1c60b0777d95dddc
+# Source0-md5:	7c2c55a5104044635220593e0511540c
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-PLD-Config.pm
@@ -165,10 +165,11 @@ mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmail
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter
 mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm $RPM_BUILD_ROOT/etc/%{name}
-ln -sf /etc/%{name}/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
-ln -sf /etc/%{name}/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
-ln -sf /etc/%{name}/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
-ln -sf /etc/%{name}/Config.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm
+ln -sf ../../../etc/otrs/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
+ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
+ln -sf ../../../etc/otrs/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
+ln -sf ../../../../etc/otrs/Config.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm
+
 
 #Final cleanups:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
