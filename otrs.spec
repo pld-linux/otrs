@@ -5,14 +5,14 @@
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
-Version:	1.1.3
+Version:	1.2.2
 %define	vrel	01
-Release:	0.2
+Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Mail
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	bc14d35c6fe669bcb92aaa169e1ac440
+# Source0-md5:	ef154439ec31224f1c60b0777d95dddc
 BuildRequires:	rpm-perlprov
 PreReq:		apache
 Requires(post):	/bin/id
@@ -20,15 +20,15 @@ Requires(post):	/usr/sbin/useradd
 Requires(post):	/usr/sbin/usermod
 Requires:	apache-mod_perl
 Requires:	fetchmail
-Requires:	mysql
-Requires:	mysql-client
-Requires:	perl-DBI
-Requires:	perl-DBD-mysql
-Requires:	perl-Digest-MD5
-Requires:	perl-Email-Valid
-Requires:	perl-MIME-Base64
-Requires:	perl-MIME-tools
-Requires:	perl-URI
+#Requires:	mysql
+#Requires:	mysql-client
+#Requires:	perl-DBI
+#Requires:	perl-DBD-mysql
+#Requires:	perl-Digest-MD5
+#Requires:	perl-Email-Valid
+#Requires:	perl-MIME-Base64
+#Requires:	perl-MIME-tools
+#Requires:	perl-URI
 Requires:	procmail
 Requires:	smtpdaemon
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -105,6 +105,9 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{otrsdir}
 
 # copy files
+rm -Rf Kernel/cpan-lib/
+rm -Rf doc/manual/*/sgml/
+rm -Rf doc/manual/de/
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
 touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
 
@@ -163,7 +166,7 @@ echo ""
 
 %files
 %defattr(644,root,root,755)
-%doc INSTAL* UPGRADING TODO CHANGES READM* doc/*
+%doc INSTAL* UPGRADING TODO CHANGES READM* doc/
 
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
@@ -175,6 +178,9 @@ echo ""
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/Modules.pm
 %{otrsdir}/Kernel/Language.pm
+%{otrsdir}/Kernel/*/*.pm
+%{otrsdir}/Kernel/*/*/*.pm
+%{otrsdir}/Kernel/*/*/*/*.pm
 %dir %{otrsdir}/Kernel/Language
 %config(noreplace) %{otrsdir}/Kernel/Language/*.pm
 %{otrsdir}/Kernel/Modules
@@ -186,7 +192,7 @@ echo ""
 %dir %{otrsdir}/Kernel/Output/HTML/Lite
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
 %attr(755,root,root) %dir %{otrsdir}/Kernel/System
-%attr(755,root,root) %dir %{otrsdir}/Kernel/cpan-lib
+#%attr(755,root,root) %dir %{otrsdir}/Kernel/cpan-lib
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Auth
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/AuthSession
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerAuth
@@ -199,11 +205,12 @@ echo ""
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Compress
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Crypt
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/CustomerPermission
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Permission
+#%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Compress
+#%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Crypt
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Number
-%{otrsdir}/Kernel/System
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/.procmailrc
 %attr(710,otrs,http) %config(noreplace) %{otrsdir}/.fetchmailrc
 %attr(600,otrs,http) %config(noreplace) %{otrsdir}/.mailfilter
@@ -216,7 +223,6 @@ echo ""
 %attr(644,otrs,http) %{otrsdir}/scripts/*
 %attr(755,otrs,http) %dir %{otrsdir}/scripts/auto_build
 %attr(755,otrs,http) %dir %{otrsdir}/scripts/database
-%attr(755,otrs,http) %dir %{otrsdir}/var
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
 %attr(775,otrs,http) %dir %{otrsdir}/var/
@@ -225,7 +231,7 @@ echo ""
 #%attr(755,otrs,http) %{otrsdir}/var/httpd/images
 #%attr(755,otrs,http) %{otrsdir}/var/httpd/images/Standard
 %attr(2775,otrs,http) %dir %{otrsdir}/var/log
-%config(noreplace) %{otrsdir}/var/log/TicketCounter.log
+%attr(664,otrs,http) %config(noreplace) %{otrsdir}/var/log/TicketCounter.log
 %attr(755,otrs,http) %{otrsdir}/var/sessions
 %attr(755,otrs,http) %{otrsdir}/var/spool
 %attr(2775,otrs,http) %{otrsdir}/var/tmp
