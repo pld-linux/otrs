@@ -1,6 +1,4 @@
 # TODO:
-# - put files with proper permissions/ownership in package instead of
-#   modifying them in %%post (thus breaking installed package - see `rpm -V`)
 # - move it to /usr/share
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
@@ -9,7 +7,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.2
 %define	vrel	01
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL
 Group:		Applications/Mail
