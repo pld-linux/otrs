@@ -108,7 +108,7 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf}
+install -d $RPM_BUILD_ROOT{%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf}}
 
 # copy files
 rm -Rf Kernel/cpan-lib/
