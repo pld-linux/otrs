@@ -1,6 +1,7 @@
 # TODO:
 # - put files with proper permissions/ownership in package instead of
 #   modifying them in %%post (thus breaking installed package - see `rpm -V`)
+# - move it to /usr/share
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
@@ -33,6 +34,7 @@ Requires:	fetchmail
 #Requires:	perl-URI
 Requires:	procmail
 Requires:	smtpdaemon
+Buildarch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		otrsdir		/home/services/otrs
