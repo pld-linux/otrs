@@ -156,7 +156,7 @@ echo ""
 
 %files
 %defattr(644,root,root,755)
-%doc INSTAL* UPGRADING TODO COPYING CHANGES READM* doc/*
+%doc INSTAL* UPGRADING TODO CHANGES READM* doc/*
 
 %dir %{otrsdir}
 %{otrsdir}/RELEASE
