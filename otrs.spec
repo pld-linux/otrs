@@ -19,8 +19,7 @@ Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-PLD-Config.pm
-Source4:	%{name}-pl.pm
-Source5:	%{name}-logrotate
+Source4:	%{name}-logrotate
 Patch0:		%{name}-conf.patch
 Patch1:		%{name}-default_conf.patch
 BuildRequires:	rpm-perlprov
@@ -144,7 +143,6 @@ rm -Rf Kernel/cpan-lib/
 rm -Rf doc/manual/*/sgml/
 rm -Rf doc/manual/de/
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
-install %{SOURCE4} $RPM_BUILD_ROOT%{otrsdir}/Kernel/Language/pl.pm
 
 # install init-Script & apache2 config
 install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
@@ -158,7 +156,7 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 	install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %endif
 
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 # logs in proper place:
 touch $RPM_BUILD_ROOT/var/log/otrs/TicketCounter.log
