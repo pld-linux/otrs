@@ -5,14 +5,14 @@
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
-Version:	1.0.2
+Version:	1.1.3
 %define	vrel	01
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL
 Group:		Applications/Mail
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	a9b2e33726cbd89052df650c40eb9c2d
+# Source0-md5:	bc14d35c6fe669bcb92aaa169e1ac440
 BuildRequires:	rpm-perlprov
 PreReq:		apache
 Requires(post):	/bin/id
@@ -25,7 +25,9 @@ Requires:	mysql-client
 Requires:	perl-DBI
 Requires:	perl-DBD-mysql
 Requires:	perl-Digest-MD5
+Requires:	perl-Email-Valid
 Requires:	perl-MIME-Base64
+Requires:	perl-MIME-tools
 Requires:	perl-URI
 Requires:	procmail
 Requires:	smtpdaemon
@@ -104,6 +106,7 @@ install -d $RPM_BUILD_ROOT%{otrsdir}
 
 # copy files
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
+touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
 
 # install init-Script & apache2 config
 install -d -m 755 $RPM_BUILD_ROOT/etc/rc.d/init.d
@@ -117,7 +120,7 @@ install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/httpd.conf/8
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%pre
 if [ -n "`/bin/id -u %{otrsuser} 2>/dev/null`" ]; then
 	if [ "`/bin/id -u %{otrsuser}`" != "31" ]; then
 		echo "Error: user %{otrsuser} doesn't have uid=31. Correct this before installing otrs." >&2
@@ -126,12 +129,13 @@ if [ -n "`/bin/id -u %{otrsuser} 2>/dev/null`" ]; then
 	# update home dir
 	/usr/sbin/usermod -d %{otrsdir} %{otrsuser}
 else
-	/usr/sbin/useradd -u 31 -d %{otrsdir} -s /bin/dalse -G http -c 'OTRS System user' %{otrsuser}
+	/usr/sbin/useradd -u 31 -d %{otrsdir} -s /bin/false -G http -c 'OTRS System user' %{otrsuser}
 fi
 
 # set permission
-/home/services/otrs/bin/SetPermissions.sh /home/services/otrs %{otrsuser} http http http
+# /home/services/otrs/bin/SetPermissions.sh /home/services/otrs %{otrsuser} http http http
 
+%post
 # note
 echo ""
 echo "Next steps: "
@@ -161,10 +165,10 @@ echo ""
 %defattr(644,root,root,755)
 %doc INSTAL* UPGRADING TODO CHANGES READM* doc/*
 
-%dir %{otrsdir}
+%attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
 %dir %{otrsdir}/Kernel
-%attr(644,http,root) %config(noreplace) %{otrsdir}/Kernel/Config.pm
+%config(noreplace) %{otrsdir}/Kernel/Config.pm
 %dir %{otrsdir}/Kernel/Config
 %config(noreplace) %{otrsdir}/Kernel/Config/GenericAgent.pm
 %config(noreplace) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
@@ -176,31 +180,57 @@ echo ""
 %{otrsdir}/Kernel/Modules
 %dir %{otrsdir}/Kernel/Output
 %dir %{otrsdir}/Kernel/Output/HTML
-%{otrsdir}/Kernel/Output/HTML/*.pm
+%attr(644,otrs,http) %{otrsdir}/Kernel/Output/HTML/*.pm
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
-%config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
+%attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
 %dir %{otrsdir}/Kernel/Output/HTML/Lite
-%config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
+%attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
+%attr(755,root,root) %dir %{otrsdir}/Kernel/System
+%attr(755,root,root) %dir %{otrsdir}/Kernel/cpan-lib
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Auth
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/AuthSession
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerAuth
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Log
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerUser
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerUser/Preferences
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User/Preferences
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Email
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Compress
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Crypt
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
+%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Number
 %{otrsdir}/Kernel/System
-%{otrsdir}/Kernel/cpan-lib*
-%config(noreplace) %{otrsdir}/.procmailrc
-%config(noreplace) %{otrsdir}/.fetchmailrc
-%config(noreplace) %{otrsdir}/.mailfilter
-%{otrsdir}/bin
-%{otrsdir}/install*
-%{otrsdir}/scripts
-%dir %{otrsdir}/var
-%dir %{otrsdir}/var/cron
-%{otrsdir}/var/article
-%config(noreplace) %{otrsdir}/var/cron/*
-%{otrsdir}/var/httpd
-%dir %{otrsdir}/var/log
+%attr(644,otrs,http) %config(noreplace) %{otrsdir}/.procmailrc
+%attr(710,otrs,http) %config(noreplace) %{otrsdir}/.fetchmailrc
+%attr(600,otrs,http) %config(noreplace) %{otrsdir}/.mailfilter
+%attr(755,root,root) %{otrsdir}/bin
+%attr(700,otrs,root) %{otrsdir}/bin/DeleteSessionIDs.pl
+%attr(700,otrs,root) %{otrsdir}/bin/UnlockTickets.pl
+%attr(700,otrs,root) %{otrsdir}/bin/otrs.getConfig
+%attr(644,otrs,http) %{otrsdir}/INSTALL
+%attr(755,otrs,http) %dir %{otrsdir}/scripts
+%attr(644,otrs,http) %{otrsdir}/scripts/*
+%attr(755,otrs,http) %dir %{otrsdir}/scripts/auto_build
+%attr(755,otrs,http) %dir %{otrsdir}/scripts/database
+%attr(755,otrs,http) %dir %{otrsdir}/var
+%attr(755,otrs,http) %dir %{otrsdir}/var/cron
+%attr(2775,otrs,http) %{otrsdir}/var/article
+%attr(775,otrs,http) %dir %{otrsdir}/var/
+%attr(644,otrs,http) %config(noreplace) %{otrsdir}/var/cron/*
+%attr(755,otrs,http) %{otrsdir}/var/httpd
+#%attr(755,otrs,http) %{otrsdir}/var/httpd/images
+#%attr(755,otrs,http) %{otrsdir}/var/httpd/images/Standard
+%attr(2775,otrs,http) %dir %{otrsdir}/var/log
 %config(noreplace) %{otrsdir}/var/log/TicketCounter.log
-%{otrsdir}/var/sessions
-%{otrsdir}/var/spool
-%{otrsdir}/var/tmp
-%dir %{otrsdir}/var/pics
-%{otrsdir}/var/pics/stats
+%attr(755,otrs,http) %{otrsdir}/var/sessions
+%attr(755,otrs,http) %{otrsdir}/var/spool
+%attr(2775,otrs,http) %{otrsdir}/var/tmp
+%attr(755,otrs,http) %dir %{otrsdir}/var/pics
+%attr(755,otrs,http) %{otrsdir}/var/pics/stats
 
 %attr(754,root,root) /etc/rc.d/init.d/otrs
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
