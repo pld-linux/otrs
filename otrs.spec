@@ -5,7 +5,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.2
 %define	vrel	01
-Release:	0.4
+Release:	0.5
 Epoch:		1
 License:	GPL
 Group:		Applications/Mail
@@ -14,6 +14,7 @@ Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-PLD-Config.pm
+Source4:	%{name}-pl.pm
 Patch0:		%{name}-conf.patch
 BuildRequires:	rpm-perlprov
 PreReq:		apache
@@ -113,6 +114,7 @@ rm -Rf Kernel/cpan-lib/
 rm -Rf doc/manual/*/sgml/
 rm -Rf doc/manual/de/
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
+install %{SOURCE4} $RPM_BUILD_ROOT%{otrsdir}/Kernel/Language/pl.pm
 
 # install init-Script & apache2 config
 install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
@@ -148,18 +150,15 @@ fi
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
         echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
 fi
+if [ -f /var/lock/subsys/httpd ]; then
+	/etc/rc.d/init.d/httpd restart 1>&2
+fi
 # note
 echo ""
 echo "Next steps: "
 echo ""
 echo "[otrs sysconfig]"
 echo "edit /etc/sysconfig/otrs"
-echo ""
-echo "[httpd services]"
-echo " Restart httpd '/etc/rc.d/init.d/httpd restart'"
-echo ""
-echo "[mysqld service]"
-echo " Start mysqld '/etc/rc.d/init.d/mysql start'"
 echo ""
 echo "[install the OTRS database]"
 echo " Use a webbrowser and open this link:"
