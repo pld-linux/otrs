@@ -96,6 +96,7 @@ Lista mo¿liwo¶ci:
 %build
 # copy config file
 cp Kernel/Config.pm.dist Kernel/Config.pm
+cp Kernel/Config/GenericAgent.pm.dist Kernel/Config/GenericAgent.pm
 cd Kernel/Config/ && for foo in *.dist; do cp $foo `basename $foo .dist`; done && cd ../../
 # copy all crontab dist files
 for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
@@ -118,8 +119,10 @@ install -d -m 755 $RPM_BUILD_ROOT/etc/httpd/httpd.conf
 
 install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
-install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_otrs.conf
-
+#apache 2
+#install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_%{name}.conf
+#apache 1
+install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -139,6 +142,10 @@ fi
 # /home/services/otrs/bin/SetPermissions.sh /home/services/otrs %{otrsuser} http http http
 
 %post
+# if apache1
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
+        echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+fi
 # note
 echo ""
 echo "Next steps: "
@@ -166,7 +173,7 @@ echo ""
 
 %files
 %defattr(644,root,root,755)
-%doc INSTAL* UPGRADING TODO CHANGES READM* doc/
+%doc INSTALL* UPGRADING TODO CHANGES README* doc/
 
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
@@ -178,20 +185,21 @@ echo ""
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/Modules.pm
 %{otrsdir}/Kernel/Language.pm
-%{otrsdir}/Kernel/*/*.pm
-%{otrsdir}/Kernel/*/*/*.pm
-%{otrsdir}/Kernel/*/*/*/*.pm
+#%attr(644,otrs,http) %{otrsdir}/Kernel/*/*.pm
+%attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*.pm
+%attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*/*.pm
 %dir %{otrsdir}/Kernel/Language
 %config(noreplace) %{otrsdir}/Kernel/Language/*.pm
 %{otrsdir}/Kernel/Modules
 %dir %{otrsdir}/Kernel/Output
 %dir %{otrsdir}/Kernel/Output/HTML
-%attr(644,otrs,http) %{otrsdir}/Kernel/Output/HTML/*.pm
+#%attr(644,otrs,http) %{otrsdir}/Kernel/Output/HTML/*.pm
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
 %dir %{otrsdir}/Kernel/Output/HTML/Lite
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
 %attr(755,root,root) %dir %{otrsdir}/Kernel/System
+%attr(644,otrs,http) %{otrsdir}/Kernel/System/*.pm
 #%attr(755,root,root) %dir %{otrsdir}/Kernel/cpan-lib
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Auth
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/AuthSession
@@ -214,15 +222,25 @@ echo ""
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/.procmailrc
 %attr(710,otrs,http) %config(noreplace) %{otrsdir}/.fetchmailrc
 %attr(600,otrs,http) %config(noreplace) %{otrsdir}/.mailfilter
-%attr(755,root,root) %{otrsdir}/bin
-%attr(700,otrs,root) %{otrsdir}/bin/DeleteSessionIDs.pl
-%attr(700,otrs,root) %{otrsdir}/bin/UnlockTickets.pl
-%attr(700,otrs,root) %{otrsdir}/bin/otrs.getConfig
+%attr(755,root,root) %dir %{otrsdir}/bin
+%attr(700,otrs,root) %{otrsdir}/bin/*.pl
+%attr(700,otrs,root) %{otrsdir}/bin/*.sh
+%attr(700,otrs,root) %{otrsdir}/bin/otrs.*
+%attr(755,root,root) %dir %{otrsdir}/bin/cgi-bin/
+%attr(750,otrs,http) %{otrsdir}/bin/cgi-bin/*.pl
 %attr(644,otrs,http) %{otrsdir}/INSTALL
 %attr(755,otrs,http) %dir %{otrsdir}/scripts
-%attr(644,otrs,http) %{otrsdir}/scripts/*
+%attr(640,otrs,http) %{otrsdir}/scripts/*.sql
+%attr(700,otrs,http) %{otrsdir}/scripts/*.pl
+%attr(644,otrs,http) %{otrsdir}/scripts/*.pm
 %attr(755,otrs,http) %dir %{otrsdir}/scripts/auto_build
+%attr(644,otrs,http) %{otrsdir}/scripts/auto_build/*.txt
 %attr(755,otrs,http) %dir %{otrsdir}/scripts/database
+%attr(640,otrs,http) %{otrsdir}/scripts/database/*
+%attr(755,otrs,http) %dir %{otrsdir}/scripts/test
+%attr(700,otrs,http) %{otrsdir}/scripts/test/*.pl
+%attr(755,otrs,http) %dir %{otrsdir}/scripts/tools
+%attr(700,otrs,http) %{otrsdir}/scripts/tools/*.pl
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
 %attr(775,otrs,http) %dir %{otrsdir}/var/
@@ -240,4 +258,7 @@ echo ""
 
 %attr(754,root,root) /etc/rc.d/init.d/otrs
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
-/etc/httpd/httpd.conf/88_otrs.conf
+#apache2
+#/etc/httpd/httpd.conf/88_%{name}.conf
+#apache1
+/etc/httpd/%{name}.conf
