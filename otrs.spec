@@ -1,3 +1,8 @@
+# TODO:
+# - separate 3 subpackages: common files, administration and client frontend
+# - logrotate file
+# - put logs into /var/log
+# - put configs to /etc
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
@@ -5,10 +10,10 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.2
 %define	vrel	01
-Release:	0.5
+Release:	0.6
 Epoch:		1
 License:	GPL
-Group:		Applications/Mail
+Group:		Applications/Databases
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
 # Source0-md5:	ef154439ec31224f1c60b0777d95dddc
 Source1:	%{name}-http.conf
@@ -93,6 +98,18 @@ Lista mo¿liwo¶ci:
   bazy danych lub katalogu LDAP, ³atwym tworzeniem dodatków i
   frontendów.
 
+%package scripts
+Summary:	OTRS scripts
+Summary(pl):	Skrypty dla OTRS
+Group:		Applications/Databases
+Requires:	%{name}-%{version}-%{release}
+
+%description scripts
+Various scripts for OTRS.
+
+%description scripts -l pl
+Ró¿ne skrypty dla OTRS.
+
 %prep
 %setup -q -n %{name}
 %patch0 -p1
@@ -107,7 +124,7 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf}}
 
 # copy files
 rm -Rf Kernel/cpan-lib/
@@ -129,6 +146,11 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 %endif
 
 touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
+
+#Final cleanups:
+rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
+rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/*.sql
+rm -rf $RPM_BUILD_ROOT%{otrsdir}/scripts/auto* $RPM_BUILD_ROOT%{otrsdir}/scripts/database $RPM_BUILD_ROOT%{otrsdir}/scripts/test
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -154,7 +176,6 @@ if [ -f /var/lock/subsys/httpd ]; then
 	/etc/rc.d/init.d/httpd restart 1>&2
 fi
 # note
-echo ""
 echo "Next steps: "
 echo ""
 echo "[otrs sysconfig]"
@@ -166,16 +187,17 @@ echo " http://`hostname -f`/otrs/installer.pl"
 echo ""
 echo "[OTRS services]"
 echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
-echo ""
-echo "Have fun!"
-echo ""
-echo " Your OTRS Team"
-echo ""
 
 %files
 %defattr(644,root,root,755)
 %doc INSTALL* UPGRADING TODO CHANGES README* doc/
-
+%doc scripts/*.sql scripts/database scripts/test
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
+%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.procmailrc
+%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.fetchmailrc
+%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.mailfilter
+%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
+%attr(754,root,root) /etc/rc.d/init.d/otrs
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
 %dir %{otrsdir}/Kernel
@@ -215,9 +237,6 @@ echo ""
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Permission
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Number
-%attr(644,otrs,http) %config(noreplace) %{otrsdir}/.procmailrc
-%attr(710,otrs,http) %config(noreplace) %{otrsdir}/.fetchmailrc
-%attr(600,otrs,http) %config(noreplace) %{otrsdir}/.mailfilter
 %attr(755,root,root) %dir %{otrsdir}/bin
 %attr(700,otrs,root) %{otrsdir}/bin/*.pl
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
@@ -225,22 +244,9 @@ echo ""
 %attr(755,root,root) %dir %{otrsdir}/bin/cgi-bin/
 %attr(750,otrs,http) %{otrsdir}/bin/cgi-bin/*.pl
 %attr(644,otrs,http) %{otrsdir}/INSTALL
-%attr(755,otrs,http) %dir %{otrsdir}/scripts
-%attr(640,otrs,http) %{otrsdir}/scripts/*.sql
-%attr(700,otrs,http) %{otrsdir}/scripts/*.pl
-%attr(644,otrs,http) %{otrsdir}/scripts/*.pm
-%attr(755,otrs,http) %dir %{otrsdir}/scripts/auto_build
-%attr(644,otrs,http) %{otrsdir}/scripts/auto_build/*.txt
-%attr(755,otrs,http) %dir %{otrsdir}/scripts/database
-%attr(640,otrs,http) %{otrsdir}/scripts/database/*
-%attr(755,otrs,http) %dir %{otrsdir}/scripts/test
-%attr(700,otrs,http) %{otrsdir}/scripts/test/*.pl
-%attr(755,otrs,http) %dir %{otrsdir}/scripts/tools
-%attr(700,otrs,http) %{otrsdir}/scripts/tools/*.pl
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
 %attr(775,otrs,http) %dir %{otrsdir}/var/
-%attr(644,otrs,http) %config(noreplace) %{otrsdir}/var/cron/*
 %attr(755,otrs,http) %{otrsdir}/var/httpd
 %attr(2775,otrs,http) %dir %{otrsdir}/var/log
 %attr(664,otrs,http) %config(noreplace) %{otrsdir}/var/log/TicketCounter.log
@@ -250,13 +256,21 @@ echo ""
 %attr(755,otrs,http) %dir %{otrsdir}/var/pics
 %attr(755,otrs,http) %{otrsdir}/var/pics/stats
 
-%attr(754,root,root) /etc/rc.d/init.d/otrs
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
 %if %{without apache1}
 	#apache2
-	/etc/httpd/httpd.conf/88_%{name}.conf
+%config(noreplace) /etc/httpd/httpd.conf/88_%{name}.conf
 %endif 
 %if %{with apache1}
 	#apache1
-	/etc/httpd/%{name}.conf
+%config(noreplace) /etc/httpd/%{name}.conf
 %endif
+
+%files scripts
+%defattr(644,root,root,755)
+%attr(755,otrs,http) %dir %{otrsdir}/scripts
+%attr(700,otrs,http) %{otrsdir}/scripts/*.pl
+%attr(700,otrs,http) %{otrsdir}/scripts/*.sh
+%attr(644,otrs,http) %{otrsdir}/scripts/*.pm
+%attr(644,otrs,http) %{otrsdir}/scripts/*.php
+%attr(755,otrs,http) %dir %{otrsdir}/scripts/tools
+%attr(700,otrs,http) %{otrsdir}/scripts/tools/*.pl
