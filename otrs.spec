@@ -1,7 +1,7 @@
 Summary:	The Open Ticket Request System.
 Name:		otrs
 Version:	1.0.1
-Copyright:	GPL
+License:	GPL
 Group:		Applications/Mail
 Provides:	otrs
 Requires:	perl perl-DBI perl-DBD-MySQL perl-Digest-MD5 perl-URI perl-MIME-Base64 mod_perl apache mysql mysqlclient9 mysql-server fetchmail procmail sendmail
