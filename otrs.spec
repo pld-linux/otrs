@@ -10,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.2
 %define	vrel	01
-Release:	0.6
+Release:	0.8
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -21,6 +21,7 @@ Source2:	%{name}-http1.conf
 Source3:	%{name}-PLD-Config.pm
 Source4:	%{name}-pl.pm
 Patch0:		%{name}-conf.patch
+Patch1:		%{name}-default_conf.patch
 BuildRequires:	rpm-perlprov
 PreReq:		apache
 Requires(post):	/bin/id
@@ -113,6 +114,7 @@ Ró¿ne skrypty dla OTRS.
 %prep
 %setup -q -n %{name}
 %patch0 -p1
+%patch1 -p1
 
 %build
 # copy config file
@@ -124,7 +126,8 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf,%{name},logrotate.d}} \
+	$RPM_BUILD_ROOT/var/log/otrs
 
 # copy files
 rm -Rf Kernel/cpan-lib/
@@ -145,12 +148,12 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 	install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %endif
 
-touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
+touch $RPM_BUILD_ROOT/var/log/otrs/TicketCounter.log
+touch $RPM_BUILD_ROOT/var/log/otrs/otrs.log
 
 #Final cleanups:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
-rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/*.sql
-rm -rf $RPM_BUILD_ROOT%{otrsdir}/scripts/auto* $RPM_BUILD_ROOT%{otrsdir}/scripts/database $RPM_BUILD_ROOT%{otrsdir}/scripts/test
+rm -rf $RPM_BUILD_ROOT%{otrsdir}/scripts/auto* $RPM_BUILD_ROOT%{otrsdir}/scripts/test
 rm -rf $RPM_BUILD_ROOT%{otrsdir}/doc
 
 %clean
@@ -192,13 +195,14 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %files
 %defattr(644,root,root,755)
 %doc INSTALL* UPGRADING TODO CHANGES README* doc/
-%doc scripts/*.sql scripts/database scripts/test
+%doc scripts/test
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.procmailrc
 %attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.fetchmailrc
 %attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.mailfilter
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
 %attr(754,root,root) /etc/rc.d/init.d/otrs
+%attr(751,otrs,http) %dir /etc/%{name}
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
 %dir %{otrsdir}/Kernel
@@ -245,17 +249,22 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %attr(755,root,root) %dir %{otrsdir}/bin/cgi-bin/
 %attr(750,otrs,http) %{otrsdir}/bin/cgi-bin/*.pl
 %attr(644,otrs,http) %{otrsdir}/INSTALL
+%attr(755,otrs,http) %dir %{otrsdir}/scripts
+%attr(755,otrs,http) %dir %{otrsdir}/scripts/database
+%attr(644,otrs,http) %{otrsdir}/scripts/*.sql
+%attr(644,otrs,http) %{otrsdir}/scripts/database/*
+%attr(775,otrs,http) %dir %{otrsdir}/var/
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
-%attr(775,otrs,http) %dir %{otrsdir}/var/
 %attr(755,otrs,http) %{otrsdir}/var/httpd
-%attr(2775,otrs,http) %dir %{otrsdir}/var/log
-%attr(664,otrs,http) %config(noreplace) %{otrsdir}/var/log/TicketCounter.log
 %attr(755,otrs,http) %{otrsdir}/var/sessions
 %attr(755,otrs,http) %{otrsdir}/var/spool
 %attr(2775,otrs,http) %{otrsdir}/var/tmp
 %attr(755,otrs,http) %dir %{otrsdir}/var/pics
 %attr(755,otrs,http) %{otrsdir}/var/pics/stats
+%attr(751,otrs,http) %dir /var/log/%{name}
+%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/otrs.log
+%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/TicketCounter.log
 
 %if %{without apache1}
 	#apache2
@@ -268,7 +277,6 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 
 %files scripts
 %defattr(644,root,root,755)
-%attr(755,otrs,http) %dir %{otrsdir}/scripts
 %attr(700,otrs,http) %{otrsdir}/scripts/*.pl
 %attr(700,otrs,http) %{otrsdir}/scripts/*.sh
 %attr(644,otrs,http) %{otrsdir}/scripts/*.pm
