@@ -200,5 +200,5 @@ echo ""
 %{otrsdir}/var/pics/stats
 
 %attr(754,root,root) /etc/rc.d/init.d/otrs
-%config(noreplace) %verify(not size mtime mdt) /etc/sysconfig/otrs
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
 /etc/httpd/httpd.conf/88_otrs.conf
