@@ -35,7 +35,7 @@ Requires:	smtpdaemon
 Buildarch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		otrsdir		/%{_datadir}/otrs
+%define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
 
 %description
