@@ -7,12 +7,14 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.2
 %define	vrel	01
-Release:	0.2
+Release:	0.3
 Epoch:		1
 License:	GPL
 Group:		Applications/Mail
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
 # Source0-md5:	ef154439ec31224f1c60b0777d95dddc
+Source1:	%{name}-http.conf
+Source2:	%{name}-http1.conf
 Patch0:		%{name}-conf.patch
 BuildRequires:	rpm-perlprov
 PreReq:		apache
@@ -119,11 +121,11 @@ install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 %if %{without apache1}
 	#apache2
-	install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_%{name}.conf
+	install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_%{name}.conf
 %endif
 %if %{with apache1}
 	#apache 1
-	install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+	install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %endif
 
 touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
