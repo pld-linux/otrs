@@ -158,12 +158,12 @@ touch $RPM_BUILD_ROOT/var/log/otrs/TicketCounter.log
 touch $RPM_BUILD_ROOT/var/log/otrs/otrs.log
 
 # move configs into proper place...
-mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}
-mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc $RPM_BUILD_ROOT/etc/%{name}
-mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter $RPM_BUILD_ROOT/etc/%{name}
-ln -s /etc/%{name}/.procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
-ln -s /etc/%{name}/.fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
-ln -s /etc/%{name}/.mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmailrc
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter
+ln -s /etc/%{name}/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
+ln -s /etc/%{name}/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
+ln -s /etc/%{name}/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
 
 #Final cleanups:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
@@ -212,9 +212,9 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %doc scripts/test
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
 %attr(751,otrs,http) %dir /etc/%{name}
-%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/.procmailrc
-%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/.fetchmailrc
-%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/.mailfilter
+%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/procmailrc
+%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/fetchmailrc
+%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/mailfilter
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
 %attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config.pm
 %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/GenericAgent.pm
