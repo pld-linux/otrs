@@ -151,6 +151,7 @@ touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/*.sql
 rm -rf $RPM_BUILD_ROOT%{otrsdir}/scripts/auto* $RPM_BUILD_ROOT%{otrsdir}/scripts/database $RPM_BUILD_ROOT%{otrsdir}/scripts/test
+rm -rf $RPM_BUILD_ROOT%{otrsdir}/scripts/doc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
