@@ -1,6 +1,7 @@
 # TODO:
 # - put files with proper permissions/ownership in package instead of
 #   modyfying them in %%post (thus breaking installed package - see `rpm -V`)
+%include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
@@ -14,11 +15,11 @@ PreReq:		apache
 Requires(post):	/bin/id
 Requires(post):	/usr/sbin/useradd
 Requires(post):	/usr/sbin/usermod
+BuildRequires:	rpm-perlprov
 Requires:	apache-mod_perl
 Requires:	fetchmail
 Requires:	mysql
 Requires:	mysql-client
-Requires:	perl
 Requires:	perl-DBI
 Requires:	perl-DBD-mysql
 Requires:	perl-Digest-MD5
