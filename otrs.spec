@@ -1,7 +1,7 @@
 # TODO:
 # - put files with proper permissions/ownership in package instead of
 #   modifying them in %%post (thus breaking installed package - see `rpm -V`)
-%bcond_with	apache1		#build for work with apache1 conf system
+%bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
@@ -14,6 +14,7 @@ License:	GPL
 Group:		Applications/Mail
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
 # Source0-md5:	ef154439ec31224f1c60b0777d95dddc
+Patch0:		%{name}-conf.patch
 BuildRequires:	rpm-perlprov
 PreReq:		apache
 Requires(post):	/bin/id
@@ -93,6 +94,7 @@ Lista mo¿liwo¶ci:
 
 %prep
 %setup -q -n %{name}
+%patch0 -p1
 
 %build
 # copy config file
