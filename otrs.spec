@@ -13,6 +13,7 @@ Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
 # Source0-md5:	ef154439ec31224f1c60b0777d95dddc
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
+Source3:	%{name}-PLD-Config.pm
 Patch0:		%{name}-conf.patch
 BuildRequires:	rpm-perlprov
 PreReq:		apache
@@ -98,7 +99,7 @@ Lista mo¿liwo¶ci:
 
 %build
 # copy config file
-cp Kernel/Config.pm.dist Kernel/Config.pm
+cp %{SOURCE3} Kernel/Config.pm
 cp Kernel/Config/GenericAgent.pm.dist Kernel/Config/GenericAgent.pm
 cd Kernel/Config/ && for foo in *.dist; do cp $foo `basename $foo .dist`; done && cd ../../
 # copy all crontab dist files
