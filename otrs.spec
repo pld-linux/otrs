@@ -1,5 +1,3 @@
-# TODO:
-# - move it to /usr/share
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
@@ -7,7 +5,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.2
 %define	vrel	01
-Release:	0.3
+Release:	0.4
 Epoch:		1
 License:	GPL
 Group:		Applications/Mail
@@ -37,7 +35,7 @@ Requires:	smtpdaemon
 Buildarch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		otrsdir		/home/services/otrs
+%define		otrsdir		/%{_datadir}/otrs
 %define		otrsuser	otrs
 
 %description
