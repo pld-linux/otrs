@@ -1,8 +1,7 @@
 # TODO:
 # - separate 3 subpackages: common files, administration and client frontend
 # - logrotate file
-# - put logs into /var/log
-# - put configs to /etc
+# - put all configs to /etc/otrs
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
@@ -10,7 +9,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.2
 %define	vrel	01
-Release:	0.8
+Release:	0.9
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -154,8 +153,17 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 	install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %endif
 
+# logs in proper place:
 touch $RPM_BUILD_ROOT/var/log/otrs/TicketCounter.log
 touch $RPM_BUILD_ROOT/var/log/otrs/otrs.log
+
+# move configs into proper place...
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc $RPM_BUILD_ROOT/etc/%{name}
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter $RPM_BUILD_ROOT/etc/%{name}
+ln -s /etc/%{name}/.procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
+ln -s /etc/%{name}/.fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
+ln -s /etc/%{name}/.mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
 
 #Final cleanups:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
@@ -203,26 +211,29 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %doc INSTALL* UPGRADING TODO CHANGES README* doc/
 %doc scripts/test
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
-%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.procmailrc
-%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.fetchmailrc
-%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/.mailfilter
-%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
-%attr(754,root,root) /etc/rc.d/init.d/otrs
 %attr(751,otrs,http) %dir /etc/%{name}
+%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/.procmailrc
+%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/.fetchmailrc
+%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) /etc/%{name}/.mailfilter
+%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
+%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config.pm
+%config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/GenericAgent.pm
+%config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
+%attr(754,root,root) /etc/rc.d/init.d/otrs
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
+%{otrsdir}/.procmailrc
+%{otrsdir}/.fetchmailrc
+%{otrsdir}/.mailfilter
 %dir %{otrsdir}/Kernel
-%config(noreplace) %{otrsdir}/Kernel/Config.pm
 %dir %{otrsdir}/Kernel/Config
-%config(noreplace) %{otrsdir}/Kernel/Config/GenericAgent.pm
-%config(noreplace) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/Modules.pm
 %{otrsdir}/Kernel/Language.pm
 %attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*.pm
 %attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*/*.pm
 %dir %{otrsdir}/Kernel/Language
-%config(noreplace) %{otrsdir}/Kernel/Language/*.pm
+%{otrsdir}/Kernel/Language/*.pm
 %{otrsdir}/Kernel/Modules
 %dir %{otrsdir}/Kernel/Output
 %dir %{otrsdir}/Kernel/Output/HTML
