@@ -10,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.3.2
 %define	vrel	01
-Release:	0.8
+Release:	0.9
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -247,8 +247,8 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %{otrsdir}/Kernel/Config/Modules.pm
 %{otrsdir}/Kernel/Config/GenericAgent.pm
 %{otrsdir}/Kernel/Language.pm
-%attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*.pm
-%attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*/*.pm
+%{otrsdir}/Kernel/*/*/*.pm
+%{otrsdir}/Kernel/*/*/*/*.pm
 %dir %{otrsdir}/Kernel/Language
 %{otrsdir}/Kernel/Language/*.pm
 %{otrsdir}/Kernel/Modules
@@ -259,39 +259,39 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %dir %{otrsdir}/Kernel/Output/HTML/Lite
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
 %attr(755,root,root) %dir %{otrsdir}/Kernel/System
-%attr(644,otrs,http) %{otrsdir}/Kernel/System/*.pm
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Auth
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/AuthSession
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Crypt
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerAuth
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerUser
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerUser/Preferences
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Email
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/GenericAgent
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Log
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/PostMaster/Filter
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Stats
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/CustomerPermission
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Permission
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Number
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User
-%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/User/Preferences
-%attr(755,root,root) %dir %{otrsdir}/bin
+%{otrsdir}/Kernel/System/*.pm
+%dir %{otrsdir}/Kernel/System/Auth
+%dir %{otrsdir}/Kernel/System/AuthSession
+%dir %{otrsdir}/Kernel/System/Crypt
+%dir %{otrsdir}/Kernel/System/CustomerAuth
+%dir %{otrsdir}/Kernel/System/CustomerUser
+%dir %{otrsdir}/Kernel/System/CustomerUser/Preferences
+%dir %{otrsdir}/Kernel/System/Email
+%dir %{otrsdir}/Kernel/System/GenericAgent
+%dir %{otrsdir}/Kernel/System/Log
+%dir %{otrsdir}/Kernel/System/PostMaster
+%dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
+%dir %{otrsdir}/Kernel/System/PostMaster/Filter
+%dir %{otrsdir}/Kernel/System/Stats
+%dir %{otrsdir}/Kernel/System/Ticket
+%dir %{otrsdir}/Kernel/System/Ticket/CustomerPermission
+%dir %{otrsdir}/Kernel/System/Ticket/Permission
+%dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
+%dir %{otrsdir}/Kernel/System/Ticket/Number
+%dir %{otrsdir}/Kernel/System/User
+%dir %{otrsdir}/Kernel/System/User/Preferences
+%dir %{otrsdir}/bin
 %attr(700,otrs,root) %{otrsdir}/bin/*.pl
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
 %attr(700,otrs,root) %{otrsdir}/bin/otrs.*
-%attr(755,root,root) %dir %{otrsdir}/bin/cgi-bin/
-%attr(750,otrs,http) %{otrsdir}/bin/cgi-bin/*.pl
-%attr(644,otrs,http) %{otrsdir}/INSTALL
-%attr(755,otrs,http) %dir %{otrsdir}/scripts
-%attr(755,otrs,http) %dir %{otrsdir}/scripts/database
-%attr(644,otrs,http) %{otrsdir}/scripts/*.sql
-%attr(755,otrs,http) %{otrsdir}/scripts/apache2-perl-startup
-%attr(644,otrs,http) %{otrsdir}/scripts/database/*
+%dir %{otrsdir}/bin/cgi-bin/
+%attr(750,root,http) %{otrsdir}/bin/cgi-bin/*.pl
+%{otrsdir}/INSTALL
+%dir %{otrsdir}/scripts
+%dir %{otrsdir}/scripts/database
+%{otrsdir}/scripts/*.sql
+%{otrsdir}/scripts/apache2-perl-startup
+%{otrsdir}/scripts/database/*
 %attr(751,otrs,http) %dir /var/log/%{name}
 %attr(751,otrs,http) %dir /var/log/archiv/%{name}
 %attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/otrs.log
@@ -328,8 +328,8 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %files scripts
 %defattr(644,root,root,755)
 %attr(700,otrs,http) %{otrsdir}/scripts/*.pl
-%attr(700,otrs,http) %{otrsdir}/scripts/*.sh
-%attr(644,otrs,http) %{otrsdir}/scripts/*.pm
-%attr(644,otrs,http) %{otrsdir}/scripts/*.php
-%attr(755,otrs,http) %dir %{otrsdir}/scripts/tools
 %attr(700,otrs,http) %{otrsdir}/scripts/tools/*.pl
+%attr(700,otrs,http) %{otrsdir}/scripts/*.sh
+%{otrsdir}/scripts/*.pm
+%{otrsdir}/scripts/*.php
+%dir %{otrsdir}/scripts/tools
