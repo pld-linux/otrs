@@ -1,6 +1,7 @@
 # TODO:
 # - put files with proper permissions/ownership in package instead of
 #   modifying them in %%post (thus breaking installed package - see `rpm -V`)
+%bcond_with	apache1		#build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
@@ -119,10 +120,15 @@ install -d -m 755 $RPM_BUILD_ROOT/etc/httpd/httpd.conf
 
 install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
-#apache 2
-#install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_%{name}.conf
-#apache 1
-install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+%if %{without apache1}
+	#apache2
+	install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/httpd.conf/88_%{name}.conf
+%endif
+%if %{with apache1}
+	#apache 1
+	install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -185,7 +191,6 @@ echo ""
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/Modules.pm
 %{otrsdir}/Kernel/Language.pm
-#%attr(644,otrs,http) %{otrsdir}/Kernel/*/*.pm
 %attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*.pm
 %attr(644,otrs,http) %{otrsdir}/Kernel/*/*/*/*.pm
 %dir %{otrsdir}/Kernel/Language
@@ -193,14 +198,12 @@ echo ""
 %{otrsdir}/Kernel/Modules
 %dir %{otrsdir}/Kernel/Output
 %dir %{otrsdir}/Kernel/Output/HTML
-#%attr(644,otrs,http) %{otrsdir}/Kernel/Output/HTML/*.pm
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
 %dir %{otrsdir}/Kernel/Output/HTML/Lite
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
 %attr(755,root,root) %dir %{otrsdir}/Kernel/System
 %attr(644,otrs,http) %{otrsdir}/Kernel/System/*.pm
-#%attr(755,root,root) %dir %{otrsdir}/Kernel/cpan-lib
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Auth
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/AuthSession
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/CustomerAuth
@@ -215,8 +218,6 @@ echo ""
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/CustomerPermission
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Permission
-#%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Compress
-#%attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Crypt
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
 %attr(755,otrs,http) %dir %{otrsdir}/Kernel/System/Ticket/Number
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/.procmailrc
@@ -246,8 +247,6 @@ echo ""
 %attr(775,otrs,http) %dir %{otrsdir}/var/
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/var/cron/*
 %attr(755,otrs,http) %{otrsdir}/var/httpd
-#%attr(755,otrs,http) %{otrsdir}/var/httpd/images
-#%attr(755,otrs,http) %{otrsdir}/var/httpd/images/Standard
 %attr(2775,otrs,http) %dir %{otrsdir}/var/log
 %attr(664,otrs,http) %config(noreplace) %{otrsdir}/var/log/TicketCounter.log
 %attr(755,otrs,http) %{otrsdir}/var/sessions
@@ -258,7 +257,11 @@ echo ""
 
 %attr(754,root,root) /etc/rc.d/init.d/otrs
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
-#apache2
-#/etc/httpd/httpd.conf/88_%{name}.conf
-#apache1
-/etc/httpd/%{name}.conf
+%if %{without apache1}
+	#apache2
+	/etc/httpd/httpd.conf/88_%{name}.conf
+%endif 
+%if %{with apache1}
+	#apache1
+	/etc/httpd/%{name}.conf
+%endif
