@@ -10,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.4
 %define	vrel	01
-Release:	0.2
+Release:	0.3
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -136,7 +136,7 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,httpd/httpd.conf,%{name}/Config,logrotate.d} \
-	$RPM_BUILD_ROOT{/var/log/otrs,%{_bindir},%{otrsdir}}
+	$RPM_BUILD_ROOT{/var/log/{,archiv/}%{name},%{_bindir},%{otrsdir}}
 
 # copy files
 rm -Rf Kernel/cpan-lib/
@@ -159,8 +159,8 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 # logs in proper place:
-touch $RPM_BUILD_ROOT/var/log/otrs/TicketCounter.log
-touch $RPM_BUILD_ROOT/var/log/otrs/otrs.log
+touch $RPM_BUILD_ROOT/var/log/%{name}/TicketCounter.log
+touch $RPM_BUILD_ROOT/var/log/%{name}/otrs.log
 
 # move configs into proper place...
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmailrc
@@ -293,6 +293,7 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %attr(755,otrs,http) %dir %{otrsdir}/var/pics
 %attr(755,otrs,http) %{otrsdir}/var/pics/stats
 %attr(751,otrs,http) %dir /var/log/%{name}
+%attr(751,otrs,http) %dir /var/log/archiv/%{name}
 %attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/otrs.log
 %attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/TicketCounter.log
 
