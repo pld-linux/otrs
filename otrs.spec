@@ -144,9 +144,6 @@ else
 	/usr/sbin/useradd -u 31 -d %{otrsdir} -s /bin/false -G http -c 'OTRS System user' %{otrsuser}
 fi
 
-# set permission
-# /home/services/otrs/bin/SetPermissions.sh /home/services/otrs %{otrsuser} http http http
-
 %post
 # if apache1
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
