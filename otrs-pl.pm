@@ -903,7 +903,7 @@ sub Data {
       'Restart your webserver' => 'Zresetuj serwer WWW',
       'Start page' => 'Strona startowa',
       'To be able to use OTRS you have to enter the following line in your command line (Terminal/Shell) as root.' => 'By móc urzywaæ OTRS musisz wykonaæ nastepuj±c± liniê poleceñ (Terminal/Pow³oka) jako root.',
-      'Your OTRS Team' => 'Twója zespó³ OTRS',
+      'Your OTRS Team' => 'Twój zespó³ OTRS',
 
     # Template: InstallerLicense
       'accept license' => 'zaakceptuj licencjê',
