@@ -50,7 +50,7 @@ sub Data {
       'All' => 'Wszystkie',
       'Attention' => 'Uwaga',
       'before' => 'przed',
-      'Bug Report' => 'Zglo¶ b³±d',
+      'Bug Report' => 'Zg³o¶ b³±d',
       'Cancel' => 'Anuluj',
       'change' => 'zmieñ',
       'Change' => 'Zmieñ',
@@ -377,7 +377,7 @@ sub Data {
       'Notifications are sent to an agent or a customer.' => 'Powiadomienia s± wysy³ane do agentów lub klientów',
       'Options of the current customer user data (e. g. &lt;OTRS_CUSTOMER_DATA_USERFIRSTNAME&gt;)' => 'Opcje dla aktualnego klienta (np. &lt;OTRS_CUSTOMER_DATA_USERFIRSTNAME&gt;)',
       'Options of the current user who requested this action (e. g. &lt;OTRS_CURRENT_USERFIRSTNAME&gt;)' => 'Opcje dla aktualnego u¿ytkownika (np. &lt;OTRS_CURRENT_USERFIRSTNAME&gt;)',
-      'Ticket owner options (e. g. &lt;OTRS_OWNER_USERFIRSTNAME&gt;)' => 'Opcje w³a¶cieciala zg³oszenia (np. &lt;OTRS_OWNER_USERFIRSTNAME&gt;)',
+      'Ticket owner options (e. g. &lt;OTRS_OWNER_USERFIRSTNAME&gt;)' => 'Opcje w³a¶ciciela zg³oszenia (np. &lt;OTRS_OWNER_USERFIRSTNAME&gt;)',
 
     # Template: AdminPOP3Form
       'All incoming emails with one account will be dispatched in the selected queue!' => 'Wszystkie przychodz±ce emaile na jedno konto bêd± umieszczone w zaznaczonej kolejce!',
