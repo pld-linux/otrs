@@ -27,8 +27,14 @@ PreReq:		apache
 Requires(post):	/bin/id
 Requires(post):	/usr/sbin/useradd
 Requires(post):	/usr/sbin/usermod
+%if %{without apache1}
+Requires:	apache >= 2
+%endif
+%if %{with apache1}
+Requires:	apache < 2
+%endif
 Requires:	apache-mod_perl
-#Requires:	mysql
+Requires:	mysql
 #Requires:	mysql-client
 #Requires:	perl-DBI
 #Requires:	perl-DBD-mysql
