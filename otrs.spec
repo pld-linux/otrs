@@ -21,7 +21,6 @@ Requires(post):	/bin/id
 Requires(post):	/usr/sbin/useradd
 Requires(post):	/usr/sbin/usermod
 Requires:	apache-mod_perl
-Requires:	fetchmail
 #Requires:	mysql
 #Requires:	mysql-client
 #Requires:	perl-DBI
