@@ -6,7 +6,7 @@
 # - put cron in ptoper place
 # - write not so brain-damage init-script...
 %bcond_with	apache1		# build for work with apache1 conf system
-#%include	/usr/lib/rpm/macros.perl
+%include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
