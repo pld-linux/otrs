@@ -108,20 +108,15 @@ for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{otrsdir}
+install -d $RPM_BUILD_ROOT%{otrsdir},/etc/{rc.d/init.d,sysconfig,httpd/httpd.conf}
 
 # copy files
 rm -Rf Kernel/cpan-lib/
 rm -Rf doc/manual/*/sgml/
 rm -Rf doc/manual/de/
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
-touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
 
 # install init-Script & apache2 config
-install -d -m 755 $RPM_BUILD_ROOT/etc/rc.d/init.d
-install -d -m 755 $RPM_BUILD_ROOT/etc/sysconfig
-install -d -m 755 $RPM_BUILD_ROOT/etc/httpd/httpd.conf
-
 install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 %if %{without apache1}
@@ -132,6 +127,8 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 	#apache 1
 	install scripts/apache-httpd.include.conf $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %endif
+
+touch $RPM_BUILD_ROOT%{otrsdir}/var/log/TicketCounter.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
