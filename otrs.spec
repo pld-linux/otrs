@@ -10,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.4
 %define	vrel	01
-Release:	0.3
+Release:	0.5
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -22,6 +22,7 @@ Source3:	%{name}-PLD-Config.pm
 Source4:	%{name}-logrotate
 Patch0:		%{name}-conf.patch
 Patch1:		%{name}-default_conf.patch
+URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
 PreReq:		apache
 Requires(post):	/bin/id
