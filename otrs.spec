@@ -12,6 +12,7 @@ Epoch:		1
 License:	GPL
 Group:		Applications/Mail
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
+# Source0-md5:	a9b2e33726cbd89052df650c40eb9c2d
 BuildRequires:	rpm-perlprov
 PreReq:		apache
 Requires(post):	/bin/id
