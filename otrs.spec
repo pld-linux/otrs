@@ -10,7 +10,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	1.2.4
 %define	vrel	01
-Release:	0.5
+Release:	0.6
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -22,6 +22,7 @@ Source3:	%{name}-PLD-Config.pm
 Source4:	%{name}-logrotate
 Patch0:		%{name}-conf.patch
 Patch1:		%{name}-default_conf.patch
+Patch2:		%{name}-apache2.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
 PreReq:		apache
@@ -38,7 +39,8 @@ Requires:	apache-mod_perl
 Requires:	mysql
 #Requires:	mysql-client
 #Requires:	perl-DBI
-#Requires:	perl-DBD-mysql
+# Not catched:
+Requires:	perl-DBD-mysql
 #Requires:	perl-Digest-MD5
 #Requires:	perl-Email-Valid
 #Requires:	perl-MIME-Base64
@@ -124,6 +126,7 @@ Ró¿ne skrypty dla OTRS.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # copy config file
@@ -173,6 +176,8 @@ ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
 ln -sf ../../../etc/otrs/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
 ln -sf ../../../../etc/otrs/Config.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm
 ln -sf ../../../../../etc/otrs/GenericAgent.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/GenericAgent.pm
+
+install scripts/apache2-perl-startup.pl	$RPM_BUILD_ROOT%{otrsdir}/scripts/apache2-perl-startup
 
 #Final cleanups:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
@@ -282,6 +287,7 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %attr(755,otrs,http) %dir %{otrsdir}/scripts
 %attr(755,otrs,http) %dir %{otrsdir}/scripts/database
 %attr(644,otrs,http) %{otrsdir}/scripts/*.sql
+%attr(755,otrs,http) %{otrsdir}/scripts/apache2-perl-startup
 %attr(644,otrs,http) %{otrsdir}/scripts/database/*
 %attr(775,otrs,http) %dir %{otrsdir}/var/
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
