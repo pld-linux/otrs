@@ -1,0 +1,4 @@
+/var/log/otrs/*.log {
+	olddir /var/log/archiv/otrs
+	create 660 otrs http
+}
