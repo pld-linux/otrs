@@ -230,7 +230,7 @@ echo " Start OTRS '/etc/rc.d/init.d/otrs start' ({start|stop|status|restart})."
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
 %config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%attr(640,root,root) /etc/logrotate.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
 %{otrsdir}/.procmailrc
