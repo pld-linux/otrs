@@ -3,6 +3,7 @@
 # - all otrs-var into /var/lib/otrs
 # - put cron in proper place
 # - write not so brain-damage init-script...
+# - apache1 bcond is wrong. ie needs update
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
@@ -25,10 +26,11 @@ Patch1:		%{name}-default_conf.patch
 Patch2:		%{name}-apache.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
+BuildRequires:	rpmbuild(macros) >= 1.202
 PreReq:		apache
-Requires(post):	/bin/id
-Requires(post):	/usr/sbin/useradd
-Requires(post):	/usr/sbin/usermod
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/useradd
+Requires(pre):	/usr/sbin/usermod
 %if %{without apache1}
 Requires:	apache >= 2
 %endif
@@ -191,19 +193,14 @@ install scripts/apache2-perl-startup.pl	$RPM_BUILD_ROOT%{otrsdir}/scripts/apache
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/bin/id -u %{otrsuser} 2>/dev/null`" ]; then
-	if [ "`/bin/id -u %{otrsuser}`" != "31" ]; then
-		echo "Error: user %{otrsuser} doesn't have uid=31. Correct this before installing otrs." >&2
-		exit 1
-	fi
-	# update home dir
-	/usr/sbin/usermod -d %{otrsdir} %{otrsuser}
-else
-	/usr/sbin/useradd -u 31 -d %{otrsdir} -s /bin/false -G http -c 'OTRS System user' %{otrsuser}
-fi
+%useradd -u 31 -d %{otrsdir} -s /bin/false -G http -c 'OTRS System user' %{otrsuser}
+
+# TODO move to trigger?
+# update home dir
+/usr/sbin/usermod -d %{otrsdir} %{otrsuser}
 
 %post
-# if apache1
+# if apache2
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
         echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
 fi
@@ -317,11 +314,11 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %attr(2775,otrs,http) %dir /var/lib/%{name}/tmp
 
 %if %{without apache1}
-	#apache2
+# apache2
 %config(noreplace) %{_sysconfdir}/httpd/httpd.conf/88_%{name}.conf
 %endif
 %if %{with apache1}
-	#apache1
+# apache1
 %config(noreplace) /etc/httpd/%{name}.conf
 %endif
 
