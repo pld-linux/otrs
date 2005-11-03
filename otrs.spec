@@ -145,7 +145,7 @@ rm -Rf doc/manual/de/
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
 
 # install init-Script & apache2 config
-install -m 755 scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
+install scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 %if %{without apache1}
 	#apache2
