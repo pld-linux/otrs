@@ -9,21 +9,18 @@
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
-Version:	1.3.2
+Version:	2.0.3
 %define	vrel	01
-Release:	0.9
+Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	c632dca827a3c5386c92a4a7d4e18d69
+# Source0-md5:	2e15bfd9c15780c7d280ec1b4e32b124
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
-Source3:	%{name}-PLD-Config.pm
-Source4:	%{name}-logrotate
-Patch0:		%{name}-conf.patch
-Patch1:		%{name}-default_conf.patch
-Patch2:		%{name}-apache.patch
+Source3:	%{name}-logrotate
+Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.202
@@ -127,12 +124,9 @@ Ró¿ne skrypty dla OTRS.
 %prep
 %setup -q -n %{name}
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
 # copy config file
-cp %{SOURCE3} Kernel/Config.pm
 cp Kernel/Config/GenericAgent.pm.dist Kernel/Config/GenericAgent.pm
 cd Kernel/Config/ && for foo in *.dist; do cp $foo `basename $foo .dist`; done && cd ../../
 # copy all crontab dist files
@@ -162,18 +156,25 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/httpd.conf/88_%{name}.con
 	install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 %endif
 
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 # logs in proper place:
 touch $RPM_BUILD_ROOT/var/log/%{name}/TicketCounter.log
 touch $RPM_BUILD_ROOT/var/log/%{name}/otrs.log
 
 # move configs into proper place...
-mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmailrc
-mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc
-mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter
-mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm $RPM_BUILD_ROOT/etc/%{name}
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.procmailrc.dist $RPM_BUILD_ROOT/etc/%{name}/procmailrc
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc.dist $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc
+mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter.dist $RPM_BUILD_ROOT/etc/%{name}/mailfilter
+mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm.dist $RPM_BUILD_ROOT/etc/%{name}/Config.pm
 mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}
+#save dist versions
+install $RPM_BUILD_ROOT/etc/%{name}/procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmailrc.dist
+install $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc.dist
+install $RPM_BUILD_ROOT/etc/%{name}/mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter.dist
+install $RPM_BUILD_ROOT/etc/%{name}/Config.pm $RPM_BUILD_ROOT/etc/%{name}/Config.pm.dist
+install $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm.dist
+#link to proper places
 ln -sf ../../../etc/otrs/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
 ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
 ln -sf ../../../etc/otrs/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
@@ -193,7 +194,7 @@ install scripts/apache2-perl-startup.pl	$RPM_BUILD_ROOT%{otrsdir}/scripts/apache
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-%useradd -u 31 -d %{otrsdir} -s /bin/false -G http -c 'OTRS System user' %{otrsuser}
+%useradd -u 31 -d %{otrsdir} -s /bin/false -g http -c 'OTRS System user' %{otrsuser}
 
 # TODO move to trigger?
 # update home dir
@@ -211,10 +212,9 @@ fi
 echo "[install the OTRS database]"
 echo " Use a webbrowser and open this link: http://`hostname -f`/otrs/installer.pl"
 
-%triggerpostun -- %{name} < 1.3.0
-echo "WARNING: you need to prepare %{name} upgrade! Database format has changed."
-echo "To do that make:"
-echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p <otrs_db>" 
+%triggerpostun -- %{name} < 2.0.0
+echo "WARNING: you need to prepare %{name} upgrade!"
+echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 
 %files
 %defattr(644,root,root,755)
@@ -228,8 +228,8 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/mailfilter
 %attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/Config.pm
 %attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/GenericAgent.pm
+%attr(640,otrs,http) %{_sysconfdir}/%{name}/*.dist
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
-%config(noreplace) %verify(not size mtime md5) %{otrsdir}/Kernel/Config/ModulesCusto*.pm
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
 %attr(755,otrs,http) %dir %{otrsdir}
@@ -241,8 +241,8 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %{otrsdir}/Kernel/Config.pm
 %dir %{otrsdir}/Kernel/Config
 %{otrsdir}/Kernel/Config/Defaults.pm
-%{otrsdir}/Kernel/Config/Modules.pm
 %{otrsdir}/Kernel/Config/GenericAgent.pm
+%{otrsdir}/Kernel/Config/Files/*.xml
 %{otrsdir}/Kernel/Language.pm
 %{otrsdir}/Kernel/*/*/*.pm
 %{otrsdir}/Kernel/*/*/*/*.pm
@@ -283,6 +283,8 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 %attr(700,otrs,root) %{otrsdir}/bin/otrs.*
 %dir %{otrsdir}/bin/cgi-bin/
 %attr(750,root,http) %{otrsdir}/bin/cgi-bin/*.pl
+%dir %{otrsdir}/bin/fcgi-bin/
+%attr(750,root,http) %{otrsdir}/bin/fcgi-bin/*.fpl
 %{otrsdir}/INSTALL
 %dir %{otrsdir}/scripts
 %dir %{otrsdir}/scripts/database
@@ -306,12 +308,12 @@ echo "cat %{otrsdir}/scripts/DBUpdate-to-1.3.mysql.sql | mysql -u <otrs_user> -p
 # attempt to move to /var/lib:
 %attr(751,otrs,http) %dir /var/lib/%{name}
 %attr(2775,otrs,http) %dir /var/lib/%{name}/article
-%attr(755,otrs,http) %dir /var/lib/%{name}/cron
+# %attr(755,otrs,http) %dir /var/lib/%{name}/cron
 %attr(751,otrs,http) %dir /var/lib/%{name}/pics
 %attr(751,otrs,http) %dir /var/lib/%{name}/pics/stats
-%attr(755,otrs,http) %dir /var/lib/%{name}/sessions
-%attr(755,otrs,http) %dir /var/lib/%{name}/spool
-%attr(2775,otrs,http) %dir /var/lib/%{name}/tmp
+# %attr(755,otrs,http) %dir /var/lib/%{name}/sessions
+# %attr(755,otrs,http) %dir /var/lib/%{name}/spool
+# %attr(2775,otrs,http) %dir /var/lib/%{name}/tmp
 
 %if %{without apache1}
 # apache2
