@@ -11,7 +11,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	2.0.3
 %define	vrel	01
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -138,10 +138,12 @@ install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,httpd/httpd.co
 	$RPM_BUILD_ROOT{/var/log/{,archiv/}%{name},%{_bindir},%{otrsdir}} \
 	$RPM_BUILD_ROOT/var/lib/%{name}/{article,pics/stats}
 
-# copy files
-rm -Rf Kernel/cpan-lib/
+# Remove regular CPAN libs - only HTML/Safe.pm has to stay, I can't find it...
+rm -Rf Kernel/cpan-lib/{Authen,Date,Email,IO,MIME,Mail,XML,auto}
+# Remove junk:
 rm -Rf doc/manual/*/sgml/
 rm -Rf doc/manual/de/
+# copy files
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
 
 # install init-Script & apache2 config
