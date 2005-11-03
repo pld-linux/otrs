@@ -1,0 +1,140 @@
+--- otrs/Kernel/Config/Defaults.pm.fix	2005-11-03 10:19:56.857440512 +0100
++++ otrs/Kernel/Config/Defaults.pm	2005-11-03 10:22:15.957294120 +0100
+@@ -235,7 +235,7 @@
+ #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
+ 
+     # param for LogModule Kernel::System::Log::File (required!)
+-    $Self->{'LogModule::LogFile'} = '/tmp/otrs.log';
++    $Self->{'LogModule::LogFile'} = '/var/log/otrs.log';
+ 
+     # param if the date (yyyy-mm) should be added as suffix to
+     # logfile [0|1]
+@@ -614,7 +614,7 @@
+     # directories                                         #
+     # --------------------------------------------------- #
+     # root directory
+-    $Self->{'Home'} = '/opt/otrs';
++    $Self->{'Home'} = '/usr/share/otrs';
+     # tmp dir
+     $Self->{'TempDir'} = '<OTRS_CONFIG_Home>/var/tmp';
+     # html template dir
+--- otrs/Kernel/Config.pm.dist.fix	2005-11-03 10:22:43.521103784 +0100
++++ otrs/Kernel/Config.pm.dist	2005-11-03 10:23:30.985888040 +0100
+@@ -58,7 +58,7 @@
+     # ---------------------------------------------------- #
+     # fs root directory
+     # ---------------------------------------------------- #
+-    $Self->{Home} = '/opt/otrs';
++    $Self->{Home} = '/usr/share/otrs';
+ 
+     # **************************************************** #
+     # insert your own config settings "here"               #
+--- otrs/scripts/apache-httpd.include.conf.fix	2005-11-03 10:25:08.160115312 +0100
++++ otrs/scripts/apache-httpd.include.conf	2005-11-03 10:36:12.123177584 +0100
+@@ -3,11 +3,11 @@
+ # --
+ 
+ # agent, admin and customer frontend (mod_alias required!)
+-ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+ # load all otrs modules (speed improvement!)
+-#Perlrequire /opt/otrs/scripts/apache-perl-startup.pl
++#Perlrequire /usr/share/otrs/scripts/apache-perl-startup.pl
+ 
+ # Apache::StatINC - Reload %INC files when updated on disk 
+ # (just use it for testing, setup, ... not for high productiv systems)
+--- otrs/scripts/apache-perl-startup.pl.fix	2005-11-03 10:34:39.449266160 +0100
++++ otrs/scripts/apache-perl-startup.pl	2005-11-03 10:35:42.872624344 +0100
+@@ -7,8 +7,8 @@
+ # --
+ # set otrs lib path!
+ # --
+-use lib "/opt/otrs/";
+-use lib "/opt/otrs/Kernel/cpan-lib";
++use lib "/usr/share/otrs/";
++use lib "/usr/share/otrs/Kernel/cpan-lib";
+ 
+ use Apache::Registry ();       # for things in the "/programs" URL
+ 
+--- otrs/scripts/apache2-httpd.include.conf.fix	2005-11-03 10:36:30.228425168 +0100
++++ otrs/scripts/apache2-httpd.include.conf	2005-11-03 10:38:01.933483880 +0100
+@@ -3,11 +3,11 @@
+ # --
+ 
+ # agent, admin and customer frontend
+-ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+ # load all otrs modules
+-Perlrequire /opt/otrs/scripts/apache2-perl-startup.pl
++Perlrequire /usr/share/otrs/scripts/apache2-perl-startup.pl
+ 
+ # Apache::Reload - Reload Perl Modules when Changed on Disk
+ PerlModule Apache::Reload
+@@ -27,13 +27,13 @@
+ </Location>
+ 
+ # directory settings
+-<Directory "/opt/otrs/bin/cgi-bin/">
++<Directory "/usr/share/otrs/bin/cgi-bin/">
+     AllowOverride None
+     Options +ExecCGI -Includes
+     Order allow,deny
+     Allow from all
+ </Directory>
+-<Directory "/opt/otrs/var/httpd/htdocs/">
++<Directory "/usr/share/otrs/var/httpd/htdocs/">
+     AllowOverride None
+     Order allow,deny
+     Allow from all
+--- otrs/scripts/apache2-perl-startup.pl.fix	2005-11-03 09:43:51.286657312 +0100
++++ otrs/scripts/apache2-perl-startup.pl	2005-11-03 09:44:37.094693432 +0100
+@@ -9,8 +9,8 @@
+ # --
+ # set otrs lib path!
+ # --
+-use lib "/opt/otrs/";
+-use lib "/opt/otrs/Kernel/cpan-lib";
++use lib "/usr/share/otrs/";
++use lib "/usr/share/otrs/Kernel/cpan-lib";
+ 
+ # pull in things we will use in most requests so it is read and compiled
+ # exactly once
+--- otrs/scripts/apache2-httpd-new.include.conf.fix	2005-11-03 10:48:27.975311056 +0100
++++ otrs/scripts/apache2-httpd-new.include.conf	2005-11-03 10:49:24.458724272 +0100
+@@ -3,11 +3,11 @@
+ # --
+ 
+ # agent, admin and customer frontend
+-ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+ # load all otrs modules
+-Perlrequire /opt/otrs/scripts/apache2-perl-startup.pl
++Perlrequire /usr/share/otrs/scripts/apache2-perl-startup.pl
+ 
+ # Apache::Reload - Reload Perl Modules when Changed on Disk
+ PerlModule Apache2::Reload
+@@ -29,13 +29,13 @@
+ </Location>
+ 
+ # directory settings
+-<Directory "/opt/otrs/bin/cgi-bin/">
++<Directory "/usr/share/otrs/bin/cgi-bin/">
+     AllowOverride None
+     Options +ExecCGI -Includes
+     Order allow,deny
+     Allow from all
+ </Directory>
+-<Directory "/opt/otrs/var/httpd/htdocs/">
++<Directory "/usr/share/otrs/var/httpd/htdocs/">
+     AllowOverride None
+     Order allow,deny
+     Allow from all
