@@ -11,7 +11,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	2.0.3
 %define	vrel	01
-Release:	0.2
+Release:	0.3
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -113,7 +113,7 @@ Lista mo¿liwo¶ci:
 Summary:	OTRS scripts
 Summary(pl):	Skrypty dla OTRS
 Group:		Applications/Databases
-Requires:	%{name}-%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description scripts
 Various scripts for OTRS.
@@ -279,6 +279,8 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 %dir %{otrsdir}/Kernel/System/Ticket/Number
 %dir %{otrsdir}/Kernel/System/User
 %dir %{otrsdir}/Kernel/System/User/Preferences
+%dir %{otrsdir}/Kernel/cpan-lib
+%dir %{otrsdir}/Kernel/cpan-lib/HTML
 %dir %{otrsdir}/bin
 %attr(700,otrs,root) %{otrsdir}/bin/*.pl
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
