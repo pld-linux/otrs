@@ -265,7 +265,9 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 %dir %{otrsdir}/Kernel/System/CustomerAuth
 %dir %{otrsdir}/Kernel/System/CustomerUser
 %dir %{otrsdir}/Kernel/System/CustomerUser/Preferences
+%dir %{otrsdir}/Kernel/System/DB
 %dir %{otrsdir}/Kernel/System/Email
+%dir %{otrsdir}/Kernel/System/LinkObject
 %dir %{otrsdir}/Kernel/System/GenericAgent
 %dir %{otrsdir}/Kernel/System/Log
 %dir %{otrsdir}/Kernel/System/PostMaster
@@ -279,6 +281,7 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 %dir %{otrsdir}/Kernel/System/Ticket/Number
 %dir %{otrsdir}/Kernel/System/User
 %dir %{otrsdir}/Kernel/System/User/Preferences
+%dir %{otrsdir}/Kernel/System/Web
 %dir %{otrsdir}/Kernel/cpan-lib
 %dir %{otrsdir}/Kernel/cpan-lib/HTML
 %dir %{otrsdir}/bin
