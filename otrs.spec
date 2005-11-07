@@ -11,7 +11,7 @@ Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	2.0.3
 %define	vrel	01
-Release:	0.3
+Release:	0.4
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -176,6 +176,9 @@ install $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetc
 install $RPM_BUILD_ROOT/etc/%{name}/mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter.dist
 install $RPM_BUILD_ROOT/etc/%{name}/Config.pm $RPM_BUILD_ROOT/etc/%{name}/Config.pm.dist
 install $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm.dist
+# File for on-line configuration:
+touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
+ln -sf /etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Files/ZZZAAuto.pm
 #link to proper places
 ln -sf ../../../etc/otrs/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
 ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
@@ -230,6 +233,7 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 %attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/mailfilter
 %attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/Config.pm
 %attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/GenericAgent.pm
+%attr(660,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/ZZZAAuto.pm
 %attr(640,otrs,http) %{_sysconfdir}/%{name}/*.dist
 %attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
