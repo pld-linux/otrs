@@ -24,16 +24,16 @@ Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.202
-PreReq:		apache
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	/usr/sbin/usermod
 %if %{without apache1}
-Requires:	apache >= 2
+Requires:	apache >= 2.0
 %endif
 %if %{with apache1}
-Requires:	apache < 2
+Requires:	apache1
 %endif
+Requires:	webserver = apache
 Requires:	apache-mod_perl
 Requires:	mysql
 #Requires:	mysql-client
