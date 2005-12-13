@@ -33,11 +33,11 @@ Requires:	apache >= 2.0
 %if %{with apache1}
 Requires:	apache1
 %endif
-Requires:	webserver = apache
 Requires:	apache-mod_perl
 Requires:	mysql
 #Requires:	mysql-client
 #Requires:	perl-DBI
+Requires:	webserver = apache
 # Not catched:
 Requires:	perl-DBD-mysql
 #Requires:	perl-Digest-MD5
@@ -225,19 +225,19 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 %defattr(644,root,root,755)
 %doc INSTALL* UPGRADING TODO CHANGES README* doc/
 %doc scripts/test Kernel/Config/GenericAgent.pm.examples
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/otrs
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/otrs
 %attr(751,otrs,http) %dir %{_sysconfdir}/%{name}
 %attr(751,otrs,http) %dir %{_sysconfdir}/%{name}/Config/
-%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/procmailrc
-%attr(710,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/fetchmailrc
-%attr(600,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/mailfilter
-%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/Config.pm
-%attr(640,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/GenericAgent.pm
-%attr(660,otrs,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/ZZZAAuto.pm
+%attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/procmailrc
+%attr(710,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/fetchmailrc
+%attr(600,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/mailfilter
+%attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Config.pm
+%attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/GenericAgent.pm
+%attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAAuto.pm
 %attr(640,otrs,http) %{_sysconfdir}/%{name}/*.dist
-%attr(644,otrs,http) %config(noreplace) %verify(not size mtime md5) %{otrsdir}/var/cron/*
+%attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{otrsdir}/var/cron/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %attr(755,otrs,http) %dir %{otrsdir}
 %{otrsdir}/RELEASE
 %{otrsdir}/.procmailrc
@@ -304,8 +304,8 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 %{otrsdir}/scripts/database/*
 %attr(751,otrs,http) %dir /var/log/%{name}
 %attr(751,otrs,http) %dir /var/log/archiv/%{name}
-%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/otrs.log
-%attr(664,otrs,http) %config(noreplace) %verify(not size mtime md5) /var/log/otrs/TicketCounter.log
+%attr(664,otrs,http) %config(noreplace) %verify(not md5 mtime size) /var/log/otrs/otrs.log
+%attr(664,otrs,http) %config(noreplace) %verify(not md5 mtime size) /var/log/otrs/TicketCounter.log
 # This entries should be changed into links and proper trigger to move data:
 %attr(751,otrs,http) %dir %{otrsdir}/var/
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
