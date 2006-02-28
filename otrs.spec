@@ -9,14 +9,14 @@
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
-Version:	2.0.3
+Version:	2.0.4
 %define	vrel	01
 Release:	0.4
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	2e15bfd9c15780c7d280ec1b4e32b124
+# Source0-md5:	cfc0fa4f711c2fa92bc513b57632bbfe
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-logrotate
@@ -177,8 +177,8 @@ install $RPM_BUILD_ROOT/etc/%{name}/mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailf
 install $RPM_BUILD_ROOT/etc/%{name}/Config.pm $RPM_BUILD_ROOT/etc/%{name}/Config.pm.dist
 install $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm.dist
 # File for on-line configuration:
-touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
-ln -sf /etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Files/ZZZAAuto.pm
+#touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
+#ln -sf /etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Files/ZZZAAuto.pm
 #link to proper places
 ln -sf ../../../etc/otrs/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
 ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
@@ -233,7 +233,7 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 %attr(600,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/mailfilter
 %attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Config.pm
 %attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/GenericAgent.pm
-%attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAAuto.pm
+#%attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAAuto.pm
 %attr(640,otrs,http) %{_sysconfdir}/%{name}/*.dist
 %attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{otrsdir}/var/cron/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
