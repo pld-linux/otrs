@@ -1,0 +1,5 @@
+- added logrotate files
+- added _noauto{req,prov} perl(Kernel::.*) macro
+- move some conf to /etc
+- added some examples files to %doc
+- rel. 0.2
