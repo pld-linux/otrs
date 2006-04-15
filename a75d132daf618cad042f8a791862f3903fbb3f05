@@ -1,0 +1,3 @@
+- shortened far too long description, added pl one
+- cleanups, missing dirs, fixed %post script
+- added todo (put proper perms on files instead of modyfying in %post)
