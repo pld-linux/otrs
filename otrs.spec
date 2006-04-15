@@ -3,15 +3,14 @@
 # - all otrs-var into /var/lib/otrs
 # - put cron in proper place
 # - write not so brain-damage init-script...
-# - apache1 bcond is wrong. ie needs update
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
+%define	vrel	01
 Summary:	The Open Ticket Request System
 Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
 Name:		otrs
 Version:	2.0.4
-%define	vrel	01
-Release:	0.4
+Release:	1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -23,20 +22,14 @@ Source3:	%{name}-logrotate
 Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	/usr/sbin/usermod
-%if %{without apache1}
-Requires:	apache >= 2.0
-%endif
-%if %{with apache1}
-Requires:	apache1
-%endif
-Requires:	apache-mod_perl
-Requires:	mysql
+Requires:	apache(mod_perl)
 #Requires:	mysql-client
 #Requires:	perl-DBI
+Requires:	webapps
 Requires:	webserver = apache
 # Not catched:
 Requires:	perl-DBD-mysql
@@ -55,6 +48,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautoprov	'perl(Kernel::.*)'
 %define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
+%define		_webapps	/etc/webapps
+%define		_webapp		%{name}
 
 %description
 OTRS is an Open source Ticket Request System with many features to
@@ -125,38 +120,35 @@ Ró¿ne skrypty dla OTRS.
 %setup -q -n %{name}
 %patch0 -p1
 
-%build
 # copy config file
 cp Kernel/Config/GenericAgent.pm.dist Kernel/Config/GenericAgent.pm
 cd Kernel/Config/ && for foo in *.dist; do cp $foo `basename $foo .dist`; done && cd ../../
 # copy all crontab dist files
 for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
-%install
-rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,httpd/httpd.conf,%{name}/Config,logrotate.d} \
-	$RPM_BUILD_ROOT{/var/log/{,archiv/}%{name},%{_bindir},%{otrsdir}} \
-	$RPM_BUILD_ROOT/var/lib/%{name}/{article,pics/stats}
-
 # Remove regular CPAN libs - only HTML/Safe.pm has to stay, I can't find it...
 rm -Rf Kernel/cpan-lib/{Authen,Date,Email,IO,MIME,Mail,XML,auto}
 # Remove junk:
 rm -Rf doc/manual/*/sgml/
 rm -Rf doc/manual/de/
+
+%install
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,%{name}/Config,logrotate.d} \
+	$RPM_BUILD_ROOT{/var/log/{,archiv/}%{name},%{_bindir},%{otrsdir}} \
+	$RPM_BUILD_ROOT/var/lib/%{name}/{article,pics/stats} \
+	$RPM_BUILD_ROOT%{_webapps}/%{_webapp}
+
 # copy files
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
 
 # install init-Script & apache2 config
 install scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
-%if %{without apache1}
-	#apache2
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/httpd.conf/88_%{name}.conf
-%endif
-%if %{with apache1}
-	#apache 1
-	install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
-%endif
+# apache 1
+install %{SOURCE2} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/apache.conf
+# apache 2
+install %{SOURCE1} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/httpd.conf
 
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
@@ -170,22 +162,22 @@ mv -f $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc.dist $RPM_BUILD_ROOT/etc/%{name}/fe
 mv -f $RPM_BUILD_ROOT%{otrsdir}/.mailfilter.dist $RPM_BUILD_ROOT/etc/%{name}/mailfilter
 mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm.dist $RPM_BUILD_ROOT/etc/%{name}/Config.pm
 mv -f $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}
-#save dist versions
+# save dist versions
+# TODO: drop .dist and rely on rpm %config(noreplace) feature
 install $RPM_BUILD_ROOT/etc/%{name}/procmailrc $RPM_BUILD_ROOT/etc/%{name}/procmailrc.dist
 install $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc $RPM_BUILD_ROOT/etc/%{name}/fetchmailrc.dist
 install $RPM_BUILD_ROOT/etc/%{name}/mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailfilter.dist
 install $RPM_BUILD_ROOT/etc/%{name}/Config.pm $RPM_BUILD_ROOT/etc/%{name}/Config.pm.dist
 install $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm.dist
 # File for on-line configuration:
-#touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
-#ln -sf /etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Files/ZZZAAuto.pm
-#link to proper places
+# touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
+# ln -sf /etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Files/ZZZAAuto.pm
+# link to proper places
 ln -sf ../../../etc/otrs/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
 ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
 ln -sf ../../../etc/otrs/mailfilter $RPM_BUILD_ROOT%{otrsdir}/.mailfilter
 ln -sf ../../../../etc/otrs/Config.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config.pm
 ln -sf ../../../../../etc/otrs/GenericAgent.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/GenericAgent.pm
-
 
 # Cleanup junk:
 rm -f $RPM_BUILD_ROOT%{otrsdir}/scripts/apache* $RPM_BUILD_ROOT%{otrsdir}/scripts/redhat* $RPM_BUILD_ROOT%{otrsdir}/scripts/suse*
@@ -206,20 +198,45 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/usermod -d %{otrsdir} %{otrsuser}
 
 %post
-# if apache2
-if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
-        echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+if [ "$1" = 0 ]; then
+	# note
+%banner -e %{name} <<EOF
+[install the OTRS database]
+ Use a webbrowser and open this link: http://`hostname -f`/otrs/installer.pl
+EOF
 fi
-if [ -f /var/lock/subsys/httpd ]; then
-	/etc/rc.d/init.d/httpd restart 1>&2
-fi
-# note
-echo "[install the OTRS database]"
-echo " Use a webbrowser and open this link: http://`hostname -f`/otrs/installer.pl"
 
-%triggerpostun -- %{name} < 2.0.0
-echo "WARNING: you need to prepare %{name} upgrade!"
-echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
+%triggerin -- apache1
+%webapp_register apache %{_webapp}
+
+%triggerun -- apache1
+%webapp_unregister apache %{_webapp}
+
+%triggerin -- apache < 2.2.0, apache-base
+%webapp_register httpd %{_webapp}
+
+%triggerun -- apache < 2.2.0, apache-base
+%webapp_unregister httpd %{_webapp}
+
+%triggerpostun -- %{name} < 1:2.0.4-0.5
+# nuke very-old config location (this mostly for Ra)
+if [ -f /etc/httpd/httpd.conf ]; then
+	sed -i -e "/^Include.*%{name}.conf/d" /etc/httpd/httpd.conf
+fi
+
+# apache1 config?!
+if [ -f /etc/httpd/%{name}.conf.rpmsave ]; then
+	cp -f %{_webapps}/%{_webapp}/httpd.conf{,.rpmnew}
+	mv -f /etc/httpd/%{name}.conf.rpmsave %{_webapps}/%{_webapp}/httpd.conf
+fi
+# apache2 config
+if [ -f /etc/httpd/httpd.conf/88_otrs.conf.rpmsave ]; then
+	cp -f %{_webapps}/%{_webapp}/httpd.conf{,.rpmnew}
+	mv -f /etc/httpd/httpd.conf/88_otrs.conf.rpmsave %{_webapps}/%{_webapp}/httpd.conf
+fi
+
+/usr/sbin/webapp register httpd %{_webapp}
+%service -q httpd reload
 
 %files
 %defattr(644,root,root,755)
@@ -326,14 +343,9 @@ echo "Read %{_docdir}/%{name}-%{version}UPGRADING.gz"
 # %attr(755,otrs,http) %dir /var/lib/%{name}/spool
 # %attr(2775,otrs,http) %dir /var/lib/%{name}/tmp
 
-%if %{without apache1}
-# apache2
-%config(noreplace) %{_sysconfdir}/httpd/httpd.conf/88_%{name}.conf
-%endif
-%if %{with apache1}
-# apache1
-%config(noreplace) /etc/httpd/%{name}.conf
-%endif
+%dir %attr(750,root,http) %{_webapps}/%{_webapp}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/apache.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/httpd.conf
 
 %files scripts
 %defattr(644,root,root,755)
