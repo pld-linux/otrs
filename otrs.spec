@@ -7,7 +7,7 @@
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
-Summary(pl):	Open Ticket Request System - otwarty system zg³aszania ¿±dañ
+Summary(pl.UTF-8):   Open Ticket Request System - otwarty system zgÅ‚aszania Å¼Ä…daÅ„
 Name:		otrs
 Version:	1.3.2
 %define	vrel	01
@@ -83,46 +83,46 @@ Feature list:
   database (MySQL, PostgreSQL, ...), user authentication against
   database or LDAP directory, easy addons and frontends development.
 
-%description -l pl
-OTRS (Open source Ticket Request System) to wolnodostêpny system
-zg³aszania ¿±dañ z wieloma mo¿liwo¶ciami zarz±dzania telefonami i
-e-mailami od klientów. Jest rozpowszechniany na Powszechnej Licencji
+%description -l pl.UTF-8
+OTRS (Open source Ticket Request System) to wolnodostÄ™pny system
+zgÅ‚aszania Å¼Ä…daÅ„ z wieloma moÅ¼liwoÅ›ciami zarzÄ…dzania telefonami i
+e-mailami od klientÃ³w. Jest rozpowszechniany na Powszechnej Licencji
 Publicznej GNU (GPL) i testowany na Linuksie, Solarisie, AIX-ie,
-FreeBSD i MacOS X. Je¶li otrzymujemy wiele e-maili i chcemy odpowiadaæ
-na nie poprzez zespó³ agentów, to OTRS mo¿e siê okazaæ bardzo dobrym
-narzêdziem.
+FreeBSD i MacOS X. JeÅ›li otrzymujemy wiele e-maili i chcemy odpowiadaÄ‡
+na nie poprzez zespÃ³Å‚ agentÃ³w, to OTRS moÅ¼e siÄ™ okazaÄ‡ bardzo dobrym
+narzÄ™dziem.
 
-Lista mo¿liwo¶ci:
-- interfejs WWW: ³atwy i logiczny w u¿yciu, z widokami dla agentów,
-  administratorów i klientów, obs³ug± motywów, obs³ug± wielu jêzyków,
-  modyfikowalnymi szablonami, obs³ug± za³±czników
-- interfejs e-mailowy z obs³ug± za³±czników MIME, obs³ug± poczty w
-  zale¿no¶ci od adresu lub x-nag³ówków, autoresponderami dla klientów,
-  powiadomieniami dla agentów
+Lista moÅ¼liwoÅ›ci:
+- interfejs WWW: Å‚atwy i logiczny w uÅ¼yciu, z widokami dla agentÃ³w,
+  administratorÃ³w i klientÃ³w, obsÅ‚ugÄ… motywÃ³w, obsÅ‚ugÄ… wielu jÄ™zykÃ³w,
+  modyfikowalnymi szablonami, obsÅ‚ugÄ… zaÅ‚Ä…cznikÃ³w
+- interfejs e-mailowy z obsÅ‚ugÄ… zaÅ‚Ä…cznikÃ³w MIME, obsÅ‚ugÄ… poczty w
+  zaleÅ¼noÅ›ci od adresu lub x-nagÅ‚Ã³wkÃ³w, autoresponderami dla klientÃ³w,
+  powiadomieniami dla agentÃ³w
 - bilety z konfigurowalnymi widokami, blokowaniem, odpowiadaniem,
-  autoresponderami, histori±, mo¿liwo¶ci± dodawania notatek,
+  autoresponderami, historiÄ…, moÅ¼liwoÅ›ciÄ… dodawania notatek,
   odbijaniem/przekierowywaniem poczty, priorytetami, rozliczaniem czasu,
-  pe³notekstowym przeszukiwaniem zawarto¶ci
-- system z tworzeniem i konfiguracj± kont u¿ytkowników, grup,
+  peÅ‚notekstowym przeszukiwaniem zawartoÅ›ci
+- system z tworzeniem i konfiguracjÄ… kont uÅ¼ytkownikÃ³w, grup,
   standardowych odpowiedzi, sygnaturek, powiadomieniami dla
-  administratorów i zg³aszaj±cych problemy, ostatecznymi terminami dla
-  problematycznych biletów, ustawialnym formatem numerowania biletów,
-  ró¿nymi poziomami uprawnieñ/praw dostêpu, centraln± baz± danych
-  (MySQL, PostgreSQL...), uwierzytelnianiem u¿ytkowników przy u¿yciu
-  bazy danych lub katalogu LDAP, ³atwym tworzeniem dodatków i
-  frontendów.
+  administratorÃ³w i zgÅ‚aszajÄ…cych problemy, ostatecznymi terminami dla
+  problematycznych biletÃ³w, ustawialnym formatem numerowania biletÃ³w,
+  rÃ³Å¼nymi poziomami uprawnieÅ„/praw dostÄ™pu, centralnÄ… bazÄ… danych
+  (MySQL, PostgreSQL...), uwierzytelnianiem uÅ¼ytkownikÃ³w przy uÅ¼yciu
+  bazy danych lub katalogu LDAP, Å‚atwym tworzeniem dodatkÃ³w i
+  frontendÃ³w.
 
 %package scripts
 Summary:	OTRS scripts
-Summary(pl):	Skrypty dla OTRS
+Summary(pl.UTF-8):   Skrypty dla OTRS
 Group:		Applications/Databases
 Requires:	%{name}-%{version}-%{release}
 
 %description scripts
 Various scripts for OTRS.
 
-%description scripts -l pl
-Ró¿ne skrypty dla OTRS.
+%description scripts -l pl.UTF-8
+RÃ³Å¼ne skrypty dla OTRS.
 
 %prep
 %setup -q -n %{name}
