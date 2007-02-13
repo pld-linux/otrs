@@ -7,7 +7,7 @@
 %include	/usr/lib/rpm/macros.perl
 %define	vrel	01
 Summary:	The Open Ticket Request System
-Summary(pl.UTF-8):   Open Ticket Request System - otwarty system zgłaszania żądań
+Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
 Version:	2.0.4
 Release:	3
@@ -106,7 +106,7 @@ Lista możliwości:
 
 %package scripts
 Summary:	OTRS scripts
-Summary(pl.UTF-8):   Skrypty dla OTRS
+Summary(pl.UTF-8):	Skrypty dla OTRS
 Group:		Applications/Databases
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
