@@ -320,7 +320,7 @@ fi
 %{otrsdir}/scripts/apache2-perl-startup
 %{otrsdir}/scripts/database/*
 %attr(751,otrs,http) %dir /var/log/%{name}
-%attr(751,otrs,http) %dir /var/log/archiv/%{name}
+%attr(751,otrs,http) %dir /var/log/archive/%{name}
 %attr(664,otrs,http) %config(noreplace) %verify(not md5 mtime size) /var/log/otrs/otrs.log
 %attr(664,otrs,http) %config(noreplace) %verify(not md5 mtime size) /var/log/otrs/TicketCounter.log
 # This entries should be changed into links and proper trigger to move data:
