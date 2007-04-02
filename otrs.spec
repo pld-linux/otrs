@@ -135,7 +135,7 @@ rm -Rf doc/manual/de/
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,%{name}/Config,logrotate.d} \
-	$RPM_BUILD_ROOT{/var/log/{,archiv/}%{name},%{_bindir},%{otrsdir}} \
+	$RPM_BUILD_ROOT{/var/log/{,archive/}%{name},%{_bindir},%{otrsdir}} \
 	$RPM_BUILD_ROOT/var/lib/%{name}/{article,pics/stats} \
 	$RPM_BUILD_ROOT%{_webapps}/%{_webapp}
 
