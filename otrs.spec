@@ -40,7 +40,7 @@ Requires:	perl-DBD-mysql
 #Requires:	perl-URI
 Requires:	procmail
 Requires:	smtpdaemon
-Conflicts:	logrotate < 3.7.4
+Conflicts:	logrotate < 3.7-4
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
