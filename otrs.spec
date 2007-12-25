@@ -9,13 +9,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	2.0.4
-Release:	3
+Version:	2.0.5
+Release:	1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	cfc0fa4f711c2fa92bc513b57632bbfe
+# Source0-md5:	1f6de97cf9f660e0e4f04a5f29122018
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-logrotate
