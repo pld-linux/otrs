@@ -265,6 +265,7 @@ fi
 %dir %{otrsdir}/Kernel/Config
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/GenericAgent.pm
+%dir %{otrsdir}/Kernel/Config/Files
 %{otrsdir}/Kernel/Config/Files/*.xml
 %{otrsdir}/Kernel/Language.pm
 %{otrsdir}/Kernel/*/*/*.pm
@@ -282,6 +283,7 @@ fi
 %{otrsdir}/Kernel/System/*.pm
 %dir %{otrsdir}/Kernel/System/Auth
 %dir %{otrsdir}/Kernel/System/AuthSession
+%dir %{otrsdir}/Kernel/System/Cache
 %dir %{otrsdir}/Kernel/System/Crypt
 %dir %{otrsdir}/Kernel/System/CustomerAuth
 %dir %{otrsdir}/Kernel/System/CustomerUser
@@ -295,16 +297,24 @@ fi
 %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
 %dir %{otrsdir}/Kernel/System/PostMaster/Filter
 %dir %{otrsdir}/Kernel/System/Stats
+%dir %{otrsdir}/Kernel/System/Stats/Dynamic
 %dir %{otrsdir}/Kernel/System/Ticket
 %dir %{otrsdir}/Kernel/System/Ticket/CustomerPermission
+%dir %{otrsdir}/Kernel/System/Ticket/Event
 %dir %{otrsdir}/Kernel/System/Ticket/Permission
 %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
 %dir %{otrsdir}/Kernel/System/Ticket/Number
 %dir %{otrsdir}/Kernel/System/User
 %dir %{otrsdir}/Kernel/System/User/Preferences
 %dir %{otrsdir}/Kernel/System/Web
+%dir %{otrsdir}/Kernel/System/Web/UploadCache
 %dir %{otrsdir}/Kernel/cpan-lib
+%dir %{otrsdir}/Kernel/cpan-lib/Algorithm
+%dir %{otrsdir}/Kernel/cpan-lib/Crypt
+%dir %{otrsdir}/Kernel/cpan-lib/File
 %dir %{otrsdir}/Kernel/cpan-lib/HTML
+%dir %{otrsdir}/Kernel/cpan-lib/Text
+%dir %{otrsdir}/Kernel/cpan-lib/Text/Diff
 %dir %{otrsdir}/bin
 %attr(700,otrs,root) %{otrsdir}/bin/*.pl
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
