@@ -9,7 +9,7 @@ Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
 Version:	2.2.5
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -118,7 +118,7 @@ Różne skrypty dla OTRS.
 
 %prep
 %setup -q
-##%patch0 -p1
+%patch0 -p1
 
 # copy config file
 cp Kernel/Config/GenericAgent.pm.dist Kernel/Config/GenericAgent.pm
