@@ -1,6 +1,139 @@
+diff -ruN otrs-2.2.5.orig/bin/Cron.sh otrs-2.2.5/bin/Cron.sh
+--- otrs-2.2.5.orig/bin/Cron.sh	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/bin/Cron.sh	2008-02-03 22:57:12.000000000 +0100
+@@ -49,12 +49,12 @@
+ OTRS_HOME="`pwd`"
+ cd -
+ 
+-#OTRS_ROOT=/opt/OpenTRS
++#OTRS_ROOT=/usr/share/OpenTRS
+ if test -e $OTRS_HOME/var/cron; then
+     OTRS_ROOT=$OTRS_HOME
+ else
+     echo "No cronjobs in $OTRS_HOME/var/cron found!";
+-    echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /opt/otrs). ";
++    echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /usr/share/otrs). ";
+     exit 5;
+ fi
+ 
+diff -ruN otrs-2.2.5.orig/bin/SetPermissions.sh otrs-2.2.5/bin/SetPermissions.sh
+--- otrs-2.2.5.orig/bin/SetPermissions.sh	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/bin/SetPermissions.sh	2008-02-03 22:57:12.000000000 +0100
+@@ -28,7 +28,7 @@
+     echo ""
+     echo "Usage: SetPermissions.sh <OTRS_HOME> <OTRS_USER> <WEBSERVER_USER> [OTRS_GROUP] [WEB_GROUP]"
+     echo ""
+-    echo "  Try: SetPermissions.sh /opt/otrs otrs wwwrun"
++    echo "  Try: SetPermissions.sh /usr/share/otrs otrs wwwrun"
+     echo ""
+     exit 1;
+ else
+diff -ruN otrs-2.2.5.orig/CHANGES otrs-2.2.5/CHANGES
+--- otrs-2.2.5.orig/CHANGES	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/CHANGES	2008-02-03 22:57:12.000000000 +0100
+@@ -817,7 +817,7 @@
+  - (2006/09/27) fixed bug #1358 - Customer History > All customer tickets.
+     returns an incorrect number of tickets
+  - (2006/09/27) fixed bug #1293 - Can't use an undefined value as a HASH
+-    reference at /opt/otrs/bin/cgi-bin//../../Kernel/Modules/AgentTicketBulk.pm
++    reference at /usr/share/otrs/bin/cgi-bin//../../Kernel/Modules/AgentTicketBulk.pm
+     line 194
+  - (2006/09/27) fixed bug #1356 - mssql driver bug - Stats module of OTRS 2.1
+     beta 2 - "Cant use string ("0")".
+@@ -2381,7 +2381,7 @@
+     (e. g. Kernel/Language/bg.pm). Updated docu.
+  - (2002/11/21) moved var/cron/* to var/cron/*.dist (.dist is not used) to make
+     updates easier! Thanks to Bryan Fullerton!
+- - (2002/11/15) moved %doc/install/* to /opt/OpenTRS/install in RPM-specs.
++ - (2002/11/15) moved %doc/install/* to /usr/share/OpenTRS/install in RPM-specs.
+     because the web-installer needs this stuff in this location. %doc isn't
+     consistent on different linux distributions!
+  - (2002/11/15) fixed bug [48], custom modules don't work/load -
+@@ -2554,7 +2554,7 @@
+  - fixed bug[12] fetchmail lock problem - http://bugs.otrs.org/show_bug.cgi?id=12
+  - fixed bug[11] typos - http://bugs.otrs.org/show_bug.cgi?id=11
+  - fixed bug[10] user_preferences table  - http://bugs.otrs.org/show_bug.cgi?id=10
+- - fixed bug[9] LoopProtection!!! Can't open'/opt/OpenTRS/var/log/LoopProtection-xyz.log':
++ - fixed bug[9] LoopProtection!!! Can't open'/usr/share/OpenTRS/var/log/LoopProtection-xyz.log':
+     No such file or directory! - http://bugs.otrs.org/show_bug.cgi?id=9
+  - fixed HTML table bug in AdminArea::Queue (just with Netscape)
+  - fixed SQL table preferences bug (use script/DBUpdate.mysql.sql)
+diff -ruN otrs-2.2.5.orig/INSTALL otrs-2.2.5/INSTALL
+--- otrs-2.2.5.orig/INSTALL	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/INSTALL	2008-02-03 22:57:12.000000000 +0100
+@@ -26,12 +26,12 @@
+ =============
+ 
+ This few steps describe an OTRS installation incl. webserver and database
+-settings. The OTRS user is "otrs" and the home (root) directory is /opt/otrs
++settings. The OTRS user is "otrs" and the home (root) directory is /usr/share/otrs
+ (of course you can choose an other directory or/and OTRS user).
+ 
+ 1. Install tar.gz:
+    ---------------
+-   $shell: cd /opt/
++   $shell: cd /usr/share/
+    $shell: tar -xzvf otrs-x.x.x.tar.gz
+    $shell: mv otrs-x.x.x otrs
+ 
+@@ -74,7 +74,7 @@
+    ------------
+     Add user:
+     ---------
+-    $shell: useradd -d /opt/otrs/ -c 'OTRS user' otrs
++    $shell: useradd -d /usr/share/otrs/ -c 'OTRS user' otrs
+ 
+     Add user to webserver group (if the webserver is not running with OTRS user):
+     -----------------------------------------------------------------------------
+@@ -101,10 +101,10 @@
+ 
+ 5. Check if all needed modules are installed:
+    ------------------------------------------
+-      $shell:~> perl -cw /opt/otrs/bin/cgi-bin/index.pl
+-      /opt/otrs/bin/cgi-bin/index.pl syntax OK
+-      $shell:~> perl -cw /opt/otrs/bin/PostMaster.pl
+-      /opt/otrs/bin/PostMaster.pl syntax OK
++      $shell:~> perl -cw /usr/share/otrs/bin/cgi-bin/index.pl
++      /usr/share/otrs/bin/cgi-bin/index.pl syntax OK
++      $shell:~> perl -cw /usr/share/otrs/bin/PostMaster.pl
++      /usr/share/otrs/bin/PostMaster.pl syntax OK
+       $shell:~>
+ 
+     If you get "syntax OK" it seems to be Ok. Go ahead.
+@@ -118,9 +118,9 @@
+    Set the file permissions with
+    "$HOME/bin/SetPermissions.sh <OTRS_HOME> <OTRS_USER> <WEBSERVER_USER> [OTRS_GROUP] [WEB_GROUP]"
+    e. g.
+-     Webserver with OTRS user: "SetPermissions.sh /opt/otrs otrs otrs"
+-     Webserver with wwwrun user (e. g. SuSE): "SetPermissions.sh /opt/otrs otrs wwwrun"
+-     Webserver with apache user (e. g. Redhat): "SetPermissions.sh /opt/otrs otrs apache apache apache"
++     Webserver with OTRS user: "SetPermissions.sh /usr/share/otrs otrs otrs"
++     Webserver with wwwrun user (e. g. SuSE): "SetPermissions.sh /usr/share/otrs otrs wwwrun"
++     Webserver with apache user (e. g. Redhat): "SetPermissions.sh /usr/share/otrs otrs apache apache apache"
+ 
+ 8. Database setup:
+    ---------------
+@@ -146,7 +146,7 @@
+ 11. First Email:
+    ------------
+    pipe an email directly into $OTRS_HOME/bin/Postmaster.pl
+-    (e. g. 'cat /opt/otrs/doc/test-email-1.box | /opt/otrs/bin/PostMaster.pl').
++    (e. g. 'cat /usr/share/otrs/doc/test-email-1.box | /usr/share/otrs/bin/PostMaster.pl').
+ 
+ 12. Cronjobs for the OTRS user:
+     ---------------------------
 diff -ruN otrs-2.2.5.orig/Kernel/Config/Defaults.pm otrs-2.2.5/Kernel/Config/Defaults.pm
 --- otrs-2.2.5.orig/Kernel/Config/Defaults.pm	2008-02-03 21:40:07.000000000 +0100
-+++ otrs-2.2.5/Kernel/Config/Defaults.pm	2008-02-03 21:40:39.000000000 +0100
++++ otrs-2.2.5/Kernel/Config/Defaults.pm	2008-02-03 22:57:10.000000000 +0100
+@@ -104,7 +104,7 @@
+ #    $Self->{DatabaseDSN} = "DBI:Oracle:sid=$Self->{Database};host=$Self->{DatabaseHost};port=1521;";
+ #    $Self->{DatabaseDSN} = "DBI:Oracle:sid=vingador;host=vingador;port=1521;";
+     # if needed, oracle env settings
+-#    $ENV{ORACLE_HOME} = '/opt/ora9/product/9.2';
++#    $ENV{ORACLE_HOME} = '/usr/share/ora9/product/9.2';
+ #    $ENV{ORACLE_HOME} = '/oracle/Ora92';
+ #    $ENV{NLS_DATE_FORMAT} = 'YYYY-MM-DD HH24:MI:SS';
+ #    $ENV{NLS_LANG} = "german_germany.utf8";
 @@ -252,7 +252,7 @@
  #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
  
@@ -19,9 +152,30 @@ diff -ruN otrs-2.2.5.orig/Kernel/Config/Defaults.pm otrs-2.2.5/Kernel/Config/Def
      # tmp dir
      $Self->{'TempDir'} = '<OTRS_CONFIG_Home>/var/tmp';
      # html template dir
+@@ -780,7 +780,7 @@
+     # --------------------------------------------------- #
+     $Self->{'PGP'} = 0;
+     $Self->{'PGP::Bin'} = '/usr/bin/gpg';
+-    $Self->{'PGP::Options'} = '--homedir /opt/otrs/.gnupg/ --batch --no-tty --yes';
++    $Self->{'PGP::Options'} = '--homedir /usr/share/otrs/.gnupg/ --batch --no-tty --yes';
+ #    $Self->{'PGP::Options'} = '--batch --no-tty --yes';
+ #    $Self->{'PGP::Key::Password'}->{'D2DF79FA'} = 1234;
+ #    $Self->{'PGP::Key::Password'}->{'488A0B8F'} = 1234;
+diff -ruN otrs-2.2.5.orig/Kernel/Config/Files/Framework.xml otrs-2.2.5/Kernel/Config/Files/Framework.xml
+--- otrs-2.2.5.orig/Kernel/Config/Files/Framework.xml	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/Kernel/Config/Files/Framework.xml	2008-02-03 22:57:10.000000000 +0100
+@@ -2821,7 +2821,7 @@
+         <Group>Framework</Group>
+         <SubGroup>Crypt::PGP</SubGroup>
+         <Setting>
+-            <String Regex="">--homedir /opt/otrs/.gnupg/ --batch --no-tty --yes</String>
++            <String Regex="">--homedir /usr/share/otrs/.gnupg/ --batch --no-tty --yes</String>
+         </Setting>
+     </ConfigItem>
+     <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
 diff -ruN otrs-2.2.5.orig/Kernel/Config.pm.dist otrs-2.2.5/Kernel/Config.pm.dist
 --- otrs-2.2.5.orig/Kernel/Config.pm.dist	2008-02-03 21:40:07.000000000 +0100
-+++ otrs-2.2.5/Kernel/Config.pm.dist	2008-02-03 21:41:00.000000000 +0100
++++ otrs-2.2.5/Kernel/Config.pm.dist	2008-02-03 22:57:06.000000000 +0100
 @@ -59,7 +59,7 @@
      # ---------------------------------------------------- #
      # fs root directory
@@ -31,9 +185,123 @@ diff -ruN otrs-2.2.5.orig/Kernel/Config.pm.dist otrs-2.2.5/Kernel/Config.pm.dist
  
      # ---------------------------------------------------- #
      # insert your own config settings "here"               #
+diff -ruN otrs-2.2.5.orig/Kernel/Modules/Installer.pm otrs-2.2.5/Kernel/Modules/Installer.pm
+--- otrs-2.2.5.orig/Kernel/Modules/Installer.pm	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/Kernel/Modules/Installer.pm	2008-02-03 22:57:08.000000000 +0100
+@@ -639,7 +639,7 @@
+             );
+         }
+         else {
+-#           my $SetPermission = $ENV{SCRIPT_FILENAME} || '/opt/otrs/bin/SetPermissions.sh';
++#           my $SetPermission = $ENV{SCRIPT_FILENAME} || '/usr/share/otrs/bin/SetPermissions.sh';
+ #           $SetPermission =~ s/(.+?)\/cgi-bin\/installer.pl/$1\/SetPermissions.sh/g;
+ #           my $BaseDir = $SetPermission;
+ #           $BaseDir =~ s/(.*\/)bin\/SetPermissions.sh/$1/;
+diff -ruN otrs-2.2.5.orig/.mailfilter.dist otrs-2.2.5/.mailfilter.dist
+--- otrs-2.2.5.orig/.mailfilter.dist	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/.mailfilter.dist	2008-02-03 22:57:12.000000000 +0100
+@@ -9,7 +9,7 @@
+ # did not receive this file, see http://www.gnu.org/licenses/gpl.txt.
+ # --
+ 
+-#SYS_HOME=/opt/otrs
++#SYS_HOME=/usr/share/otrs
+ SYS_HOME=$HOME
+ 
+ import DEFAULT
+diff -ruN otrs-2.2.5.orig/.procmailrc.dist otrs-2.2.5/.procmailrc.dist
+--- otrs-2.2.5.orig/.procmailrc.dist	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/.procmailrc.dist	2008-02-03 22:57:10.000000000 +0100
+@@ -9,7 +9,7 @@
+ # did not receive this file, see http://www.gnu.org/licenses/gpl.txt.
+ # --
+ 
+-#SYS_HOME=/opt/otrs/
++#SYS_HOME=/usr/share/otrs/
+ SYS_HOME=$HOME
+ 
+ SHELL=/bin/sh
+diff -ruN otrs-2.2.5.orig/README otrs-2.2.5/README
+--- otrs-2.2.5.orig/README	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/README	2008-02-03 22:57:10.000000000 +0100
+@@ -140,7 +140,7 @@
+ 
+ Directories & Files:
+ ====================
+-$HOME (e. g. /opt/otrs/)
++$HOME (e. g. /usr/share/otrs/)
+ |
+ |  (all executables)
+ |--/bin/             (all system programs)
+diff -ruN otrs-2.2.5.orig/README.webserver otrs-2.2.5/README.webserver
+--- otrs-2.2.5.orig/README.webserver	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/README.webserver	2008-02-03 22:57:10.000000000 +0100
+@@ -27,7 +27,7 @@
+ 
+   Add it to /etc/sysconfig/apache with HTTPD_CONF_INCLUDE_FILES
+   [...]
+-  HTTPD_CONF_INCLUDE_FILES=/opt/otrs/scripts/suse-httpd.include.conf
++  HTTPD_CONF_INCLUDE_FILES=/usr/share/otrs/scripts/suse-httpd.include.conf
+   [...]
+ 
+   Start SuSEconfig and restart the webserver (rcapache restart).
+@@ -50,9 +50,9 @@
+ 
+     Use "$HOME/bin/SetPermissions.sh <OTRS_HOME> <OTRS_USER> <WEBSERVER_USER> [OTRS_GROUP] [WEB_GROUP]"
+     e. g.
+-     Webserver with otrs user: "SetPermissions.sh /opt/otrs otrs otrs"
+-     Webserver with wwwrun user (e. g. SuSE): "SetPermissions.sh /opt/otrs otrs wwwrun"
+-     Webserver with apache user (e. g. Redhat): "SetPermissions.sh /opt/otrs otrs apache"
++     Webserver with otrs user: "SetPermissions.sh /usr/share/otrs otrs otrs"
++     Webserver with wwwrun user (e. g. SuSE): "SetPermissions.sh /usr/share/otrs otrs wwwrun"
++     Webserver with apache user (e. g. Redhat): "SetPermissions.sh /usr/share/otrs otrs apache"
+ 
+ b)
+  *)
+@@ -60,8 +60,8 @@
+   ============================
+   Add this to the cgi-bin stuff section in httpd.conf
+   [...]
+-  Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
+-  ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
++  Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
++  ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
+   [...]
+ 
+  *)
+@@ -70,11 +70,11 @@
+   Add this to the mod_perl stuff section in httpd.conf
+   [...]
+     # agent, admin and customer frontend (mod_alias required!)
+-    ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-    Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++    ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++    Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+     # load all otrs modules (speed improvement!)
+-#   Perlrequire /opt/otrs/scripts/apache-perl-startup.pl
++#   Perlrequire /usr/share/otrs/scripts/apache-perl-startup.pl
+ 
+     # Apache::StatINC - Reload %INC files when updated on disk
+     # (just use it for testing, setup, ... not for high productiv systems)
+@@ -96,11 +96,11 @@
+   Add this to the mod_perl stuff section in httpd.conf
+   [...]
+     # agent, admin and customer frontend
+-    ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-    Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++    ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++    Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+     # load all otrs modules
+-    Perlrequire /opt/otrs/scripts/apache2-perl-startup.pl
++    Perlrequire /usr/share/otrs/scripts/apache2-perl-startup.pl
+ 
+     # Apache::Reload - Reload Perl Modules when Changed on Disk
+     PerlModule Apache2::Reload
 diff -ruN otrs-2.2.5.orig/scripts/apache2-httpd.include.conf otrs-2.2.5/scripts/apache2-httpd.include.conf
 --- otrs-2.2.5.orig/scripts/apache2-httpd.include.conf	2008-02-03 21:40:07.000000000 +0100
-+++ otrs-2.2.5/scripts/apache2-httpd.include.conf	2008-02-03 21:44:40.000000000 +0100
++++ otrs-2.2.5/scripts/apache2-httpd.include.conf	2008-02-03 22:57:13.000000000 +0100
 @@ -4,20 +4,20 @@
  # --
  
@@ -77,7 +345,7 @@ diff -ruN otrs-2.2.5.orig/scripts/apache2-httpd.include.conf otrs-2.2.5/scripts/
      Allow from all
 diff -ruN otrs-2.2.5.orig/scripts/apache2-httpd-new.include.conf otrs-2.2.5/scripts/apache2-httpd-new.include.conf
 --- otrs-2.2.5.orig/scripts/apache2-httpd-new.include.conf	2008-02-03 21:40:07.000000000 +0100
-+++ otrs-2.2.5/scripts/apache2-httpd-new.include.conf	2008-02-03 21:45:48.000000000 +0100
++++ otrs-2.2.5/scripts/apache2-httpd-new.include.conf	2008-02-03 22:57:13.000000000 +0100
 @@ -4,21 +4,21 @@
  # --
  
@@ -122,7 +390,7 @@ diff -ruN otrs-2.2.5.orig/scripts/apache2-httpd-new.include.conf otrs-2.2.5/scri
      Allow from all
 diff -ruN otrs-2.2.5.orig/scripts/apache2-perl-startup.pl otrs-2.2.5/scripts/apache2-perl-startup.pl
 --- otrs-2.2.5.orig/scripts/apache2-perl-startup.pl	2008-02-03 21:40:07.000000000 +0100
-+++ otrs-2.2.5/scripts/apache2-perl-startup.pl	2008-02-03 21:45:17.000000000 +0100
++++ otrs-2.2.5/scripts/apache2-perl-startup.pl	2008-02-03 22:57:13.000000000 +0100
 @@ -7,8 +7,8 @@
  $ENV{MOD_PERL} =~ /mod_perl/ or die "MOD_PERL not used!";
  
@@ -136,7 +404,7 @@ diff -ruN otrs-2.2.5.orig/scripts/apache2-perl-startup.pl otrs-2.2.5/scripts/apa
  # exactly once
 diff -ruN otrs-2.2.5.orig/scripts/apache-httpd.include.conf otrs-2.2.5/scripts/apache-httpd.include.conf
 --- otrs-2.2.5.orig/scripts/apache-httpd.include.conf	2008-02-03 21:40:07.000000000 +0100
-+++ otrs-2.2.5/scripts/apache-httpd.include.conf	2008-02-03 21:42:27.000000000 +0100
++++ otrs-2.2.5/scripts/apache-httpd.include.conf	2008-02-03 22:57:13.000000000 +0100
 @@ -4,14 +4,14 @@
  # --
  
@@ -157,7 +425,7 @@ diff -ruN otrs-2.2.5.orig/scripts/apache-httpd.include.conf otrs-2.2.5/scripts/a
      # (just use it for testing, setup, ... not for high productiv systems)
 diff -ruN otrs-2.2.5.orig/scripts/apache-perl-startup.pl otrs-2.2.5/scripts/apache-perl-startup.pl
 --- otrs-2.2.5.orig/scripts/apache-perl-startup.pl	2008-02-03 21:40:07.000000000 +0100
-+++ otrs-2.2.5/scripts/apache-perl-startup.pl	2008-02-03 21:42:56.000000000 +0100
++++ otrs-2.2.5/scripts/apache-perl-startup.pl	2008-02-03 22:57:12.000000000 +0100
 @@ -5,8 +5,8 @@
  $ENV{GATEWAY_INTERFACE} =~ /^CGI-Perl/ or die "GATEWAY_INTERFACE not Perl!";
  
@@ -168,4 +436,890 @@ diff -ruN otrs-2.2.5.orig/scripts/apache-perl-startup.pl otrs-2.2.5/scripts/apac
 +use lib "/usr/share/otrs/Kernel/cpan-lib";
  
  use Apache::Registry ();       # for things in the "/programs" URL
+ 
+diff -ruN otrs-2.2.5.orig/scripts/auto_build/files.txt otrs-2.2.5/scripts/auto_build/files.txt
+--- otrs-2.2.5.orig/scripts/auto_build/files.txt	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/auto_build/files.txt	2008-02-03 22:57:13.000000000 +0100
+@@ -1,58 +1,58 @@
+ 
+-%config(noreplace) /opt/otrs/Kernel/Config.pm
+-%config(noreplace) /opt/otrs/Kernel/Config/GenericAgent.pm
+-%config(noreplace) /opt/otrs/var/log/TicketCounter.log
+-%config(noreplace) /opt/otrs/.procmailrc
+-%config(noreplace) /opt/otrs/.fetchmailrc
+-%config(noreplace) /opt/otrs/.mailfilter
+-%config(noreplace) /opt/otrs/Kernel/Output/HTML/Standard/*.dtl
+-%config(noreplace) /opt/otrs/Kernel/Output/HTML/Lite/*.dtl
+-%config(noreplace) /opt/otrs/Kernel/Language/*.pm
+-%config(noreplace) /opt/otrs/var/cron/*
+-%config(noreplace) /opt/otrs/var/logo-otrs.png
++%config(noreplace) /usr/share/otrs/Kernel/Config.pm
++%config(noreplace) /usr/share/otrs/Kernel/Config/GenericAgent.pm
++%config(noreplace) /usr/share/otrs/var/log/TicketCounter.log
++%config(noreplace) /usr/share/otrs/.procmailrc
++%config(noreplace) /usr/share/otrs/.fetchmailrc
++%config(noreplace) /usr/share/otrs/.mailfilter
++%config(noreplace) /usr/share/otrs/Kernel/Output/HTML/Standard/*.dtl
++%config(noreplace) /usr/share/otrs/Kernel/Output/HTML/Lite/*.dtl
++%config(noreplace) /usr/share/otrs/Kernel/Language/*.pm
++%config(noreplace) /usr/share/otrs/var/cron/*
++%config(noreplace) /usr/share/otrs/var/logo-otrs.png
+ 
+-%dir /opt/otrs/
+-/opt/otrs/RELEASE
+-/opt/otrs/ARCHIVE
+-/opt/otrs/.procmailrc.dist
+-/opt/otrs/.fetchmailrc.dist
+-/opt/otrs/.mailfilter.dist
+-%dir /opt/otrs/Kernel/
+-%dir /opt/otrs/Kernel/Config/
+-/opt/otrs/Kernel/Config.pm.dist
+-/opt/otrs/Kernel/Config/Files/
+-/opt/otrs/Kernel/Config/GenericAgent.pm.dist
+-/opt/otrs/Kernel/Config/GenericAgent.pm.examples
+-/opt/otrs/Kernel/Config/Defaults.pm
+-/opt/otrs/Kernel/Language.pm
+-%dir /opt/otrs/Kernel/Language/
+-/opt/otrs/Kernel/Modules*
+-%dir /opt/otrs/Kernel/Output/
+-%dir /opt/otrs/Kernel/Output/HTML/
+-%dir /opt/otrs/Kernel/Output/HTML/Standard/
+-%dir /opt/otrs/Kernel/Output/HTML/Lite/
+-/opt/otrs/Kernel/Output/HTML/*.pm
+-/opt/otrs/Kernel/System*
+-/opt/otrs/bin*
+-/opt/otrs/scripts*
+-%dir /opt/otrs/var/
+-%dir /opt/otrs/var/article/
+-/opt/otrs/var/httpd/
+-%dir /opt/otrs/var/log/
+-%dir /opt/otrs/var/sessions/
+-%dir /opt/otrs/var/spool/
+-%dir /opt/otrs/var/cron/
+-%dir /opt/otrs/var/tmp/
+-%dir /opt/otrs/var/pics/stats/
++%dir /usr/share/otrs/
++/usr/share/otrs/RELEASE
++/usr/share/otrs/ARCHIVE
++/usr/share/otrs/.procmailrc.dist
++/usr/share/otrs/.fetchmailrc.dist
++/usr/share/otrs/.mailfilter.dist
++%dir /usr/share/otrs/Kernel/
++%dir /usr/share/otrs/Kernel/Config/
++/usr/share/otrs/Kernel/Config.pm.dist
++/usr/share/otrs/Kernel/Config/Files/
++/usr/share/otrs/Kernel/Config/GenericAgent.pm.dist
++/usr/share/otrs/Kernel/Config/GenericAgent.pm.examples
++/usr/share/otrs/Kernel/Config/Defaults.pm
++/usr/share/otrs/Kernel/Language.pm
++%dir /usr/share/otrs/Kernel/Language/
++/usr/share/otrs/Kernel/Modules*
++%dir /usr/share/otrs/Kernel/Output/
++%dir /usr/share/otrs/Kernel/Output/HTML/
++%dir /usr/share/otrs/Kernel/Output/HTML/Standard/
++%dir /usr/share/otrs/Kernel/Output/HTML/Lite/
++/usr/share/otrs/Kernel/Output/HTML/*.pm
++/usr/share/otrs/Kernel/System*
++/usr/share/otrs/bin*
++/usr/share/otrs/scripts*
++%dir /usr/share/otrs/var/
++%dir /usr/share/otrs/var/article/
++/usr/share/otrs/var/httpd/
++%dir /usr/share/otrs/var/log/
++%dir /usr/share/otrs/var/sessions/
++%dir /usr/share/otrs/var/spool/
++%dir /usr/share/otrs/var/cron/
++%dir /usr/share/otrs/var/tmp/
++%dir /usr/share/otrs/var/pics/stats/
+ 
+-/opt/otrs/Kernel/cpan-lib*
++/usr/share/otrs/Kernel/cpan-lib*
+ 
+-%doc /opt/otrs/INSTAL*
+-%doc /opt/otrs/UPGRADING
+-%doc /opt/otrs/TODO
+-%doc /opt/otrs/COPYING
+-%doc /opt/otrs/CHANGES
+-%doc /opt/otrs/READM*
+-%doc /opt/otrs/doc*
+-%doc /opt/otrs/CREDITS
++%doc /usr/share/otrs/INSTAL*
++%doc /usr/share/otrs/UPGRADING
++%doc /usr/share/otrs/TODO
++%doc /usr/share/otrs/COPYING
++%doc /usr/share/otrs/CHANGES
++%doc /usr/share/otrs/READM*
++%doc /usr/share/otrs/doc*
++%doc /usr/share/otrs/CREDITS
+ 
+diff -ruN otrs-2.2.5.orig/scripts/fedora-otrs-4.spec otrs-2.2.5/scripts/fedora-otrs-4.spec
+--- otrs-2.2.5.orig/scripts/fedora-otrs-4.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/fedora-otrs-4.spec	2008-02-03 22:57:12.000000000 +0100
+@@ -45,7 +45,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -66,12 +66,12 @@
+ useradd $OTRSUSER || :
+ useradd apache || :
+ groupadd apache || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER apache apache apache
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER apache apache apache
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -79,9 +79,9 @@
+ if cat /etc/passwd | grep $OTRSUSER > /dev/null ; then
+     echo "$OTRSUSER exists."
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g apache -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g apache -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ 
+@@ -92,7 +92,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -101,16 +101,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+diff -ruN otrs-2.2.5.orig/scripts/redhat-otrs-7.3.spec otrs-2.2.5/scripts/redhat-otrs-7.3.spec
+--- otrs-2.2.5.orig/scripts/redhat-otrs-7.3.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/redhat-otrs-7.3.spec	2008-02-03 22:57:13.000000000 +0100
+@@ -45,7 +45,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -62,12 +62,12 @@
+ useradd $OTRSUSER || :
+ useradd apache || :
+ groupadd apache || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER apache apache apache
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER apache apache apache
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -75,15 +75,15 @@
+ if cat /etc/passwd | grep $OTRSUSER > /dev/null ; then
+     echo "$OTRSUSER exists."
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g apache -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g apache -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ %post
+ # add httpd.include.conf to /etc/httpd/conf/httpd.conf
+ APACHERC=/etc/httpd/conf/httpd.conf
+-OTRSINCLUDE=/opt/otrs/scripts/apache-httpd.include.conf
++OTRSINCLUDE=/usr/share/otrs/scripts/apache-httpd.include.conf
+ 
+ cat $APACHERC | grep -v "httpd.include.conf" > /tmp/httpd.conf.tmp && \
+ echo "Include $OTRSINCLUDE" >> /tmp/httpd.conf.tmp && mv /tmp/httpd.conf.tmp $APACHERC
+@@ -94,7 +94,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -103,16 +103,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+@@ -150,11 +150,11 @@
+ 
+ %changelog
+ * Thu Oct 18 2006 - martin+rpm@otrs.org
+-- added rename of old /opt/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
++- added rename of old /usr/share/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
+ * Thu Jan 02 2003 - martin+rpm@otrs.org
+-- moved from /opt/OpenTRS to /opt/otrs
++- moved from /usr/share/OpenTRS to /usr/share/otrs
+ * Thu Nov 12 2002 - martin+rpm@otrs.org
+-- moved %doc/install* to /opt/OpenTRS/ (installer problems!)
++- moved %doc/install* to /usr/share/OpenTRS/ (installer problems!)
+   and added Kernel/cpan-lib*
+ * Sun Sep 22 2002 - martin+rpm@otrs.org
+ - added /etc/sysconfig/otrs for rc script (Thanks to Lars Müller)
+diff -ruN otrs-2.2.5.orig/scripts/redhat-otrs-8.0.spec otrs-2.2.5/scripts/redhat-otrs-8.0.spec
+--- otrs-2.2.5.orig/scripts/redhat-otrs-8.0.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/redhat-otrs-8.0.spec	2008-02-03 22:57:13.000000000 +0100
+@@ -45,7 +45,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -66,12 +66,12 @@
+ useradd $OTRSUSER || :
+ useradd apache || :
+ groupadd apache || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER apache apache apache
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER apache apache apache
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -79,9 +79,9 @@
+ if cat /etc/passwd | grep $OTRSUSER > /dev/null ; then
+     echo "$OTRSUSER exists."
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g apache -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g apache -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ 
+@@ -92,7 +92,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -101,16 +101,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+@@ -147,7 +147,7 @@
+ 
+ %changelog
+ * Thu Oct 18 2006 - martin+rpm@otrs.org
+-- added rename of old /opt/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
++- added rename of old /usr/share/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
+ * Thu Feb 12 2003 - martin+rpm@otrs.org
+ - spec for RedHat 8.0 created
+ 
+diff -ruN otrs-2.2.5.orig/scripts/redhat-rcotrs-config otrs-2.2.5/scripts/redhat-rcotrs-config
+--- otrs-2.2.5.orig/scripts/redhat-rcotrs-config	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/redhat-rcotrs-config	2008-02-03 22:57:13.000000000 +0100
+@@ -12,7 +12,7 @@
+ # 
+ # OTRS home (root) directory
+ #
+-OTRS_ROOT=/opt/otrs
++OTRS_ROOT=/usr/share/otrs
+ 
+ # if one of this is false, it will not be checked at the startup!
+ # Note: (may be the database isn't on the same host! --> DB_RUNNING=0) 
+diff -ruN otrs-2.2.5.orig/scripts/restore.pl otrs-2.2.5/scripts/restore.pl
+--- otrs-2.2.5.orig/scripts/restore.pl	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/restore.pl	2008-02-03 22:57:12.000000000 +0100
+@@ -42,7 +42,7 @@
+ if ($Opts{'h'}) {
+     print "restore.pl <Revision $VERSION> - restore script\n";
+     print "Copyright (c) 2001-2007 OTRS GmbH, http://otrs.org/\n";
+-    print "usage: restore.pl -b /data_backup/<TIME>/ -d /opt/otrs/\n";
++    print "usage: restore.pl -b /data_backup/<TIME>/ -d /usr/share/otrs/\n";
+     exit 1;
+ } if (!$Opts{'b'}) {
+     print STDERR "ERROR: Need -b for backup directory\n";
+diff -ruN otrs-2.2.5.orig/scripts/suse-otrs-10.0.spec otrs-2.2.5/scripts/suse-otrs-10.0.spec
+--- otrs-2.2.5.orig/scripts/suse-otrs-10.0.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/suse-otrs-10.0.spec	2008-02-03 22:57:13.000000000 +0100
+@@ -47,7 +47,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -75,12 +75,12 @@
+ useradd $OTRSUSER || :
+ useradd wwwrun || :
+ groupadd www || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER wwwrun www www
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER wwwrun www www
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -90,9 +90,9 @@
+     # update groups
+     usermod -g www $OTRSUSER
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ 
+@@ -106,7 +106,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -115,16 +115,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+@@ -165,7 +165,7 @@
+ 
+ %changelog
+ * Thu Oct 18 2006 - martin+rpm@otrs.org
+-- added rename of old /opt/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
++- added rename of old /usr/share/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
+ * Sun Mar 25 2006 - martin+rpm@otrs.org
+ - added SUSE 10.0 support
+ 
+diff -ruN otrs-2.2.5.orig/scripts/suse-otrs-7.3.spec otrs-2.2.5/scripts/suse-otrs-7.3.spec
+--- otrs-2.2.5.orig/scripts/suse-otrs-7.3.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/suse-otrs-7.3.spec	2008-02-03 22:57:13.000000000 +0100
+@@ -47,7 +47,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -71,12 +71,12 @@
+ useradd $OTRSUSER || :
+ useradd wwwrun || :
+ groupadd nogroup || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER wwwrun
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER wwwrun
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -86,9 +86,9 @@
+     # update groups
+     usermod -g nogroup $OTRSUSER
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ %post
+@@ -98,7 +98,7 @@
+ # add apache-httpd.include.conf to apache.rc.config
+ APACHERC=/etc/rc.config.d/apache.rc.config
+ 
+-OTRSINCLUDE=/opt/otrs/scripts/apache-httpd.include.conf
++OTRSINCLUDE=/usr/share/otrs/scripts/apache-httpd.include.conf
+ sed 's+^HTTPD_CONF_INCLUDE_FILES=.*$+HTTPD_CONF_INCLUDE_FILES='$OTRSINCLUDE'+' \
+ $APACHERC > /tmp/apache.rc.config.tmp && mv /tmp/apache.rc.config.tmp $APACHERC
+ # if it's a major-update backup old version templates (maybe not compatible!)
+@@ -107,7 +107,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -116,16 +116,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+@@ -165,11 +165,11 @@
+ 
+ %changelog
+ * Thu Oct 18 2006 - martin+rpm@otrs.org
+-- added rename of old /opt/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
++- added rename of old /usr/share/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
+ * Thu Jan 02 2003 - martin+rpm@otrs.org
+-- moved from /opt/OpenTRS to /opt/otrs
++- moved from /usr/share/OpenTRS to /usr/share/otrs
+ * Thu Nov 12 2002 - martin+rpm@otrs.org
+-- moved %doc/install* to /opt/OpenTRS/ (installer problems!)
++- moved %doc/install* to /usr/share/OpenTRS/ (installer problems!)
+   and added Kernel/cpan-lib*
+ * Sun Sep 22 2002 - martin+rpm@otrs.org
+ - added /etc/rc.config.d/otrs for rc script (Thanks to Lars Müller)
+diff -ruN otrs-2.2.5.orig/scripts/suse-otrs-8.0.spec otrs-2.2.5/scripts/suse-otrs-8.0.spec
+--- otrs-2.2.5.orig/scripts/suse-otrs-8.0.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/suse-otrs-8.0.spec	2008-02-03 22:57:13.000000000 +0100
+@@ -47,7 +47,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -72,12 +72,12 @@
+ useradd $OTRSUSER || :
+ useradd wwwrun || :
+ groupadd nogroup || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER wwwrun
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER wwwrun
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -87,9 +87,9 @@
+     # update groups
+     usermod -g nogroup $OTRSUSER
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ 
+@@ -99,7 +99,7 @@
+ 
+ # add httpd.include.conf to /etc/sysconfig/apache
+ if test -e /etc/sysconfig/apache; then
+-    OTRSINCLUDE=/opt/otrs/scripts/apache-httpd.include.conf
++    OTRSINCLUDE=/usr/share/otrs/scripts/apache-httpd.include.conf
+     APACHERC=/etc/sysconfig/apache
+     sed 's+^HTTPD_CONF_INCLUDE_FILES=.*$+HTTPD_CONF_INCLUDE_FILES='$OTRSINCLUDE'+' \
+     $APACHERC > /tmp/apache.rc.config.tmp && mv /tmp/apache.rc.config.tmp $APACHERC
+@@ -111,7 +111,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -120,16 +120,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+@@ -170,11 +170,11 @@
+ 
+ %changelog
+ * Thu Oct 18 2006 - martin+rpm@otrs.org
+-- added rename of old /opt/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
++- added rename of old /usr/share/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
+ * Thu Jan 02 2003 - martin+rpm@otrs.org
+-- moved from /opt/OpenTRS to /opt/otrs
++- moved from /usr/share/OpenTRS to /usr/share/otrs
+ * Thu Nov 12 2002 - martin+rpm@otrs.org
+-- moved %doc/install* to /opt/OpenTRS/ (installer problems!)
++- moved %doc/install* to /usr/share/OpenTRS/ (installer problems!)
+   and added Kernel/cpan-lib*
+ * Sun Sep 22 2002 - martin+rpm@otrs.org
+ - added /etc/sysconfig/otrs for rc script (Thanks to Lars Müller)
+diff -ruN otrs-2.2.5.orig/scripts/suse-otrs-9.0.spec otrs-2.2.5/scripts/suse-otrs-9.0.spec
+--- otrs-2.2.5.orig/scripts/suse-otrs-9.0.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/suse-otrs-9.0.spec	2008-02-03 22:57:13.000000000 +0100
+@@ -47,7 +47,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -72,12 +72,12 @@
+ useradd $OTRSUSER || :
+ useradd wwwrun || :
+ groupadd www || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER wwwrun www www
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER wwwrun www www
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -87,9 +87,9 @@
+     # update groups
+     usermod -g www $OTRSUSER
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ 
+@@ -99,7 +99,7 @@
+ 
+ # add httpd.include.conf to /etc/sysconfig/apache
+ if test -e /etc/sysconfig/apache; then
+-    OTRSINCLUDE=/opt/otrs/scripts/apache-httpd.include.conf
++    OTRSINCLUDE=/usr/share/otrs/scripts/apache-httpd.include.conf
+     APACHERC=/etc/sysconfig/apache
+     sed 's+^HTTPD_CONF_INCLUDE_FILES=.*$+HTTPD_CONF_INCLUDE_FILES='$OTRSINCLUDE'+' \
+     $APACHERC > /tmp/apache.rc.config.tmp && mv /tmp/apache.rc.config.tmp $APACHERC
+@@ -111,7 +111,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -120,16 +120,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+@@ -170,13 +170,13 @@
+ 
+ %changelog
+ * Thu Oct 18 2006 - martin+rpm@otrs.org
+-- added rename of old /opt/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
++- added rename of old /usr/share/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
+ * Sun Dec 07 2003 - martin+rpm@otrs.org
+ - added SUSE 9.0 support
+ * Thu Jan 02 2003 - martin+rpm@otrs.org
+-- moved from /opt/OpenTRS to /opt/otrs
++- moved from /usr/share/OpenTRS to /usr/share/otrs
+ * Thu Nov 12 2002 - martin+rpm@otrs.org
+-- moved %doc/install* to /opt/OpenTRS/ (installer problems!)
++- moved %doc/install* to /usr/share/OpenTRS/ (installer problems!)
+   and added Kernel/cpan-lib*
+ * Sun Sep 22 2002 - martin+rpm@otrs.org
+ - added /etc/sysconfig/otrs for rc script (Thanks to Lars Müller)
+diff -ruN otrs-2.2.5.orig/scripts/suse-otrs-9.1.spec otrs-2.2.5/scripts/suse-otrs-9.1.spec
+--- otrs-2.2.5.orig/scripts/suse-otrs-9.1.spec	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/suse-otrs-9.1.spec	2008-02-03 22:57:13.000000000 +0100
+@@ -47,7 +47,7 @@
+ # delete old RPM_BUILD_ROOT
+ rm -rf $RPM_BUILD_ROOT
+ # set DESTROOT
+-export DESTROOT="/opt/otrs/"
++export DESTROOT="/usr/share/otrs/"
+ # create RPM_BUILD_ROOT DESTROOT
+ mkdir -p $RPM_BUILD_ROOT/$DESTROOT/
+ # copy files
+@@ -75,12 +75,12 @@
+ useradd $OTRSUSER || :
+ useradd wwwrun || :
+ groupadd www || :
+-$RPM_BUILD_ROOT/opt/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/opt/otrs $OTRSUSER wwwrun www www
++$RPM_BUILD_ROOT/usr/share/otrs/bin/SetPermissions.sh $RPM_BUILD_ROOT/usr/share/otrs $OTRSUSER wwwrun www www
+ 
+ %pre
+ # remember about the installed version
+-if test -e /opt/otrs/RELEASE; then
+-    cat /opt/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
++if test -e /usr/share/otrs/RELEASE; then
++    cat /usr/share/otrs/RELEASE|grep VERSION|sed 's/VERSION = //'|sed 's/ /-/g' > /tmp/otrs-old.tmp
+ fi
+ # useradd
+ export OTRSUSER=otrs
+@@ -90,9 +90,9 @@
+     # update groups
+     usermod -g www $OTRSUSER
+     # update home dir
+-    usermod -d /opt/otrs $OTRSUSER
++    usermod -d /usr/share/otrs $OTRSUSER
+ else
+-    useradd $OTRSUSER -d /opt/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
++    useradd $OTRSUSER -d /usr/share/otrs/ -s /bin/false -g nogroup -c 'OTRS System User' && echo "$OTRSUSER added."
+ fi
+ 
+ 
+@@ -106,7 +106,7 @@
+     OLDOTRS=`cat /tmp/otrs-old.tmp`
+     if echo $OLDOTRS | grep -v "$TOINSTALL" > /dev/null; then
+         echo "backup old (maybe not compatible) templates (of $OLDOTRS)"
+-        for i in /opt/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
++        for i in /usr/share/otrs/Kernel/Output/HTML/Standard/*.rpmnew;
+             do BF=`echo $i|sed 's/.rpmnew$//'`; mv -v $BF $BF.backup_maybe_not_compat_to.$OLDOTRS; mv $i $BF;
+         done
+     fi
+@@ -115,16 +115,16 @@
+ 
+ # OTRS 2.0 -> OTRS 2.1
+ # remove old ticket config file
+-if test -e /opt/otrs/Kernel/Config/Files/Ticket.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/Ticket.pm /opt/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
++if test -e /usr/share/otrs/Kernel/Config/Files/Ticket.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/Ticket.pm /usr/share/otrs/Kernel/Config/Files/Ticket.pm.not_longer_used
+ fi;
+ # remove old ticket postmaster config file
+-if test -e /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm /opt/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm /usr/share/otrs/Kernel/Config/Files/TicketPostMaster.pm.not_longer_used;
+ fi
+ # remove old faq config file
+-if test -e /opt/otrs/Kernel/Config/Files/FAQ.pm; then
+-    mv /opt/otrs/Kernel/Config/Files/FAQ.pm /opt/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
++if test -e /usr/share/otrs/Kernel/Config/Files/FAQ.pm; then
++    mv /usr/share/otrs/Kernel/Config/Files/FAQ.pm /usr/share/otrs/Kernel/Config/Files/FAQ.pm.not_longer_used;
+ fi
+ 
+ # note
+@@ -165,15 +165,15 @@
+ 
+ %changelog
+ * Thu Oct 18 2006 - martin+rpm@otrs.org
+-- added rename of old /opt/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
++- added rename of old /usr/share/otrs/Kernel/Config/Files/(Ticket|TicketPostMaster|FAQ).pm files
+ * Sun Jun 18 2004 - martin+rpm@otrs.org
+ - added SUSE 9.1 support
+ * Sun Dec 07 2003 - martin+rpm@otrs.org
+ - added SUSE 9.0 support
+ * Thu Jan 02 2003 - martin+rpm@otrs.org
+-- moved from /opt/OpenTRS to /opt/otrs
++- moved from /usr/share/OpenTRS to /usr/share/otrs
+ * Thu Nov 12 2002 - martin+rpm@otrs.org
+-- moved %doc/install* to /opt/OpenTRS/ (installer problems!)
++- moved %doc/install* to /usr/share/OpenTRS/ (installer problems!)
+   and added Kernel/cpan-lib*
+ * Sun Sep 22 2002 - martin+rpm@otrs.org
+ - added /etc/sysconfig/otrs for rc script (Thanks to Lars Müller)
+diff -ruN otrs-2.2.5.orig/scripts/suse-rcotrs-config otrs-2.2.5/scripts/suse-rcotrs-config
+--- otrs-2.2.5.orig/scripts/suse-rcotrs-config	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/suse-rcotrs-config	2008-02-03 22:57:13.000000000 +0100
+@@ -12,7 +12,7 @@
+ # 
+ # OTRS home (root) directory
+ #
+-OTRS_ROOT=/opt/otrs
++OTRS_ROOT=/usr/share/otrs
+ 
+ # 
+ # if one of this is false, it will not be checked at the startup!
+diff -ruN otrs-2.2.5.orig/scripts/sync_node.sh otrs-2.2.5/scripts/sync_node.sh
+--- otrs-2.2.5.orig/scripts/sync_node.sh	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/sync_node.sh	2008-02-03 22:57:13.000000000 +0100
+@@ -21,7 +21,7 @@
+ # --
+ 
+ if ! test $1; then
+-    echo "Usage: $0 dest_node.host /opt/dest_note_otrs/ /opt/local_otrs/ '/etc/init.d/apache restart' remote_user"
++    echo "Usage: $0 dest_node.host /usr/share/dest_note_otrs/ /usr/share/local_otrs/ '/etc/init.d/apache restart' remote_user"
+     exit 1;
+ fi
+ 
+diff -ruN otrs-2.2.5.orig/scripts/test/Crypt.t otrs-2.2.5/scripts/test/Crypt.t
+--- otrs-2.2.5.orig/scripts/test/Crypt.t	2008-02-03 21:40:07.000000000 +0100
++++ otrs-2.2.5/scripts/test/Crypt.t	2008-02-03 22:57:12.000000000 +0100
+@@ -19,8 +19,8 @@
+ # check if gpg is located there
+ if (! -e $Self->{ConfigObject}->Get('PGP::Bin')) {
+     # maybe it's a mac with macport
+-    if (-e '/opt/local/bin/gpg') {
+-        $Self->{ConfigObject}->Set(Key => 'PGP::Bin', Value => '/opt/local/bin/gpg');
++    if (-e '/usr/share/local/bin/gpg') {
++        $Self->{ConfigObject}->Set(Key => 'PGP::Bin', Value => '/usr/share/local/bin/gpg');
+     }
+ }
  
