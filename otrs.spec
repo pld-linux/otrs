@@ -5,17 +5,16 @@
 # - write not so brain-damage init-script...
 %bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
-%define	vrel	01
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	2.0.5
-Release:	1
+Version:	2.2.5
+Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
-Source0:	http://ftp.gwdg.de/pub/misc/otrs/%{name}-%{version}-%{vrel}.tar.bz2
-# Source0-md5:	1f6de97cf9f660e0e4f04a5f29122018
+Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
+# Source0-md5:	8cf859e35cd50ee2b65e934a62f64fcd
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-logrotate
