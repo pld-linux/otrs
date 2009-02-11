@@ -130,3 +130,106 @@
          </Setting>
      </ConfigItem>
      <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
+--- ./Kernel/Config/Defaults.pm.org	2009-02-11 20:31:17.295066037 +0100
++++ ./Kernel/Config/Defaults.pm	2009-02-11 20:32:54.648184904 +0100
+@@ -267,7 +267,7 @@ sub LoadDefaults {
+ #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
+ 
+     # param for LogModule Kernel::System::Log::File (required!)
+-    $Self->{'LogModule::LogFile'} = '/tmp/otrs.log';
++    $Self->{'LogModule::LogFile'} = '/var/log/otrs.log';
+ 
+     # param if the date (yyyy-mm) should be added as suffix to
+     # logfile [0|1]
+--- ./scripts/apache2-httpd.include.conf.org	2009-02-11 20:34:22.177964594 +0100
++++ ./scripts/apache2-httpd.include.conf	2009-02-11 20:35:00.407961819 +0100
+@@ -4,14 +4,14 @@
+ # --
+ 
+ # agent, admin and customer frontend
+-ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+ # if mod_perl is used
+ <IfModule mod_perl.c>
+ 
+     # load all otrs modules
+-    Perlrequire /opt/otrs/scripts/apache2-perl-startup.pl
++    Perlrequire /usr/share/otrs/scripts/apache2-perl-startup.pl
+ 
+     # Apache::Reload - Reload Perl Modules when Changed on Disk
+     PerlModule Apache::Reload
+@@ -33,13 +33,13 @@ Alias /otrs-web/ "/opt/otrs/var/httpd/ht
+ </IfModule>
+ 
+ # directory settings
+-<Directory "/opt/otrs/bin/cgi-bin/">
++<Directory "/usr/share/otrs/bin/cgi-bin/">
+     AllowOverride None
+     Options +ExecCGI -Includes
+     Order allow,deny
+     Allow from all
+ </Directory>
+-<Directory "/opt/otrs/var/httpd/htdocs/">
++<Directory "/usr/share/otrs/var/httpd/htdocs/">
+     AllowOverride None
+     Order allow,deny
+     Allow from all
+--- ./scripts/apache2-httpd-new.include.conf.org	2009-02-11 20:36:27.415035000 +0100
++++ ./scripts/apache2-httpd-new.include.conf	2009-02-11 20:36:42.088025280 +0100
+@@ -4,14 +4,14 @@
+ # --
+ 
+ # agent, admin and customer frontend
+-ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+ # if mod_perl is used
+ <IfModule mod_perl.c>
+ 
+     # load all otrs modules
+-    Perlrequire /opt/otrs/scripts/apache2-perl-startup.pl
++    Perlrequire /usr/share/otrs/scripts/apache2-perl-startup.pl
+ 
+     # Apache::Reload - Reload Perl Modules when Changed on Disk
+     PerlModule Apache2::Reload
+@@ -34,13 +34,13 @@ Alias /otrs-web/ "/opt/otrs/var/httpd/ht
+ </IfModule>
+ 
+ # directory settings
+-<Directory "/opt/otrs/bin/cgi-bin/">
++<Directory "/usr/share/otrs/bin/cgi-bin/">
+     AllowOverride None
+     Options +ExecCGI -Includes
+     Order allow,deny
+     Allow from all
+ </Directory>
+-<Directory "/opt/otrs/var/httpd/htdocs/">
++<Directory "/usr/share/otrs/var/httpd/htdocs/">
+     AllowOverride None
+     Order allow,deny
+     Allow from all
+--- ./scripts/apache-httpd.include.conf.org	2007-04-16 14:11:53.000000000 +0200
++++ ./scripts/apache-httpd.include.conf	2009-02-11 20:37:41.464664483 +0100
+@@ -4,14 +4,14 @@
+ # --
+ 
+ # agent, admin and customer frontend (mod_alias required!)
+-ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
+-Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
++ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
++Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
+ 
+ # if mod_perl is used
+ <IfModule mod_perl.c>
+ 
+     # load all otrs modules (speed improvement!)
+-#   Perlrequire /opt/otrs/scripts/apache-perl-startup.pl
++#   Perlrequire /usr/share/otrs/scripts/apache-perl-startup.pl
+ 
+     # Apache::StatINC - Reload %INC files when updated on disk
+     # (just use it for testing, setup, ... not for high productiv systems)
