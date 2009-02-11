@@ -68,3 +68,65 @@
  
  # pull in things we will use in most requests so it is read and compiled
  # exactly once
+--- ./Kernel/Config/Defaults.pm.org	2009-02-11 13:27:47.327241494 +0100
++++ ./Kernel/Config/Defaults.pm	2009-02-11 13:28:43.554268486 +0100
+@@ -104,7 +104,7 @@ sub LoadDefaults {
+ #    $Self->{DatabaseDSN} = "DBI:Oracle:sid=$Self->{Database};host=$Self->{DatabaseHost};port=1521;";
+ #    $Self->{DatabaseDSN} = "DBI:Oracle:sid=vingador;host=vingador;port=1521;";
+ # if needed, oracle env settings
+-#    $ENV{ORACLE_HOME} = '/opt/ora9/product/9.2';
++#    $ENV{ORACLE_HOME} = '/usr/share/ora9/product/9.2';
+ #    $ENV{ORACLE_HOME} = '/oracle/Ora92';
+ #    $ENV{NLS_DATE_FORMAT} = 'YYYY-MM-DD HH24:MI:SS';
+ #    $ENV{NLS_LANG} = "german_germany.utf8";
+@@ -766,7 +766,7 @@ sub LoadDefaults {
+     # directories                                         #
+     # --------------------------------------------------- #
+     # root directory
+-    $Self->{'Home'} = '/opt/otrs';
++    $Self->{'Home'} = '/usr/share/otrs';
+ 
+     # tmp dir
+     $Self->{'TempDir'} = '<OTRS_CONFIG_Home>/var/tmp';
+@@ -806,7 +806,7 @@ sub LoadDefaults {
+     # --------------------------------------------------- #
+     $Self->{'PGP'}          = 0;
+     $Self->{'PGP::Bin'}     = '/usr/bin/gpg';
+-    $Self->{'PGP::Options'} = '--homedir /opt/otrs/.gnupg/ --batch --no-tty --yes';
++    $Self->{'PGP::Options'} = '--homedir /usr/share/otrs/.gnupg/ --batch --no-tty --yes';
+ 
+ #    $Self->{'PGP::Options'} = '--batch --no-tty --yes';
+ #    $Self->{'PGP::Key::Password'}->{'D2DF79FA'} = 1234;
+--- ./Kernel/Modules/Installer.pm.org	2009-02-11 13:27:57.670939967 +0100
++++ ./Kernel/Modules/Installer.pm	2009-02-11 13:28:58.914266877 +0100
+@@ -617,7 +617,7 @@ sub Run {
+         }
+         else {
+ 
+-            # my $SetPermission = $ENV{SCRIPT_FILENAME} || '/opt/otrs/bin/SetPermissions.sh';
++            # my $SetPermission = $ENV{SCRIPT_FILENAME} || '/usr/share/otrs/bin/SetPermissions.sh';
+             # $SetPermission =~ s/(.+?)\/cgi-bin\/installer.pl/$1\/SetPermissions.sh/g;
+             # my $BaseDir = $SetPermission;
+             # $BaseDir =~ s/(.*\/)bin\/SetPermissions.sh/$1/;
+--- ./Kernel/Config.pm.dist.org	2009-02-11 13:27:30.157609226 +0100
++++ ./Kernel/Config.pm.dist	2009-02-11 13:28:17.873854943 +0100
+@@ -59,7 +59,7 @@ sub Load {
+     # ---------------------------------------------------- #
+     # fs root directory
+     # ---------------------------------------------------- #
+-    $Self->{Home} = '/opt/otrs';
++    $Self->{Home} = '/usr/share/otrs';
+ 
+     # ---------------------------------------------------- #
+     # insert your own config settings "here"               #
+--- ./Kernel/Config/Files/Framework.xml.org2	2009-02-11 13:30:55.893889121 +0100
++++ ./Kernel/Config/Files/Framework.xml	2009-02-11 13:31:20.450919346 +0100
+@@ -2786,7 +2786,7 @@
+         <Group>Framework</Group>
+         <SubGroup>Crypt::PGP</SubGroup>
+         <Setting>
+-            <String Regex="">--homedir /opt/otrs/.gnupg/ --batch --no-tty --yes</String>
++		<String Regex="">--homedir /usr/share/otrs/.gnupg/ --batch --no-tty --yes</String>
+         </Setting>
+     </ConfigItem>
+     <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
