@@ -9,7 +9,7 @@ Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
 Version:	2.3.4
-Release:	0.1
+Release:	0.2
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -37,6 +37,10 @@ Requires:	perl-DBD-mysql
 #Requires:	perl-MIME-Base64
 #Requires:	perl-MIME-tools
 #Requires:	perl-URI
+# Required for apache loading script:
+Requires:	perl-Crypt-PasswdMD5
+Requires:	perl-Text-CSV
+#####
 Requires:	procmail
 Requires:	smtpdaemon
 Conflicts:	logrotate < 3.7-4
