@@ -8,13 +8,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	2.4.4
+Version:	2.4.3
 Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	26228a25b36786c07801649d0df04c25
+# Source0-md5:	84679f1bfb34c67e5e0a15bf9437e7cd
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-logrotate
@@ -244,9 +244,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-#%doc INSTALL* UPGRADING TODO CHANGES README* doc/
-%doc doc/
-%doc %{otrsdir}/README* %{otrsdir}/TODO %{otrsdir}/UPGRADING %{otrsdir}/ARCHIVE %{otrsdir}/CHANGES %{otrsdir}/COPYING %{otrsdir}/COPYING-Third-Party %{otrsdir}/CREDITS
+%doc INSTALL* UPGRADING TODO CHANGES README* doc/
 %doc scripts/test Kernel/Config/GenericAgent.pm.examples
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/otrs
 %attr(751,otrs,http) %dir %{_sysconfdir}/%{name}
@@ -371,60 +369,3 @@ fi
 %{otrsdir}/scripts/*.pm
 %{otrsdir}/scripts/*.php
 %dir %{otrsdir}/scripts/tools
-
-#NEW !!!!!!!!!!!!!!!!!!!!!!
-#%{_datadir}/otrs/Kernel/Config/Files/Framework.xml.orig
-#%{_datadir}/otrs/Kernel/Config/GenericAgent.pm.dist
-#%doc %{otrsdir}/{README, README.database, README.webserver, TODO, UPGRADING, ARCHIVE, CHANGES, COPYING, COPYING-Third-Party, CREDITS}
-%{_datadir}/otrs/Kernel/Config/GenericAgent.pm.examples
-%{_datadir}/otrs/Kernel/System/Ticket/Custom.pm.example
-%{_datadir}/otrs/Kernel/cpan-lib/Apache/LICENSE
-%{_datadir}/otrs/Kernel/cpan-lib/Apache2/LICENSE
-%{_datadir}/otrs/Kernel/cpan-lib/Net/IMAP/Simple/SSL.pm
-#%{_datadir}/otrs/README
-#%{_datadir}/otrs/README.database
-#%{_datadir}/otrs/README.webserver
-#%{_datadir}/otrs/TODO
-#%{_datadir}/otrs/UPGRADING
-#%{_datadir}/otrs/ARCHIVE
-#%{_datadir}/otrs/CHANGES
-#%{_datadir}/otrs/COPYING
-#%{_datadir}/otrs/COPYING-Third-Party
-#%{_datadir}/otrs/CREDITS
-
-#%{_datadir}/otrs/bin/Cron.sh.orig
-#%{_datadir}/otrs/bin/SetPermissions.sh.orig
-#%{_datadir}/otrs/scripts/fedora-otrs-4.spec
-%{_datadir}/otrs/var/logo-otrs.png
-%{_datadir}/otrs/var/packages/Support-1.0.92.opm
-%{_datadir}/otrs/var/stats/ListOfOpenTicketsSortedByTimeLeftUntilEscalationDeadlineExpires.de.xml
-%{_datadir}/otrs/var/stats/ListOfOpenTicketsSortedByTimeLeftUntilEscalationDeadlineExpires.en.xml
-%{_datadir}/otrs/var/stats/ListOfOpenTicketsSortedByTimeLeftUntilResponseDeadlineExpires.de.xml
-%{_datadir}/otrs/var/stats/ListOfOpenTicketsSortedByTimeLeftUntilResponseDeadlineExpires.en.xml
-%{_datadir}/otrs/var/stats/ListOfOpenTicketsSortedByTimeLeftUntilSolutionDeadlineExpires.de.xml
-%{_datadir}/otrs/var/stats/ListOfOpenTicketsSortedByTimeLeftUntilSolutionDeadlineExpires.en.xml
-%{_datadir}/otrs/var/stats/ListOfTheMostTimeConsumingTickets.de.xml
-%{_datadir}/otrs/var/stats/ListOfTheMostTimeConsumingTickets.en.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsClosedLastMonth.de.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsClosedLastMonth.en.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsClosedSortedByResponseTime.de.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsClosedSortedByResponseTime.en.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsClosedSortedBySolutionTime.de.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsClosedSortedBySolutionTime.en.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsCreatedLastMonth.de.xml
-%{_datadir}/otrs/var/stats/ListOfTicketsCreatedLastMonth.en.xml
-%{_datadir}/otrs/var/stats/Stats.NewTickets.de.xml
-%{_datadir}/otrs/var/stats/Stats.NewTickets.en.xml
-%{_datadir}/otrs/var/stats/Stats.StatusActionOverview.de.xml
-%{_datadir}/otrs/var/stats/Stats.StatusActionOverview.en.xml
-%{_datadir}/otrs/var/stats/Stats.TicketOverview.de.xml
-%{_datadir}/otrs/var/stats/Stats.TicketOverview.en.xml
-#%{_datadir}/otrs/ARCHIVE
-#%{_datadir}/otrs/CHANGES
-#%{_datadir}/otrs/CHANGES.orig
-#%{_datadir}/otrs/COPYING
-#%{_datadir}/otrs/COPYING-Third-Party
-#%{_datadir}/otrs/CREDITS
-#%{_datadir}/otrs/INSTALL.RedHat
-#%{_datadir}/otrs/INSTALL.SuSE
-#%{_datadir}/otrs/Kernel/Config/Defaults.pm.orig
