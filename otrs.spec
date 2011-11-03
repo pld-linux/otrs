@@ -286,6 +286,7 @@ fi
 %dir %{otrsdir}/Kernel/System
 %{otrsdir}/Kernel/System/*.pm
 %dir %{otrsdir}/Kernel/System/Auth
+%dir %{otrsdir}/Kernel/System/Auth/Sync
 %dir %{otrsdir}/Kernel/System/AuthSession
 %dir %{otrsdir}/Kernel/System/Cache
 %dir %{otrsdir}/Kernel/System/Crypt
@@ -297,12 +298,19 @@ fi
 %dir %{otrsdir}/Kernel/System/LinkObject
 %dir %{otrsdir}/Kernel/System/GenericAgent
 %dir %{otrsdir}/Kernel/System/Log
+%dir %{otrsdir}/Kernel/System/MailAccount
 %dir %{otrsdir}/Kernel/System/PostMaster
 %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
 %dir %{otrsdir}/Kernel/System/PostMaster/Filter
+%dir %{otrsdir}/Kernel/System/Queue
+%dir %{otrsdir}/Kernel/System/SLA
+%dir %{otrsdir}/Kernel/System/Service
 %dir %{otrsdir}/Kernel/System/Stats
+%dir %{otrsdir}/Kernel/System/Stats/Static
 %dir %{otrsdir}/Kernel/System/Stats/Dynamic
 %dir %{otrsdir}/Kernel/System/Ticket
+%dir %{otrsdir}/Kernel/System/Ticket/Acl
+%dir %{otrsdir}/Kernel/System/Ticket/ArticleSearchIndex
 %dir %{otrsdir}/Kernel/System/Ticket/CustomerPermission
 %dir %{otrsdir}/Kernel/System/Ticket/Event
 %dir %{otrsdir}/Kernel/System/Ticket/Permission
@@ -314,9 +322,15 @@ fi
 %dir %{otrsdir}/Kernel/System/Web/UploadCache
 %dir %{otrsdir}/Kernel/cpan-lib
 %dir %{otrsdir}/Kernel/cpan-lib/Algorithm
+%dir %{otrsdir}/Kernel/cpan-lib/Apache
+%dir %{otrsdir}/Kernel/cpan-lib/Apache2
 %dir %{otrsdir}/Kernel/cpan-lib/Crypt
 %dir %{otrsdir}/Kernel/cpan-lib/File
 %dir %{otrsdir}/Kernel/cpan-lib/HTML
+%dir %{otrsdir}/Kernel/cpan-lib/Net
+%dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP
+%dir %{otrsdir}/Kernel/cpan-lib/Net/POP3
+%dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP
 %dir %{otrsdir}/Kernel/cpan-lib/Text
 %dir %{otrsdir}/Kernel/cpan-lib/Text/Diff
 %dir %{otrsdir}/bin
