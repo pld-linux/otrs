@@ -1,6 +1,6 @@
-diff -ur otrs-2.4.12/bin/Cron.sh otrs-2.4.12.new//bin/Cron.sh
---- otrs-2.4.12/bin/Cron.sh	2011-10-11 10:44:52.000000000 +0200
-+++ otrs-2.4.12.new//bin/Cron.sh	2011-11-03 08:52:59.183765676 +0100
+diff -ur otrs-3.0.5/bin/Cron.sh otrs-3.0.5.new//bin/Cron.sh
+--- otrs-3.0.5/bin/Cron.sh	2009-02-26 12:01:01.000000000 +0100
++++ otrs-3.0.5.new//bin/Cron.sh	2011-11-03 11:25:00.450333939 +0100
 @@ -45,7 +45,7 @@
  OTRS_HOME="`pwd`"
  cd -
@@ -10,22 +10,22 @@ diff -ur otrs-2.4.12/bin/Cron.sh otrs-2.4.12.new//bin/Cron.sh
  if test -e $OTRS_HOME/var/cron; then
      OTRS_ROOT=$OTRS_HOME
  else
-diff -ur otrs-2.4.12/bin/SetPermissions.sh otrs-2.4.12.new//bin/SetPermissions.sh
---- otrs-2.4.12/bin/SetPermissions.sh	2011-10-11 10:44:52.000000000 +0200
-+++ otrs-2.4.12.new//bin/SetPermissions.sh	2011-11-03 08:53:28.010431961 +0100
-@@ -29,7 +29,7 @@
-     echo ""
-     echo "Usage: SetPermissions.sh <OTRS_HOME> <OTRS_USER> <WEBSERVER_USER> [OTRS_GROUP] [WEB_GROUP]"
-     echo ""
--    echo "  Try: SetPermissions.sh /opt/otrs otrs wwwrun"
-+    echo "  Try: SetPermissions.sh /usr/share/otrs otrs wwwrun"
-     echo ""
-     exit 1;
- else
-diff -ur otrs-2.4.12/Kernel/Config/Defaults.pm otrs-2.4.12.new//Kernel/Config/Defaults.pm
---- otrs-2.4.12/Kernel/Config/Defaults.pm	2011-10-11 10:45:04.000000000 +0200
-+++ otrs-2.4.12.new//Kernel/Config/Defaults.pm	2011-11-03 09:58:06.006286765 +0100
-@@ -294,7 +294,7 @@
+diff -ur otrs-3.0.5/bin/otrs.SetPermissions.pl otrs-3.0.5.new//bin/otrs.SetPermissions.pl
+--- otrs-3.0.5/bin/otrs.SetPermissions.pl	2010-12-17 08:35:44.000000000 +0100
++++ otrs-3.0.5.new//bin/otrs.SetPermissions.pl	2011-11-03 11:25:31.843666857 +0100
+@@ -76,7 +76,7 @@
+     [--not-root]
+     <OTRS_HOME>
+ 
+-Try: otrs.SetPermissions.pl /opt/otrs
++Try: otrs.SetPermissions.pl /usr/share/otrs
+ EOF
+ 
+     if ( $#ARGV < 0 ) {
+diff -ur otrs-3.0.5/Kernel/Config/Defaults.pm otrs-3.0.5.new//Kernel/Config/Defaults.pm
+--- otrs-3.0.5/Kernel/Config/Defaults.pm	2011-01-06 10:54:05.000000000 +0100
++++ otrs-3.0.5.new//Kernel/Config/Defaults.pm	2011-11-03 11:26:15.786999604 +0100
+@@ -295,7 +295,7 @@
  #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
  
      # param for LogModule Kernel::System::Log::File (required!)
@@ -38,24 +38,24 @@ diff -ur otrs-2.4.12/Kernel/Config/Defaults.pm otrs-2.4.12.new//Kernel/Config/De
      # directories                                         #
      # --------------------------------------------------- #
      # root directory
--    $Self->{'Home'} = '/opt/otrs';
-+    $Self->{'Home'} = '/usr/share/otrs';
+-    $Self->{Home} = '/opt/otrs';
++    $Self->{Home} = '/usr/share/otrs';
  
      # tmp dir
-     $Self->{'TempDir'} = '<OTRS_CONFIG_Home>/var/tmp';
-@@ -867,7 +867,7 @@
+     $Self->{TempDir} = '<OTRS_CONFIG_Home>/var/tmp';
+@@ -980,7 +980,7 @@
      # --------------------------------------------------- #
-     $Self->{'PGP'}          = 0;
+     $Self->{PGP}          = 0;
      $Self->{'PGP::Bin'}     = '/usr/bin/gpg';
 -    $Self->{'PGP::Options'} = '--homedir /opt/otrs/.gnupg/ --batch --no-tty --yes';
 +    $Self->{'PGP::Options'} = '--homedir /usr/share/otrs/.gnupg/ --batch --no-tty --yes';
  
  #    $Self->{'PGP::Options'} = '--batch --no-tty --yes';
  #    $Self->{'PGP::Key::Password'}->{'D2DF79FA'} = 1234;
-diff -ur otrs-2.4.12/Kernel/Config/Files/Framework.xml otrs-2.4.12.new//Kernel/Config/Files/Framework.xml
---- otrs-2.4.12/Kernel/Config/Files/Framework.xml	2011-10-11 10:45:04.000000000 +0200
-+++ otrs-2.4.12.new//Kernel/Config/Files/Framework.xml	2011-11-03 09:58:23.286287156 +0100
-@@ -476,7 +476,7 @@
+diff -ur otrs-3.0.5/Kernel/Config/Files/Framework.xml otrs-3.0.5.new//Kernel/Config/Files/Framework.xml
+--- otrs-3.0.5/Kernel/Config/Files/Framework.xml	2011-01-12 23:57:22.000000000 +0100
++++ otrs-3.0.5.new//Kernel/Config/Files/Framework.xml	2011-11-03 11:26:57.030331955 +0100
+@@ -504,7 +504,7 @@
          <Group>Framework</Group>
          <SubGroup>Core::Log</SubGroup>
          <Setting>
@@ -64,7 +64,7 @@ diff -ur otrs-2.4.12/Kernel/Config/Files/Framework.xml otrs-2.4.12.new//Kernel/C
          </Setting>
      </ConfigItem>
      <ConfigItem Name="LogModule::LogFile::Date" Required="1" Valid="1">
-@@ -2863,7 +2863,7 @@
+@@ -2781,7 +2781,7 @@
          <Group>Framework</Group>
          <SubGroup>Crypt::PGP</SubGroup>
          <Setting>
@@ -73,9 +73,9 @@ diff -ur otrs-2.4.12/Kernel/Config/Files/Framework.xml otrs-2.4.12.new//Kernel/C
          </Setting>
      </ConfigItem>
      <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
-diff -ur otrs-2.4.12/Kernel/Config.pm.dist otrs-2.4.12.new//Kernel/Config.pm.dist
---- otrs-2.4.12/Kernel/Config.pm.dist	2011-10-11 10:45:05.000000000 +0200
-+++ otrs-2.4.12.new//Kernel/Config.pm.dist	2011-11-03 09:56:48.846287789 +0100
+diff -ur otrs-3.0.5/Kernel/Config.pm.dist otrs-3.0.5.new//Kernel/Config.pm.dist
+--- otrs-3.0.5/Kernel/Config.pm.dist	2010-01-13 23:25:00.000000000 +0100
++++ otrs-3.0.5.new//Kernel/Config.pm.dist	2011-11-03 11:27:15.280332150 +0100
 @@ -59,7 +59,7 @@
      # ---------------------------------------------------- #
      # fs root directory
@@ -85,21 +85,9 @@ diff -ur otrs-2.4.12/Kernel/Config.pm.dist otrs-2.4.12.new//Kernel/Config.pm.dis
  
      # ---------------------------------------------------- #
      # insert your own config settings "here"               #
-diff -ur otrs-2.4.12/Kernel/Modules/Installer.pm otrs-2.4.12.new//Kernel/Modules/Installer.pm
---- otrs-2.4.12/Kernel/Modules/Installer.pm	2011-10-11 10:45:05.000000000 +0200
-+++ otrs-2.4.12.new//Kernel/Modules/Installer.pm	2011-11-03 09:56:34.546287743 +0100
-@@ -617,7 +617,7 @@
-         }
-         else {
- 
--            # my $SetPermission = $ENV{SCRIPT_FILENAME} || '/opt/otrs/bin/SetPermissions.sh';
-+            # my $SetPermission = $ENV{SCRIPT_FILENAME} || '/usr/share/otrs/bin/SetPermissions.sh';
-             # $SetPermission =~ s/(.+?)\/cgi-bin\/installer.pl/$1\/SetPermissions.sh/g;
-             # my $BaseDir = $SetPermission;
-             # $BaseDir =~ s/(.*\/)bin\/SetPermissions.sh/$1/;
-diff -ur otrs-2.4.12/scripts/apache2-httpd.include.conf otrs-2.4.12.new//scripts/apache2-httpd.include.conf
---- otrs-2.4.12/scripts/apache2-httpd.include.conf	2011-10-11 10:45:05.000000000 +0200
-+++ otrs-2.4.12.new//scripts/apache2-httpd.include.conf	2011-11-03 09:59:29.342952287 +0100
+diff -ur otrs-3.0.5/scripts/apache2-httpd.include.conf otrs-3.0.5.new//scripts/apache2-httpd.include.conf
+--- otrs-3.0.5/scripts/apache2-httpd.include.conf	2010-10-11 18:16:11.000000000 +0200
++++ otrs-3.0.5.new//scripts/apache2-httpd.include.conf	2011-11-03 11:18:32.017005757 +0100
 @@ -4,14 +4,14 @@
  # --
  
@@ -110,45 +98,6 @@ diff -ur otrs-2.4.12/scripts/apache2-httpd.include.conf otrs-2.4.12.new//scripts
 +Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
  
  # if mod_perl is used
- <IfModule mod_perl.c>
- 
-     # load all otrs modules
--    Perlrequire /opt/otrs/scripts/apache2-perl-startup.pl
-+    Perlrequire /usr/share/otrs/scripts/apache2-perl-startup.pl
- 
-     # Apache::Reload - Reload Perl Modules when Changed on Disk
-     PerlModule Apache::Reload
-@@ -33,13 +33,13 @@
- </IfModule>
- 
- # directory settings
--<Directory "/opt/otrs/bin/cgi-bin/">
-+<Directory "/usr/share/otrs/bin/cgi-bin/">
-     AllowOverride None
-     Options +ExecCGI -Includes
-     Order allow,deny
-     Allow from all
- </Directory>
--<Directory "/opt/otrs/var/httpd/htdocs/">
-+<Directory "/usr/share/otrs/var/httpd/htdocs/">
-     AllowOverride None
-     Order allow,deny
-     Allow from all
-diff -ur otrs-2.4.12/scripts/apache2-httpd-new.include.conf otrs-2.4.12.new//scripts/apache2-httpd-new.include.conf
---- otrs-2.4.12/scripts/apache2-httpd-new.include.conf	2011-10-11 10:45:05.000000000 +0200
-+++ otrs-2.4.12.new//scripts/apache2-httpd-new.include.conf	2011-11-03 10:00:03.179618153 +0100
-@@ -4,8 +4,8 @@
- # --
- 
- # agent, admin and customer frontend
--ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
--Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
-+ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
-+Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
- 
- # activate this if you are using an Oracle database
- #SetEnv ORACLE_HOME /path/to/your/oracle/
-@@ -17,7 +17,7 @@
  <IfModule mod_perl.c>
  
      # load all otrs modules
@@ -157,7 +106,7 @@ diff -ur otrs-2.4.12/scripts/apache2-httpd-new.include.conf otrs-2.4.12.new//scr
  
      # Apache::Reload - Reload Perl Modules when Changed on Disk
      PerlModule Apache2::Reload
-@@ -40,13 +40,13 @@
+@@ -34,26 +34,26 @@
  </IfModule>
  
  # directory settings
@@ -173,38 +122,34 @@ diff -ur otrs-2.4.12/scripts/apache2-httpd-new.include.conf otrs-2.4.12.new//scr
      AllowOverride None
      Order allow,deny
      Allow from all
-diff -ur otrs-2.4.12/scripts/apache2-perl-startup.pl otrs-2.4.12.new//scripts/apache2-perl-startup.pl
---- otrs-2.4.12/scripts/apache2-perl-startup.pl	2011-10-11 10:45:05.000000000 +0200
-+++ otrs-2.4.12.new//scripts/apache2-perl-startup.pl	2011-11-03 08:54:59.390430750 +0100
-@@ -37,8 +37,8 @@
+ </Directory>
+ 
+ <IfModule mod_headers.c>
+-    <Directory "/opt/otrs/var/httpd/htdocs/skins/*/*/css-cache">
++    <Directory "/usr/share/otrs/var/httpd/htdocs/skins/*/*/css-cache">
+         <FilesMatch "\.(css|CSS)$">
+             Header set Cache-Control "max-age=2592000 must-revalidate"
+         </FilesMatch>
+     </Directory>
+ 
+-    <Directory "/opt/otrs/var/httpd/htdocs/js_new/js-cache">
++    <Directory "/usr/share/otrs/var/httpd/htdocs/js_new/js-cache">
+         <FilesMatch "\.(js|JS)$">
+             Header set Cache-Control "max-age=2592000 must-revalidate"
+         </FilesMatch>
+diff -ur otrs-3.0.5/scripts/apache2-perl-startup.pl otrs-3.0.5.new//scripts/apache2-perl-startup.pl
+--- otrs-3.0.5/scripts/apache2-perl-startup.pl	2010-09-03 09:10:35.000000000 +0200
++++ otrs-3.0.5.new//scripts/apache2-perl-startup.pl	2011-11-03 11:29:49.820331074 +0100
+@@ -35,9 +35,9 @@
  use ModPerl::Util;
  
  # set otrs lib path!
 -use lib "/opt/otrs/";
 -use lib "/opt/otrs/Kernel/cpan-lib";
+-use lib "/opt/otrs/Custom";
 +use lib "/usr/share/otrs/";
-+use lib "/usr/share/otrs/cpan-lib";
++use lib "/usr/share/otrs/Kernel/cpan-lib";
++use lib "/usr/share/otrs/Custom";
  
  # pull in things we will use in most requests so it is read and compiled
  # exactly once
-diff -ur otrs-2.4.12/scripts/apache-httpd.include.conf otrs-2.4.12.new//scripts/apache-httpd.include.conf
---- otrs-2.4.12/scripts/apache-httpd.include.conf	2011-10-11 10:45:05.000000000 +0200
-+++ otrs-2.4.12.new//scripts/apache-httpd.include.conf	2011-11-03 10:00:52.546284562 +0100
-@@ -4,14 +4,14 @@
- # --
- 
- # agent, admin and customer frontend (mod_alias required!)
--ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
--Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
-+ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
-+Alias /otrs-web/ "/usr/share/otrs/var/httpd/htdocs/"
- 
- # if mod_perl is used
- <IfModule mod_perl.c>
- 
-     # load all otrs modules (speed improvement!)
--#   Perlrequire /opt/otrs/scripts/apache-perl-startup.pl
-+#   Perlrequire /usr/share/otrs/scripts/apache-perl-startup.pl
- 
-     # Apache::StatINC - Reload %INC files when updated on disk
-     # (just use it for testing, setup, ... not for high productiv systems)
