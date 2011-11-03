@@ -306,6 +306,7 @@ fi
 %dir %{otrsdir}/Kernel/System/Stats
 %dir %{otrsdir}/Kernel/System/Stats/Static
 %dir %{otrsdir}/Kernel/System/Stats/Dynamic
+%dir %{otrsdir}/Kernel/System/SysConfig
 %dir %{otrsdir}/Kernel/System/Ticket
 %dir %{otrsdir}/Kernel/System/Ticket/Acl
 %dir %{otrsdir}/Kernel/System/Ticket/ArticleSearchIndex
@@ -314,17 +315,27 @@ fi
 %dir %{otrsdir}/Kernel/System/Ticket/Permission
 %dir %{otrsdir}/Kernel/System/Ticket/IndexAccelerator
 %dir %{otrsdir}/Kernel/System/Ticket/Number
+%dir %{otrsdir}/Kernel/System/UnitTest
 %dir %{otrsdir}/Kernel/System/User
 %dir %{otrsdir}/Kernel/System/User/Preferences
 %dir %{otrsdir}/Kernel/System/Web
 %dir %{otrsdir}/Kernel/System/Web/UploadCache
+%dir %{otrsdir}/Kernel/System/VirtualFS
 %dir %{otrsdir}/Kernel/cpan-lib
 %{otrsdir}/Kernel/cpan-lib/*.pm
 %dir %{otrsdir}/Kernel/cpan-lib/Algorithm
 %dir %{otrsdir}/Kernel/cpan-lib/Apache
 %dir %{otrsdir}/Kernel/cpan-lib/Apache2
+%dir %{otrsdir}/Kernel/cpan-lib/CGI
 %dir %{otrsdir}/Kernel/cpan-lib/Crypt
+%dir %{otrsdir}/Kernel/cpan-lib/CSS
+%dir %{otrsdir}/Kernel/cpan-lib/Digest
+%dir %{otrsdir}/Kernel/cpan-lib/Digest/SHA
 %dir %{otrsdir}/Kernel/cpan-lib/File
+%dir %{otrsdir}/Kernel/cpan-lib/JSON
+%dir %{otrsdir}/Kernel/cpan-lib/JSON/PP
+%dir %{otrsdir}/Kernel/cpan-lib/JSON/backportPP
+%dir %{otrsdir}/Kernel/cpan-lib/JavaScript
 %dir %{otrsdir}/Kernel/cpan-lib/Net
 %dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP
 %dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP/Simple
