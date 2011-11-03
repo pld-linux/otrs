@@ -8,13 +8,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	2.4.12
+Version:	3.0.5
 Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	e774d4d1ea5f64bfccf673ea07646343
+# Source0-md5:	ec39d77394e82ce1ba3b777379145083
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-logrotate
@@ -281,8 +281,6 @@ fi
 %dir %{otrsdir}/Kernel/Output/HTML
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
-%dir %{otrsdir}/Kernel/Output/HTML/Lite
-%attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
 %dir %{otrsdir}/Kernel/System
 %{otrsdir}/Kernel/System/*.pm
 %dir %{otrsdir}/Kernel/System/Auth
@@ -321,16 +319,20 @@ fi
 %dir %{otrsdir}/Kernel/System/Web
 %dir %{otrsdir}/Kernel/System/Web/UploadCache
 %dir %{otrsdir}/Kernel/cpan-lib
+%{otrsdir}/Kernel/cpan-lib/*.pm
 %dir %{otrsdir}/Kernel/cpan-lib/Algorithm
 %dir %{otrsdir}/Kernel/cpan-lib/Apache
 %dir %{otrsdir}/Kernel/cpan-lib/Apache2
 %dir %{otrsdir}/Kernel/cpan-lib/Crypt
 %dir %{otrsdir}/Kernel/cpan-lib/File
-%dir %{otrsdir}/Kernel/cpan-lib/HTML
 %dir %{otrsdir}/Kernel/cpan-lib/Net
 %dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP
+%dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP/Simple
+%{otrsdir}/Kernel/cpan-lib/Net/IMAP/Simple/*.pm
 %dir %{otrsdir}/Kernel/cpan-lib/Net/POP3
 %dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP
+%dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS
+%{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS/*.pm
 %dir %{otrsdir}/Kernel/cpan-lib/Text
 %dir %{otrsdir}/Kernel/cpan-lib/Text/Diff
 %dir %{otrsdir}/bin
@@ -355,23 +357,16 @@ fi
 %attr(751,otrs,http) %dir %{otrsdir}/var/
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
-%attr(755,otrs,http) %{otrsdir}/var/fonts
 %attr(755,otrs,http) %{otrsdir}/var/httpd
 %attr(755,otrs,http) %{otrsdir}/var/sessions
 %attr(755,otrs,http) %{otrsdir}/var/spool
 %attr(755,otrs,http) %{otrsdir}/var/stats
 %attr(2775,otrs,http) %{otrsdir}/var/tmp
-%attr(755,otrs,http) %dir %{otrsdir}/var/pics
-%attr(755,otrs,http) %{otrsdir}/var/pics/stats
 # attempt to move to /var/lib:
 %attr(751,otrs,http) %dir /var/lib/%{name}
 %attr(2775,otrs,http) %dir /var/lib/%{name}/article
-# %attr(755,otrs,http) %dir /var/lib/%{name}/cron
 %attr(751,otrs,http) %dir /var/lib/%{name}/pics
 %attr(751,otrs,http) %dir /var/lib/%{name}/pics/stats
-# %attr(755,otrs,http) %dir /var/lib/%{name}/sessions
-# %attr(755,otrs,http) %dir /var/lib/%{name}/spool
-# %attr(2775,otrs,http) %dir /var/lib/%{name}/tmp
 
 %dir %attr(750,root,http) %{_webapps}/%{_webapp}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/apache.conf
@@ -381,7 +376,6 @@ fi
 %defattr(644,root,root,755)
 %attr(700,otrs,http) %{otrsdir}/scripts/*.pl
 %attr(700,otrs,http) %{otrsdir}/scripts/tools/*.pl
-%attr(700,otrs,http) %{otrsdir}/scripts/*.sh
 %{otrsdir}/scripts/*.pm
 %{otrsdir}/scripts/*.php
 %dir %{otrsdir}/scripts/tools
