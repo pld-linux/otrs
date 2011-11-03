@@ -8,13 +8,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	2.4.3
+Version:	2.4.12
 Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	84679f1bfb34c67e5e0a15bf9437e7cd
+# Source0-md5:	e774d4d1ea5f64bfccf673ea07646343
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-logrotate
@@ -283,7 +283,7 @@ fi
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
 %dir %{otrsdir}/Kernel/Output/HTML/Lite
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Lite/*.dtl
-%attr(755,root,root) %dir %{otrsdir}/Kernel/System
+%dir %{otrsdir}/Kernel/System
 %{otrsdir}/Kernel/System/*.pm
 %dir %{otrsdir}/Kernel/System/Auth
 %dir %{otrsdir}/Kernel/System/AuthSession
@@ -326,7 +326,7 @@ fi
 %dir %{otrsdir}/bin/cgi-bin/
 %attr(750,root,http) %{otrsdir}/bin/cgi-bin/*.pl
 %dir %{otrsdir}/bin/fcgi-bin/
-%attr(750,root,http) %{otrsdir}/bin/fcgi-bin/*.fpl
+%attr(750,root,http) %{otrsdir}/bin/fcgi-bin/*.pl
 %{otrsdir}/INSTALL
 %dir %{otrsdir}/scripts
 %dir %{otrsdir}/scripts/database
@@ -341,9 +341,11 @@ fi
 %attr(751,otrs,http) %dir %{otrsdir}/var/
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
+%attr(755,otrs,http) %{otrsdir}/var/fonts
 %attr(755,otrs,http) %{otrsdir}/var/httpd
 %attr(755,otrs,http) %{otrsdir}/var/sessions
 %attr(755,otrs,http) %{otrsdir}/var/spool
+%attr(755,otrs,http) %{otrsdir}/var/stats
 %attr(2775,otrs,http) %{otrsdir}/var/tmp
 %attr(755,otrs,http) %dir %{otrsdir}/var/pics
 %attr(755,otrs,http) %{otrsdir}/var/pics/stats
