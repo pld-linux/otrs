@@ -3,18 +3,17 @@
 # - all otrs-var into /var/lib/otrs
 # - put cron in proper place
 # - write not so brain-damage init-script...
-%bcond_with	apache1		# build for work with apache1 conf system
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.0.5
+Version:	3.0.11
 Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	ec39d77394e82ce1ba3b777379145083
+# Source0-md5:	1e0f904ebad38e4b6b0f1af8c4012cd8
 Source1:	%{name}-http.conf
 Source2:	%{name}-http1.conf
 Source3:	%{name}-logrotate
@@ -149,10 +148,8 @@ cp -R . $RPM_BUILD_ROOT%{otrsdir}
 # install init-Script & apache2 config
 install scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
 install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
-# apache 1
-install %{SOURCE2} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/apache.conf
-# apache 2
-install %{SOURCE1} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/httpd.conf
+
+install scripts/apache2-httpd.include.conf $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/httpd.conf
 
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
@@ -174,8 +171,8 @@ install $RPM_BUILD_ROOT/etc/%{name}/mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailf
 install $RPM_BUILD_ROOT/etc/%{name}/Config.pm $RPM_BUILD_ROOT/etc/%{name}/Config.pm.dist
 install $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm.dist
 # File for on-line configuration:
-# touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
-# ln -sf /etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Files/ZZZAAuto.pm
+touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
+ln -sf ../../../../../../etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/Files/ZZZAAuto.pm
 # link to proper places
 ln -sf ../../../etc/otrs/procmailrc $RPM_BUILD_ROOT%{otrsdir}/.procmailrc
 ln -sf ../../../etc/otrs/fetchmailrc $RPM_BUILD_ROOT%{otrsdir}/.fetchmailrc
@@ -210,12 +207,6 @@ if [ "$1" = 0 ]; then
 EOF
 fi
 
-%triggerin -- apache1 < 1.3.37-3, apache1-base
-%webapp_register apache %{_webapp}
-
-%triggerun -- apache1 < 1.3.37-3, apache1-base
-%webapp_unregister apache %{_webapp}
-
 %triggerin -- apache < 2.2.0, apache-base
 %webapp_register httpd %{_webapp}
 
@@ -228,11 +219,6 @@ if [ -f /etc/httpd/httpd.conf ]; then
 	sed -i -e "/^Include.*%{name}.conf/d" /etc/httpd/httpd.conf
 fi
 
-# apache1 config?!
-if [ -f /etc/httpd/%{name}.conf.rpmsave ]; then
-	cp -f %{_webapps}/%{_webapp}/httpd.conf{,.rpmnew}
-	mv -f /etc/httpd/%{name}.conf.rpmsave %{_webapps}/%{_webapp}/httpd.conf
-fi
 # apache2 config
 if [ -f /etc/httpd/httpd.conf/88_otrs.conf.rpmsave ]; then
 	cp -f %{_webapps}/%{_webapp}/httpd.conf{,.rpmnew}
@@ -252,9 +238,9 @@ fi
 %attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/procmailrc
 %attr(710,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/fetchmailrc
 %attr(600,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/mailfilter
-%attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Config.pm
+%attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Config.pm
 %attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/GenericAgent.pm
-#%attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAAuto.pm
+%attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAAuto.pm
 %attr(640,otrs,http) %{_sysconfdir}/%{name}/*.dist
 %attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{otrsdir}/var/cron/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
@@ -270,6 +256,7 @@ fi
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/GenericAgent.pm
 %dir %{otrsdir}/Kernel/Config/Files
+%{otrsdir}/Kernel/Config/Files/*.pm
 %{otrsdir}/Kernel/Config/Files/*.xml
 %{otrsdir}/Kernel/Language.pm
 %{otrsdir}/Kernel/*/*/*.pm
@@ -366,8 +353,10 @@ fi
 %attr(664,otrs,http) %config(noreplace) %verify(not md5 mtime size) /var/log/otrs/TicketCounter.log
 # This entries should be changed into links and proper trigger to move data:
 %attr(751,otrs,http) %dir %{otrsdir}/var/
+%{otrsdir}/var/*.png
 %attr(755,otrs,http) %dir %{otrsdir}/var/cron
 %attr(2775,otrs,http) %{otrsdir}/var/article
+%attr(755,otrs,http) %{otrsdir}/var/fonts
 %attr(755,otrs,http) %{otrsdir}/var/httpd
 %attr(755,otrs,http) %{otrsdir}/var/sessions
 %attr(755,otrs,http) %{otrsdir}/var/spool
@@ -380,7 +369,6 @@ fi
 %attr(751,otrs,http) %dir /var/lib/%{name}/pics/stats
 
 %dir %attr(750,root,http) %{_webapps}/%{_webapp}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/httpd.conf
 
 %files scripts
