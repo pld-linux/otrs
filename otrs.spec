@@ -14,9 +14,7 @@ License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
 # Source0-md5:	1e0f904ebad38e4b6b0f1af8c4012cd8
-Source1:	%{name}-http.conf
-Source2:	%{name}-http1.conf
-Source3:	%{name}-logrotate
+Source1:	%{name}-logrotate
 Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
@@ -151,7 +149,7 @@ install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
 
 install scripts/apache2-httpd.include.conf $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/httpd.conf
 
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 # logs in proper place:
 touch $RPM_BUILD_ROOT/var/log/%{name}/TicketCounter.log
