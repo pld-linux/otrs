@@ -23,23 +23,15 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	/usr/sbin/usermod
 Requires:	apache(mod_perl)
-#Requires:	mysql-client
-#Requires:	perl-DBI
-Requires:	webapps
-Requires:	webserver = apache
-# Not catched:
-Requires:	perl-DBD-mysql
-#Requires:	perl-Digest-MD5
-#Requires:	perl-Email-Valid
-#Requires:	perl-MIME-Base64
-#Requires:	perl-MIME-tools
-#Requires:	perl-URI
-# Required for apache loading script:
 Requires:	perl-Crypt-PasswdMD5
+Requires:	perl-DBD-mysql
+Requires:	perl-DBI
 Requires:	perl-Text-CSV
-#####
 Requires:	procmail
 Requires:	smtpdaemon
+Requires:	webapps
+Requires:	webserver = apache
+Suggests:	perl-PDF-API2
 Conflicts:	logrotate < 3.7-4
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
