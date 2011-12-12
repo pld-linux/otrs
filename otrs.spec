@@ -3,6 +3,10 @@
 # - all otrs-var into /var/lib/otrs
 # - put cron in proper place
 # - write not so brain-damage init-script...
+# - do not provide system perl deps:
+#   perl-MailTools-2.08-1.noarch: required "perl(Net::SMTP::SSL)" is provided by the following packages:
+#   a) otrs-3.0.11-1.noarch
+#   b) perl-Net-SMTP-SSL-1.01-1.noarch
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
@@ -37,8 +41,9 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # This auto don't work , i'm lame
-%define		_noautoreq	'perl(Kernel::.*)'
-%define		_noautoprov	'perl(Kernel::.*)'
+%define		_noautoreq	perl(Kernel::.*)
+%define		_noautoprov	perl(Kernel::.*)
+
 %define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
 %define		_webapps	/etc/webapps
