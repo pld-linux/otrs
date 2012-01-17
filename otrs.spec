@@ -19,6 +19,7 @@ Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
 # Source0-md5:	1e0f904ebad38e4b6b0f1af8c4012cd8
 Source1:	%{name}-logrotate
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
@@ -142,7 +143,7 @@ cp -R . $RPM_BUILD_ROOT%{otrsdir}
 
 # install init-Script & apache2 config
 install scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
-install scripts/redhat-rcotrs-config $RPM_BUILD_ROOT/etc/sysconfig/otrs
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/otrs
 
 install scripts/apache2-httpd.include.conf $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/httpd.conf
 
