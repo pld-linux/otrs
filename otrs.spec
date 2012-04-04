@@ -11,13 +11,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.0.11
+Version:	3.1.3
 Release:	1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	1e0f904ebad38e4b6b0f1af8c4012cd8
+# Source0-md5:	2af2a1a2b8bcd959ee9cf532d0016953
 Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
@@ -226,7 +226,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc INSTALL* UPGRADING TODO CHANGES README* doc/
+%doc ARCHIVE CHANGES  COPYING  COPYING-Third-Party CREDITS doc/ README README.database README.webserver RELEASE UPGRADING
 %doc scripts/test Kernel/Config/GenericAgent.pm.examples
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/otrs
 %attr(751,otrs,http) %dir %{_sysconfdir}/%{name}
@@ -254,6 +254,18 @@ fi
 %dir %{otrsdir}/Kernel/Config/Files
 %{otrsdir}/Kernel/Config/Files/*.pm
 %{otrsdir}/Kernel/Config/Files/*.xml
+%dir %{otrsdir}/Kernel/GenericInterface
+%{otrsdir}/Kernel/GenericInterface/*.pm
+%dir %{otrsdir}/Kernel/GenericInterface/Event
+%dir %{otrsdir}/Kernel/GenericInterface/Invoker
+%dir %{otrsdir}/Kernel/GenericInterface/Invoker/Test
+%dir %{otrsdir}/Kernel/GenericInterface/Mapping
+%dir %{otrsdir}/Kernel/GenericInterface/Operation
+%dir %{otrsdir}/Kernel/GenericInterface/Operation/Session
+%dir %{otrsdir}/Kernel/GenericInterface/Operation/Test
+%dir %{otrsdir}/Kernel/GenericInterface/Operation/Ticket
+%dir %{otrsdir}/Kernel/GenericInterface/Transport
+%dir %{otrsdir}/Kernel/GenericInterface/Transport/HTTP
 %{otrsdir}/Kernel/Language.pm
 %{otrsdir}/Kernel/*/*/*.pm
 %{otrsdir}/Kernel/*/*/*/*.pm
@@ -264,6 +276,10 @@ fi
 %dir %{otrsdir}/Kernel/Output/HTML
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
+%dir %{otrsdir}/Kernel/Scheduler
+%{otrsdir}/Kernel/Scheduler/*.pm
+%dir %{otrsdir}/Kernel/Scheduler/TaskHandler
+%{otrsdir}/Kernel/Scheduler/TaskHandler/*.pm
 %dir %{otrsdir}/Kernel/System
 %{otrsdir}/Kernel/System/*.pm
 %dir %{otrsdir}/Kernel/System/Auth
@@ -275,15 +291,20 @@ fi
 %dir %{otrsdir}/Kernel/System/CustomerUser
 %dir %{otrsdir}/Kernel/System/CustomerUser/Preferences
 %dir %{otrsdir}/Kernel/System/DB
+%dir %{otrsdir}/Kernel/System/DynamicField
+%dir %{otrsdir}/Kernel/System/DynamicField/Backend
+%dir %{otrsdir}/Kernel/System/DynamicField/ObjectType
 %dir %{otrsdir}/Kernel/System/Email
-%dir %{otrsdir}/Kernel/System/LinkObject
 %dir %{otrsdir}/Kernel/System/GenericAgent
+%dir %{otrsdir}/Kernel/System/GenericInterface
+%dir %{otrsdir}/Kernel/System/LinkObject
 %dir %{otrsdir}/Kernel/System/Log
 %dir %{otrsdir}/Kernel/System/MailAccount
 %dir %{otrsdir}/Kernel/System/PostMaster
 %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
 %dir %{otrsdir}/Kernel/System/PostMaster/Filter
 %dir %{otrsdir}/Kernel/System/Queue
+%dir %{otrsdir}/Kernel/System/Scheduler
 %dir %{otrsdir}/Kernel/System/SLA
 %dir %{otrsdir}/Kernel/System/Service
 %dir %{otrsdir}/Kernel/System/Stats
@@ -310,15 +331,29 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/Apache
 %dir %{otrsdir}/Kernel/cpan-lib/Apache2
 %dir %{otrsdir}/Kernel/cpan-lib/CGI
+%dir %{otrsdir}/Kernel/cpan-lib/Class
+%dir %{otrsdir}/Kernel/cpan-lib/Class/Inspector
 %dir %{otrsdir}/Kernel/cpan-lib/Crypt
 %dir %{otrsdir}/Kernel/cpan-lib/CSS
 %dir %{otrsdir}/Kernel/cpan-lib/Digest
 %dir %{otrsdir}/Kernel/cpan-lib/Digest/SHA
+%dir %{otrsdir}/Kernel/cpan-lib/Encode
 %dir %{otrsdir}/Kernel/cpan-lib/File
+%dir %{otrsdir}/Kernel/cpan-lib/HTTP
+%dir %{otrsdir}/Kernel/cpan-lib/HTTP/Headers
+%dir %{otrsdir}/Kernel/cpan-lib/HTTP/Request
 %dir %{otrsdir}/Kernel/cpan-lib/JSON
 %dir %{otrsdir}/Kernel/cpan-lib/JSON/PP
 %dir %{otrsdir}/Kernel/cpan-lib/JSON/backportPP
 %dir %{otrsdir}/Kernel/cpan-lib/JavaScript
+%dir %{otrsdir}/Kernel/cpan-lib/LWP
+%dir %{otrsdir}/Kernel/cpan-lib/LWP/Authen
+%dir %{otrsdir}/Kernel/cpan-lib/LWP/Protocol
+%dir %{otrsdir}/Kernel/cpan-lib/Locale
+%dir %{otrsdir}/Kernel/cpan-lib/Locale/Codes
+%dir %{otrsdir}/Kernel/cpan-lib/Mozilla
+%dir %{otrsdir}/Kernel/cpan-lib/Mozilla/CA
+%{otrsdir}/Kernel/cpan-lib/Mozilla/CA/cacert.pem
 %dir %{otrsdir}/Kernel/cpan-lib/Net
 %dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP
 %dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP/Simple
@@ -327,8 +362,20 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP
 %dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS
 %{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS/*.pm
+%dir %{otrsdir}/Kernel/cpan-lib/Proc
+%dir %{otrsdir}/Kernel/cpan-lib/SOAP
+%dir %{otrsdir}/Kernel/cpan-lib/SOAP/Lite
+%dir %{otrsdir}/Kernel/cpan-lib/SOAP/Lite/Deserializer
+%{otrsdir}/Kernel/cpan-lib/SOAP/Lite/Deserializer/*.pm
+%dir %{otrsdir}/Kernel/cpan-lib/SOAP/Transport
 %dir %{otrsdir}/Kernel/cpan-lib/Text
 %dir %{otrsdir}/Kernel/cpan-lib/Text/Diff
+%dir %{otrsdir}/Kernel/cpan-lib/URI
+%dir %{otrsdir}/Kernel/cpan-lib/URI/file
+%dir %{otrsdir}/Kernel/cpan-lib/URI/urn
+%dir %{otrsdir}/Kernel/cpan-lib/YAML
+%dir %{otrsdir}/Kernel/cpan-lib/YAML/Dumper
+%dir %{otrsdir}/Kernel/cpan-lib/YAML/Loader
 %dir %{otrsdir}/bin
 %attr(700,otrs,root) %{otrsdir}/bin/*.pl
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
@@ -372,5 +419,4 @@ fi
 %attr(700,otrs,http) %{otrsdir}/scripts/*.pl
 %attr(700,otrs,http) %{otrsdir}/scripts/tools/*.pl
 %{otrsdir}/scripts/*.pm
-%{otrsdir}/scripts/*.php
 %dir %{otrsdir}/scripts/tools
