@@ -11,13 +11,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.1.3
+Version:	3.1.6
 Release:	1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	2af2a1a2b8bcd959ee9cf532d0016953
+# Source0-md5:	59c64e88d52c48e570a00d7feb265921
 Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
@@ -266,14 +266,16 @@ fi
 %dir %{otrsdir}/Kernel/GenericInterface/Operation/Ticket
 %dir %{otrsdir}/Kernel/GenericInterface/Transport
 %dir %{otrsdir}/Kernel/GenericInterface/Transport/HTTP
-%{otrsdir}/Kernel/Language.pm
+%{otrsdir}/Kernel/*.pm
 %{otrsdir}/Kernel/*/*/*.pm
 %{otrsdir}/Kernel/*/*/*/*.pm
 %dir %{otrsdir}/Kernel/Language
 %{otrsdir}/Kernel/Language/*.pm
 %{otrsdir}/Kernel/Modules
+%{otrsdir}/Kernel/Modules/*.pm
 %dir %{otrsdir}/Kernel/Output
 %dir %{otrsdir}/Kernel/Output/HTML
+%{otrsdir}/Kernel/Output/HTML/*.pm
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
 %dir %{otrsdir}/Kernel/Scheduler
