@@ -12,7 +12,7 @@ Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
 Version:	3.1.6
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -44,6 +44,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # This auto don't work , i'm lame
 %define		_noautoreq	perl(Kernel::.*)
 %define		_noautoprov	perl(Kernel::.*)
+%define		_noautoprov	perl(YAML::.*)
 
 %define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
