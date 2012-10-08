@@ -41,8 +41,8 @@ Conflicts:	logrotate < 3.7-4
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		__noautoreq	'perl\\\(Kernel::.*\\)'
-%define		__noautoprov	'perl\\\(Kernel::.*\\)' 'perl\\\(YAML::.*\\)' 'perl\\\(Net::.*\\)'
+%define		_noautoreq	'perl\\(Kernel::.*\\)'
+%define		_noautoprov	'perl\\(Kernel::.*\\)' 'perl\\(YAML::.*\\)' 'perl\\(Net::.*\\)'
 
 %define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
