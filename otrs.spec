@@ -11,13 +11,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.1.6
-Release:	3
+Version:	3.1.10
+Release:	1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	59c64e88d52c48e570a00d7feb265921
+# Source0-md5:	c54da576e1e8661613897d67a607f00b
 Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
@@ -247,12 +247,10 @@ fi
 %{otrsdir}/.fetchmailrc
 %{otrsdir}/.mailfilter
 %dir %{otrsdir}/Kernel
-%{otrsdir}/Kernel/Config.pm
 %dir %{otrsdir}/Kernel/Config
 %{otrsdir}/Kernel/Config/Defaults.pm
 %{otrsdir}/Kernel/Config/GenericAgent.pm
 %dir %{otrsdir}/Kernel/Config/Files
-%{otrsdir}/Kernel/Config/Files/*.pm
 %{otrsdir}/Kernel/Config/Files/*.xml
 %dir %{otrsdir}/Kernel/GenericInterface
 %{otrsdir}/Kernel/GenericInterface/*.pm
@@ -271,17 +269,15 @@ fi
 %{otrsdir}/Kernel/*/*/*/*.pm
 %dir %{otrsdir}/Kernel/Language
 %{otrsdir}/Kernel/Language/*.pm
-%{otrsdir}/Kernel/Modules
+%dir %{otrsdir}/Kernel/Modules
 %{otrsdir}/Kernel/Modules/*.pm
 %dir %{otrsdir}/Kernel/Output
 %dir %{otrsdir}/Kernel/Output/HTML
-%{otrsdir}/Kernel/Output/HTML/*.pm
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
 %dir %{otrsdir}/Kernel/Scheduler
 %{otrsdir}/Kernel/Scheduler/*.pm
 %dir %{otrsdir}/Kernel/Scheduler/TaskHandler
-%{otrsdir}/Kernel/Scheduler/TaskHandler/*.pm
 %dir %{otrsdir}/Kernel/System
 %{otrsdir}/Kernel/System/*.pm
 %dir %{otrsdir}/Kernel/System/Auth
@@ -365,6 +361,7 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS
 %{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS/*.pm
 %dir %{otrsdir}/Kernel/cpan-lib/Proc
+%{otrsdir}/Kernel/cpan-lib/Proc/Daemon.pod
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP/Lite
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP/Lite/Deserializer
@@ -379,7 +376,6 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/YAML/Dumper
 %dir %{otrsdir}/Kernel/cpan-lib/YAML/Loader
 %dir %{otrsdir}/bin
-%attr(700,otrs,root) %{otrsdir}/bin/*.pl
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
 %attr(700,otrs,root) %{otrsdir}/bin/otrs.*
 %dir %{otrsdir}/bin/cgi-bin/
