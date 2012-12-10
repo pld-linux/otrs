@@ -3,9 +3,9 @@
 # - all otrs-var into /var/lib/otrs
 # - put cron in proper place
 # - write not so brain-damage init-script...
-# - do not provide system perl deps:
+# - do not provide system perl deps (reason for build blocker)
 #   perl-MailTools-2.08-1.noarch: required "perl(Net::SMTP::SSL)" is provided by the following packages:
-#   a) otrs-3.0.11-1.noarch
+#   a) otrs-3.1.11-1.noarch
 #   b) perl-Net-SMTP-SSL-1.01-1.noarch
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
@@ -23,6 +23,7 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
+BuildRequires:	FIX_TODO_DO_NOT_SEND_TO_TH
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
