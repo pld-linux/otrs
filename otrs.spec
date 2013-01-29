@@ -15,13 +15,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.1.11
+Version:	3.2.1
 Release:	1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	361e2d28b720f872622a87c9f41664e9
+# Source0-md5:	9f096d37d6c4842680962676ef32a2f7
 Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
@@ -279,6 +279,7 @@ fi
 %dir %{otrsdir}/Kernel/Output/HTML
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
+%attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/ProcessManagement/*.dtl
 %dir %{otrsdir}/Kernel/Scheduler
 %{otrsdir}/Kernel/Scheduler/*.pm
 %dir %{otrsdir}/Kernel/Scheduler/TaskHandler
@@ -305,6 +306,12 @@ fi
 %dir %{otrsdir}/Kernel/System/PostMaster
 %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
 %dir %{otrsdir}/Kernel/System/PostMaster/Filter
+%dir %{otrsdir}/Kernel/System/ProcessManagement
+%dir %{otrsdir}/Kernel/System/ProcessManagement/DB
+%dir %{otrsdir}/Kernel/System/ProcessManagement/DB/Process
+%{otrsdir}/Kernel/System/ProcessManagement/DB/Process/State.pm
+%dir %{otrsdir}/Kernel/System/ProcessManagement/TransitionAction
+%dir %{otrsdir}/Kernel/System/ProcessManagement/TransitionValidation
 %dir %{otrsdir}/Kernel/System/Queue
 %dir %{otrsdir}/Kernel/System/Scheduler
 %dir %{otrsdir}/Kernel/System/SLA
