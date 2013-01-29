@@ -1,6 +1,6 @@
-diff -ur otrs-3.0.11/bin/Cron.sh otrs-3.0.11.new//bin/Cron.sh
---- otrs-3.0.11/bin/Cron.sh	2011-10-11 14:01:44.000000000 +0200
-+++ otrs-3.0.11.new//bin/Cron.sh	2011-11-04 09:11:31.296872990 +0100
+diff -ur otrs-3.2.1/bin/Cron.sh otrs-3.2.1.new/bin/Cron.sh
+--- otrs-3.2.1/bin/Cron.sh	2012-11-22 12:43:09.000000000 +0100
++++ otrs-3.2.1.new/bin/Cron.sh	2013-01-29 12:39:20.521608435 +0100
 @@ -45,7 +45,7 @@
  OTRS_HOME="`pwd`"
  cd -
@@ -10,10 +10,11 @@ diff -ur otrs-3.0.11/bin/Cron.sh otrs-3.0.11.new//bin/Cron.sh
  if test -e $OTRS_HOME/var/cron; then
      OTRS_ROOT=$OTRS_HOME
  else
-diff -ur otrs-3.0.11/bin/otrs.SetPermissions.pl otrs-3.0.11.new//bin/otrs.SetPermissions.pl
---- otrs-3.0.11/bin/otrs.SetPermissions.pl	2011-10-11 14:01:45.000000000 +0200
-+++ otrs-3.0.11.new//bin/otrs.SetPermissions.pl	2011-11-04 09:11:31.296872990 +0100
-@@ -76,7 +76,7 @@
+Tylko w otrs-3.2.1.new/bin: Cron.sh~
+diff -ur otrs-3.2.1/bin/otrs.SetPermissions.pl otrs-3.2.1.new/bin/otrs.SetPermissions.pl
+--- otrs-3.2.1/bin/otrs.SetPermissions.pl	2013-01-24 11:21:14.000000000 +0100
++++ otrs-3.2.1.new/bin/otrs.SetPermissions.pl	2013-01-29 12:39:39.175799680 +0100
+@@ -82,7 +82,7 @@
      [--not-root]
      <OTRS_HOME>
  
@@ -22,10 +23,11 @@ diff -ur otrs-3.0.11/bin/otrs.SetPermissions.pl otrs-3.0.11.new//bin/otrs.SetPer
  EOF
  
      if ( $#ARGV < 0 ) {
-diff -ur otrs-3.0.11/Kernel/Config/Defaults.pm otrs-3.0.11.new//Kernel/Config/Defaults.pm
---- otrs-3.0.11/Kernel/Config/Defaults.pm	2011-10-11 14:01:54.000000000 +0200
-+++ otrs-3.0.11.new//Kernel/Config/Defaults.pm	2011-11-04 09:11:31.296872990 +0100
-@@ -302,7 +302,7 @@
+Tylko w otrs-3.2.1.new/bin: otrs.SetPermissions.pl~
+diff -ur otrs-3.2.1/Kernel/Config/Defaults.pm otrs-3.2.1.new/Kernel/Config/Defaults.pm
+--- otrs-3.2.1/Kernel/Config/Defaults.pm	2013-01-17 10:06:52.000000000 +0100
++++ otrs-3.2.1.new/Kernel/Config/Defaults.pm	2013-01-29 12:40:37.118464479 +0100
+@@ -297,7 +297,7 @@
  #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
  
      # param for LogModule Kernel::System::Log::File (required!)
@@ -34,7 +36,7 @@ diff -ur otrs-3.0.11/Kernel/Config/Defaults.pm otrs-3.0.11.new//Kernel/Config/De
  
      # param if the date (yyyy-mm) should be added as suffix to
      # logfile [0|1]
-@@ -834,7 +834,7 @@
+@@ -824,7 +824,7 @@
      # directories                                         #
      # --------------------------------------------------- #
      # root directory
@@ -43,7 +45,7 @@ diff -ur otrs-3.0.11/Kernel/Config/Defaults.pm otrs-3.0.11.new//Kernel/Config/De
  
      # tmp dir
      $Self->{TempDir} = '<OTRS_CONFIG_Home>/var/tmp';
-@@ -987,7 +987,7 @@
+@@ -965,7 +965,7 @@
      # --------------------------------------------------- #
      $Self->{PGP}          = 0;
      $Self->{'PGP::Bin'}     = '/usr/bin/gpg';
@@ -52,33 +54,33 @@ diff -ur otrs-3.0.11/Kernel/Config/Defaults.pm otrs-3.0.11.new//Kernel/Config/De
  
  #    $Self->{'PGP::Options'} = '--batch --no-tty --yes';
  #    $Self->{'PGP::Key::Password'}->{'D2DF79FA'} = 1234;
-Tylko w otrs-3.0.11.new//Kernel/Config: Defaults.pm.orig
-diff -ur otrs-3.0.11/Kernel/Config/Files/Framework.xml otrs-3.0.11.new//Kernel/Config/Files/Framework.xml
---- otrs-3.0.11/Kernel/Config/Files/Framework.xml	2011-10-11 14:01:54.000000000 +0200
-+++ otrs-3.0.11.new//Kernel/Config/Files/Framework.xml	2011-11-04 09:11:31.300206326 +0100
-@@ -499,7 +499,7 @@
+Tylko w otrs-3.2.1.new/Kernel/Config: Defaults.pm~
+diff -ur otrs-3.2.1/Kernel/Config/Files/Framework.xml otrs-3.2.1.new/Kernel/Config/Files/Framework.xml
+--- otrs-3.2.1/Kernel/Config/Files/Framework.xml	2013-01-03 10:12:36.000000000 +0100
++++ otrs-3.2.1.new/Kernel/Config/Files/Framework.xml	2013-01-29 12:41:09.689962451 +0100
+@@ -493,7 +493,7 @@
          <Group>Framework</Group>
          <SubGroup>Core::Log</SubGroup>
          <Setting>
 -            <String Regex="">/tmp/otrs.log</String>
-+            <String Regex="">/var/log/otrs.log</String>
++		<String Regex="">/usr/share/otrs.log</String>
          </Setting>
      </ConfigItem>
      <ConfigItem Name="LogModule::LogFile::Date" Required="1" Valid="1">
-@@ -2787,7 +2787,7 @@
+@@ -2834,7 +2834,7 @@
          <Group>Framework</Group>
          <SubGroup>Crypt::PGP</SubGroup>
          <Setting>
 -            <String Regex="">--homedir /opt/otrs/.gnupg/ --batch --no-tty --yes</String>
-+            <String Regex="">--homedir /usr/share/otrs/.gnupg/ --batch --no-tty --yes</String>
++		<String Regex="">--homedir /usr/share/otrs/.gnupg/ --batch --no-tty --yes</String>
          </Setting>
      </ConfigItem>
      <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
-Tylko w otrs-3.0.11.new//Kernel/Config/Files: Framework.xml.orig
-diff -ur otrs-3.0.11/Kernel/Config.pm.dist otrs-3.0.11.new//Kernel/Config.pm.dist
---- otrs-3.0.11/Kernel/Config.pm.dist	2011-10-11 14:01:57.000000000 +0200
-+++ otrs-3.0.11.new//Kernel/Config.pm.dist	2011-11-04 09:11:31.300206326 +0100
-@@ -59,7 +59,7 @@
+Tylko w otrs-3.2.1.new/Kernel/Config/Files: Framework.xml~
+diff -ur otrs-3.2.1/Kernel/Config.pm.dist otrs-3.2.1.new/Kernel/Config.pm.dist
+--- otrs-3.2.1/Kernel/Config.pm.dist	2012-11-22 12:43:05.000000000 +0100
++++ otrs-3.2.1.new/Kernel/Config.pm.dist	2013-01-29 12:41:32.054324327 +0100
+@@ -63,7 +63,7 @@
      # ---------------------------------------------------- #
      # fs root directory
      # ---------------------------------------------------- #
@@ -87,13 +89,14 @@ diff -ur otrs-3.0.11/Kernel/Config.pm.dist otrs-3.0.11.new//Kernel/Config.pm.dis
  
      # ---------------------------------------------------- #
      # insert your own config settings "here"               #
-diff -ur otrs-3.0.11/scripts/apache2-httpd.include.conf otrs-3.0.11.new//scripts/apache2-httpd.include.conf
---- otrs-3.0.11/scripts/apache2-httpd.include.conf	2011-10-11 14:01:58.000000000 +0200
-+++ otrs-3.0.11.new//scripts/apache2-httpd.include.conf	2011-11-04 09:13:04.620205082 +0100
-@@ -4,8 +4,8 @@
+Tylko w otrs-3.2.1.new/Kernel: Config.pm.dist~
+diff -ur otrs-3.2.1/scripts/apache2-httpd.include.conf otrs-3.2.1.new/scripts/apache2-httpd.include.conf
+--- otrs-3.2.1/scripts/apache2-httpd.include.conf	2013-01-17 10:06:55.000000000 +0100
++++ otrs-3.2.1.new/scripts/apache2-httpd.include.conf	2013-01-29 12:42:41.307509300 +0100
+@@ -3,8 +3,8 @@
+ # $Id: apache2-httpd.include.conf,v 1.27 2013/01/04 13:03:06 mg Exp $
  # --
  
- # agent, admin and customer frontend
 -ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
 -Alias /otrs-web/ "/opt/otrs/var/httpd/htdocs/"
 +ScriptAlias /otrs/ "/usr/share/otrs/bin/cgi-bin/"
@@ -101,31 +104,34 @@ diff -ur otrs-3.0.11/scripts/apache2-httpd.include.conf otrs-3.0.11.new//scripts
  
  # activate this if you are using an Oracle database
  #SetEnv ORACLE_HOME /path/to/your/oracle/
-@@ -17,7 +17,7 @@
+@@ -15,7 +15,7 @@
  <IfModule mod_perl.c>
  
-     # load all otrs modules
+     # Setup environment and preload modules
 -    Perlrequire /opt/otrs/scripts/apache2-perl-startup.pl
-+    Perlrequire /usr/share/otrs/scripts/apache2-perl-startup
++    Perlrequire /usr/share/otrs/scripts/apache2-perl-startup.pl
  
-     # Apache::Reload - Reload Perl Modules when Changed on Disk
+     # Reload Perl modules when changed on disk
      PerlModule Apache2::Reload
-@@ -40,26 +40,26 @@
+@@ -41,7 +41,7 @@
+ 
  </IfModule>
  
- # directory settings
 -<Directory "/opt/otrs/bin/cgi-bin/">
 +<Directory "/usr/share/otrs/bin/cgi-bin/">
      AllowOverride None
      Options +ExecCGI -Includes
      Order allow,deny
-     Allow from all
+@@ -52,7 +52,7 @@
+     </IfModule>
  </Directory>
+ 
 -<Directory "/opt/otrs/var/httpd/htdocs/">
 +<Directory "/usr/share/otrs/var/httpd/htdocs/">
      AllowOverride None
      Order allow,deny
      Allow from all
+@@ -63,13 +63,13 @@
  </Directory>
  
  <IfModule mod_headers.c>
@@ -141,13 +147,21 @@ diff -ur otrs-3.0.11/scripts/apache2-httpd.include.conf otrs-3.0.11.new//scripts
          <FilesMatch "\.(js|JS)$">
              Header set Cache-Control "max-age=2592000 must-revalidate"
          </FilesMatch>
-diff -ur otrs-3.0.11/scripts/apache2-perl-startup.pl otrs-3.0.11.new//scripts/apache2-perl-startup.pl
---- otrs-3.0.11/scripts/apache2-perl-startup.pl	2011-10-11 14:01:58.000000000 +0200
-+++ otrs-3.0.11.new//scripts/apache2-perl-startup.pl	2011-11-04 09:11:31.300206326 +0100
-@@ -35,9 +35,9 @@
+Tylko w otrs-3.2.1.new/scripts: apache2-httpd.include.conf~
+diff -ur otrs-3.2.1/scripts/apache2-perl-startup.pl otrs-3.2.1.new/scripts/apache2-perl-startup.pl
+--- otrs-3.2.1/scripts/apache2-perl-startup.pl	2013-01-24 11:21:14.000000000 +0100
++++ otrs-3.2.1.new/scripts/apache2-perl-startup.pl	2013-01-29 12:43:07.268703262 +0100
+@@ -35,15 +35,15 @@
+     # set $0 to index.pl because this is broken in mod_perl context;
+     # apart from that, on Fedora, $0 is not a path which would break OTRS.
+     # see bug # 8533
+-    $0 = '/opt/otrs/bin/cgi-bin/index.pl';
++    $0 = '/usr/share/otrs/bin/cgi-bin/index.pl';
+ }
+ 
+ use Apache2::RequestRec;
  use ModPerl::Util;
  
- # set otrs lib path!
 -use lib "/opt/otrs/";
 -use lib "/opt/otrs/Kernel/cpan-lib";
 -use lib "/opt/otrs/Custom";
@@ -155,10 +169,12 @@ diff -ur otrs-3.0.11/scripts/apache2-perl-startup.pl otrs-3.0.11.new//scripts/ap
 +use lib "/usr/share/otrs/Kernel/cpan-lib";
 +use lib "/usr/share/otrs/Custom";
  
- # pull in things we will use in most requests so it is read and compiled
- # exactly once
---- otrs-3.0.11/scripts/redhat-rcotrs-config	2011-10-11 14:01:57.000000000 +0200
-+++ otrs-3.0.11.new/scripts/redhat-rcotrs-config	2011-12-20 14:37:10.646969824 +0100
+ # Preload frequently used modules to speed up client spawning.
+ use CGI ();
+Tylko w otrs-3.2.1.new/scripts: apache2-perl-startup.pl~
+diff -ur otrs-3.2.1/scripts/redhat-rcotrs-config otrs-3.2.1.new/scripts/redhat-rcotrs-config
+--- otrs-3.2.1/scripts/redhat-rcotrs-config	2012-10-11 09:11:09.000000000 +0200
++++ otrs-3.2.1.new/scripts/redhat-rcotrs-config	2013-01-29 12:43:27.239621730 +0100
 @@ -12,7 +12,7 @@
  # 
  # OTRS home (root) directory
@@ -168,3 +184,4 @@ diff -ur otrs-3.0.11/scripts/apache2-perl-startup.pl otrs-3.0.11.new//scripts/ap
  
  # if one of this is false, it will not be checked at the startup!
  # Note: (may be the database isn't on the same host! --> DB_RUNNING=0) 
+Tylko w otrs-3.2.1.new/scripts: redhat-rcotrs-config~
