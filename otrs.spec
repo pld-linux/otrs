@@ -279,6 +279,7 @@ fi
 %dir %{otrsdir}/Kernel/Output/HTML
 %dir %{otrsdir}/Kernel/Output/HTML/Standard
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/*.dtl
+%dir %{otrsdir}/Kernel/Output/HTML/Standard/ProcessManagement
 %attr(644,otrs,http) %config(noreplace) %{otrsdir}/Kernel/Output/HTML/Standard/ProcessManagement/*.dtl
 %dir %{otrsdir}/Kernel/Scheduler
 %{otrsdir}/Kernel/Scheduler/*.pm
