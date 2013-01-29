@@ -26,8 +26,8 @@ Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
-BuildRequires:	rpm-perlprov
 BuildRequires:	FIX_TODO_DO_NOT_SEND_TO_TH
+BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
@@ -37,10 +37,13 @@ Requires:	perl-Crypt-PasswdMD5
 Requires:	perl-DBD-mysql
 Requires:	perl-DBI
 Requires:	perl-Text-CSV
+Requires:	perl-YAML-LibYAML
 Requires:	procmail
 Requires:	smtpdaemon
 Requires:	webapps
 Requires:	webserver = apache
+Suggests:	perl-Crypt-SSLeay
+Suggests:	perl-JSON-XS
 Suggests:	perl-PDF-API2
 Conflicts:	logrotate < 3.7-4
 BuildArch:	noarch
