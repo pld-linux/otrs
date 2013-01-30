@@ -3,20 +3,13 @@
 # - all otrs-var into /var/lib/otrs
 # - put cron in proper place
 # - write not so brain-damage init-script...
-# - do not provide system perl deps (reason for build blocker)
-#   perl-MailTools-2.08-1.noarch: required "perl(Net::SMTP::SSL)" is provided by the following packages:
-#   a) otrs-3.1.11-1.noarch
-#   b) perl-Net-SMTP-SSL-1.01-1.noarch
-#   perl-libwww-6.03-1.noarch: required "perl(HTTP::Status)" is provided by the following packages:
-#   a) otrs-3.1.11-1.noarch
-#   b) perl-HTTP-Message-6.02-1.noarch
 #   VERIFY .... rpm -qp .../foo.rpm --provides
 %include	/usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
 Version:	3.2.1
-Release:	1
+Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
@@ -26,7 +19,6 @@ Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
-BuildRequires:	FIX_TODO_DO_NOT_SEND_TO_TH
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(pre):	/bin/id
@@ -50,7 +42,7 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreq	'perl\\(Kernel::.*\\)'
-%define		_noautoprov	'perl\\(Kernel::.*\\)' 'perl\\(YAML::.*\\)' 'perl\\(Net::.*\\)'
+%define		_noautoprov	'perl\\(Kernel::.*\\)' 'perl\\(YAML::.*\\)' 'perl\\(Net::.*\\)' 'perl\\(HTTP::.*\\)'
 
 %define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
