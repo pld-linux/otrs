@@ -4,7 +4,7 @@
 # - put cron in proper place
 # - write not so brain-damage init-script...
 #   VERIFY .... rpm -qp .../foo.rpm --provides
-%include	/usr/lib/rpm/macros.perl
+%{load:/usr/lib/rpm/macros.d/perl}
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
@@ -20,7 +20,7 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
 URL:		http://otrs.org/
 BuildRequires:	rpm-perlprov
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.654
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	/usr/sbin/usermod
@@ -41,8 +41,8 @@ Conflicts:	logrotate < 3.7-4
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_noautoreq	'perl\\(Kernel::.*\\)'
-%define		_noautoprov	'perl\\(Kernel::.*\\)' 'perl\\(YAML::.*\\)' 'perl\\(Net::.*\\)' 'perl\\(HTTP::.*\\)'
+%define		_noautoreq_perl	Kernel::.*
+%define		_noautoprov 	'perl\\(Kernel::.*\\)' 'perl\\(YAML::.*\\)' 'perl\\(Net::.*\\)' 'perl\\(HTTP::.*\\)'
 
 %define		otrsdir		%{_datadir}/otrs
 %define		otrsuser	otrs
