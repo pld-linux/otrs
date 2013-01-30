@@ -9,7 +9,6 @@
  if test -e $OTRS_HOME/var/cron; then
      OTRS_ROOT=$OTRS_HOME
  else
-Tylko w otrs-3.2.1.new/bin: Cron.sh~
 --- otrs-3.2.1/bin/otrs.SetPermissions.pl	2013-01-24 11:21:14.000000000 +0100
 +++ otrs-3.2.1.new/bin/otrs.SetPermissions.pl	2013-01-29 12:39:39.175799680 +0100
 @@ -82,7 +82,7 @@
@@ -21,7 +20,6 @@ Tylko w otrs-3.2.1.new/bin: Cron.sh~
  EOF
  
      if ( $#ARGV < 0 ) {
-Tylko w otrs-3.2.1.new/bin: otrs.SetPermissions.pl~
 --- otrs-3.2.1/Kernel/Config/Defaults.pm	2013-01-17 10:06:52.000000000 +0100
 +++ otrs-3.2.1.new/Kernel/Config/Defaults.pm	2013-01-29 12:40:37.118464479 +0100
 @@ -297,7 +297,7 @@
@@ -51,7 +49,6 @@ Tylko w otrs-3.2.1.new/bin: otrs.SetPermissions.pl~
  
  #    $Self->{'PGP::Options'} = '--batch --no-tty --yes';
  #    $Self->{'PGP::Key::Password'}->{'D2DF79FA'} = 1234;
-Tylko w otrs-3.2.1.new/Kernel/Config: Defaults.pm~
 --- otrs-3.2.1/Kernel/Config/Files/Framework.xml	2013-01-03 10:12:36.000000000 +0100
 +++ otrs-3.2.1.new/Kernel/Config/Files/Framework.xml	2013-01-29 12:41:09.689962451 +0100
 @@ -493,7 +493,7 @@
@@ -72,7 +69,6 @@ Tylko w otrs-3.2.1.new/Kernel/Config: Defaults.pm~
          </Setting>
      </ConfigItem>
      <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
-Tylko w otrs-3.2.1.new/Kernel/Config/Files: Framework.xml~
 --- otrs-3.2.1/Kernel/Config.pm.dist	2012-11-22 12:43:05.000000000 +0100
 +++ otrs-3.2.1.new/Kernel/Config.pm.dist	2013-01-29 12:41:32.054324327 +0100
 @@ -63,7 +63,7 @@
@@ -84,7 +80,6 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Framework.xml~
  
      # ---------------------------------------------------- #
      # insert your own config settings "here"               #
-Tylko w otrs-3.2.1.new/Kernel: Config.pm.dist~
 --- otrs-3.2.1/scripts/apache2-httpd.include.conf	2013-01-17 10:06:55.000000000 +0100
 +++ otrs-3.2.1.new/scripts/apache2-httpd.include.conf	2013-01-29 12:42:41.307509300 +0100
 @@ -3,8 +3,8 @@
@@ -141,7 +136,6 @@ Tylko w otrs-3.2.1.new/Kernel: Config.pm.dist~
          <FilesMatch "\.(js|JS)$">
              Header set Cache-Control "max-age=2592000 must-revalidate"
          </FilesMatch>
-Tylko w otrs-3.2.1.new/scripts: apache2-httpd.include.conf~
 --- otrs-3.2.1/scripts/apache2-perl-startup.pl	2013-01-24 11:21:14.000000000 +0100
 +++ otrs-3.2.1.new/scripts/apache2-perl-startup.pl	2013-01-29 12:43:07.268703262 +0100
 @@ -35,15 +35,15 @@
@@ -164,7 +158,6 @@ Tylko w otrs-3.2.1.new/scripts: apache2-httpd.include.conf~
  
  # Preload frequently used modules to speed up client spawning.
  use CGI ();
-Tylko w otrs-3.2.1.new/scripts: apache2-perl-startup.pl~
 --- otrs-3.2.1/scripts/redhat-rcotrs-config	2012-10-11 09:11:09.000000000 +0200
 +++ otrs-3.2.1.new/scripts/redhat-rcotrs-config	2013-01-29 12:43:27.239621730 +0100
 @@ -12,7 +12,7 @@
@@ -176,4 +169,3 @@ Tylko w otrs-3.2.1.new/scripts: apache2-perl-startup.pl~
  
  # if one of this is false, it will not be checked at the startup!
  # Note: (may be the database isn't on the same host! --> DB_RUNNING=0) 
-Tylko w otrs-3.2.1.new/scripts: redhat-rcotrs-config~
