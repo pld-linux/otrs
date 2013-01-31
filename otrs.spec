@@ -1,7 +1,6 @@
 # TODO:
 # - separate 3 subpackages: common files, administration and client frontend
 # - all otrs-var into /var/lib/otrs
-# - put cron in proper place
 # - write not so brain-damage init-script...
 #   VERIFY .... rpm -qp .../foo.rpm --provides
 %include    /usr/lib/rpm/macros.perl
@@ -121,8 +120,6 @@ Różne skrypty dla OTRS.
 # copy config file
 cp Kernel/Config/GenericAgent.pm.dist Kernel/Config/GenericAgent.pm
 cd Kernel/Config/ && for foo in *.dist; do cp $foo `basename $foo .dist`; done && cd ../../
-# copy all crontab dist files
-for foo in var/cron/*.dist; do mv $foo var/cron/`basename $foo .dist`; done
 
 # Remove regular CPAN libs - only HTML/Safe.pm has to stay, I can't find it...
 rm -Rf Kernel/cpan-lib/{Authen,Date,Email,IO,MIME,Mail,XML,auto}
@@ -132,13 +129,16 @@ rm -Rf doc/manual/de/
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{logrotate.d,rc.d/init.d,sysconfig,%{name}/Config,logrotate.d} \
+install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,rc.d/init.d,sysconfig,%{name}/Config,logrotate.d} \
 	$RPM_BUILD_ROOT{/var/log/{,archive/}%{name},%{_bindir},%{otrsdir}} \
 	$RPM_BUILD_ROOT/var/lib/%{name}/{article,pics/stats} \
 	$RPM_BUILD_ROOT%{_webapps}/%{_webapp}
 
 # copy files
 cp -R . $RPM_BUILD_ROOT%{otrsdir}
+
+# copy all crontab dist files
+for foo in var/cron/*.dist; do mv $foo $RPM_BUILD_ROOT/etc/cron.d/otrs.`basename $foo` ; done
 
 # install init-Script & apache2 config
 install scripts/redhat-rcotrs $RPM_BUILD_ROOT/etc/rc.d/init.d/otrs
@@ -237,7 +237,7 @@ fi
 %attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/GenericAgent.pm
 %attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAAuto.pm
 %attr(640,otrs,http) %{_sysconfdir}/%{name}/*.dist
-%attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{otrsdir}/var/cron/*
+%attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %attr(755,otrs,http) %dir %{otrsdir}
@@ -402,7 +402,7 @@ fi
 # This entries should be changed into links and proper trigger to move data:
 %attr(751,otrs,http) %dir %{otrsdir}/var/
 %{otrsdir}/var/*.png
-%attr(755,otrs,http) %dir %{otrsdir}/var/cron
+%attr(755,otrs,http) %dir /etc/cron.d
 %attr(2775,otrs,http) %{otrsdir}/var/article
 %attr(755,otrs,http) %{otrsdir}/var/fonts
 %attr(755,otrs,http) %{otrsdir}/var/httpd

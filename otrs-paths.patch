@@ -1,14 +1,3 @@
---- otrs-3.2.1/bin/Cron.sh	2012-11-22 12:43:09.000000000 +0100
-+++ otrs-3.2.1.new/bin/Cron.sh	2013-01-29 12:39:20.521608435 +0100
-@@ -45,7 +45,7 @@
- OTRS_HOME="`pwd`"
- cd -
- 
--#OTRS_ROOT=/opt/OpenTRS
-+#OTRS_ROOT=/usr/share/otrs
- if test -e $OTRS_HOME/var/cron; then
-     OTRS_ROOT=$OTRS_HOME
- else
 --- otrs-3.2.1/bin/otrs.SetPermissions.pl	2013-01-24 11:21:14.000000000 +0100
 +++ otrs-3.2.1.new/bin/otrs.SetPermissions.pl	2013-01-29 12:39:39.175799680 +0100
 @@ -82,7 +82,7 @@
@@ -169,3 +158,26 @@
  
  # if one of this is false, it will not be checked at the startup!
  # Note: (may be the database isn't on the same host! --> DB_RUNNING=0) 
+--- otrs-3.2.1.new/bin/Cron.sh	2013-01-31 09:29:55.308734799 +0100
++++ otrs-3.2.1/bin/Cron.sh	2012-11-22 12:43:09.000000000 +0100
+@@ -45,16 +45,16 @@
+ OTRS_HOME="`pwd`"
+ cd -
+ 
+-#OTRS_ROOT=/usr/share/otrs
+-if test -e /etc/cron.d; then
++#OTRS_ROOT=/opt/OpenTRS
++if test -e $OTRS_HOME/var/cron; then
+     OTRS_ROOT=$OTRS_HOME
+ else
+-    echo "No cronjobs in /etc/cron.d found!";
++    echo "No cronjobs in $OTRS_HOME/var/cron found!";
+     echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /opt/otrs). ";
+     exit 5;
+ fi
+ 
+-CRON_DIR=/etc/cron.d
++CRON_DIR=$OTRS_ROOT/var/cron
+ CRON_TMP_FILE=$OTRS_ROOT/var/tmp/otrs-cron-tmp.$$
+ 
+ echo "Cron.sh - start/stop OTRS cronjobs - <\$Revision: 1.22 $> "
