@@ -402,7 +402,6 @@ fi
 # This entries should be changed into links and proper trigger to move data:
 %attr(751,otrs,http) %dir %{otrsdir}/var/
 %{otrsdir}/var/*.png
-%attr(755,otrs,http) %dir /etc/cron.d
 %attr(2775,otrs,http) %{otrsdir}/var/article
 %attr(755,otrs,http) %{otrsdir}/var/fonts
 %attr(755,otrs,http) %{otrsdir}/var/httpd
