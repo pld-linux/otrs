@@ -16,7 +16,7 @@
  
      # param for LogModule Kernel::System::Log::File (required!)
 -    $Self->{'LogModule::LogFile'} = '/tmp/otrs.log';
-+    $Self->{'LogModule::LogFile'} = '/var/log/otrs.log';
++    $Self->{'LogModule::LogFile'} = '/var/log/otrs/otrs.log';
  
      # param if the date (yyyy-mm) should be added as suffix to
      # logfile [0|1]
@@ -45,7 +45,7 @@
          <SubGroup>Core::Log</SubGroup>
          <Setting>
 -            <String Regex="">/tmp/otrs.log</String>
-+		<String Regex="">/usr/share/otrs.log</String>
++		<String Regex="">/var/log/otrs/otrs.log</String>
          </Setting>
      </ConfigItem>
      <ConfigItem Name="LogModule::LogFile::Date" Required="1" Valid="1">
