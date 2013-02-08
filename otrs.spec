@@ -166,6 +166,8 @@ install $RPM_BUILD_ROOT/etc/%{name}/mailfilter $RPM_BUILD_ROOT/etc/%{name}/mailf
 install $RPM_BUILD_ROOT/etc/%{name}/Config.pm $RPM_BUILD_ROOT/etc/%{name}/Config.pm.dist
 install $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm $RPM_BUILD_ROOT/etc/%{name}/GenericAgent.pm.dist
 # File for on-line configuration:
+touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAuto.pm
+ln -sf ../../../../../../etc/otrs/ZZZAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/Files/ZZZAuto.pm
 touch $RPM_BUILD_ROOT/etc/%{name}/ZZZAAuto.pm
 ln -sf ../../../../../../etc/otrs/ZZZAAuto.pm $RPM_BUILD_ROOT%{otrsdir}/Kernel/Config/Files/ZZZAAuto.pm
 # link to proper places
@@ -235,6 +237,7 @@ fi
 %attr(600,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/mailfilter
 %attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/Config.pm
 %attr(640,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/GenericAgent.pm
+%attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAuto.pm
 %attr(660,otrs,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/ZZZAAuto.pm
 %attr(640,otrs,http) %{_sysconfdir}/%{name}/*.dist
 %attr(644,otrs,http) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/*
