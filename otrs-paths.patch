@@ -1,5 +1,28 @@
+--- otrs-3.2.1/bin/Cron.sh	2012-11-22 12:43:09.000000000 +0100
++++ otrs-3.2.1.new/bin/Cron.sh	2013-02-08 12:49:37.545377896 +0100
+@@ -45,16 +45,16 @@
+ OTRS_HOME="`pwd`"
+ cd -
+ 
+-#OTRS_ROOT=/opt/OpenTRS
+-if test -e $OTRS_HOME/var/cron; then
++#OTRS_ROOT=/usr/share/otrs
++if test -e /etc/cron.d; then
+     OTRS_ROOT=$OTRS_HOME
+ else
+-    echo "No cronjobs in $OTRS_HOME/var/cron found!";
++    echo "No cronjobs in /etc/cron.d found!";
+     echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /opt/otrs). ";
+     exit 5;
+ fi
+ 
+-CRON_DIR=$OTRS_ROOT/var/cron
++CRON_DIR=/etc/cron.d
+ CRON_TMP_FILE=$OTRS_ROOT/var/tmp/otrs-cron-tmp.$$
+ 
+ echo "Cron.sh - start/stop OTRS cronjobs - <\$Revision: 1.22 $> "
 --- otrs-3.2.1/bin/otrs.SetPermissions.pl	2013-01-24 11:21:14.000000000 +0100
-+++ otrs-3.2.1.new/bin/otrs.SetPermissions.pl	2013-01-29 12:39:39.175799680 +0100
++++ otrs-3.2.1.new/bin/otrs.SetPermissions.pl	2013-02-08 12:49:37.538710921 +0100
 @@ -82,7 +82,7 @@
      [--not-root]
      <OTRS_HOME>
@@ -10,7 +33,7 @@
  
      if ( $#ARGV < 0 ) {
 --- otrs-3.2.1/Kernel/Config/Defaults.pm	2013-01-17 10:06:52.000000000 +0100
-+++ otrs-3.2.1.new/Kernel/Config/Defaults.pm	2013-01-29 12:40:37.118464479 +0100
++++ otrs-3.2.1.new/Kernel/Config/Defaults.pm	2013-02-08 12:49:37.542044408 +0100
 @@ -297,7 +297,7 @@
  #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
  
@@ -39,7 +62,7 @@
  #    $Self->{'PGP::Options'} = '--batch --no-tty --yes';
  #    $Self->{'PGP::Key::Password'}->{'D2DF79FA'} = 1234;
 --- otrs-3.2.1/Kernel/Config/Files/Framework.xml	2013-01-03 10:12:36.000000000 +0100
-+++ otrs-3.2.1.new/Kernel/Config/Files/Framework.xml	2013-01-29 12:41:09.689962451 +0100
++++ otrs-3.2.1.new/Kernel/Config/Files/Framework.xml	2013-02-08 12:49:37.545377896 +0100
 @@ -493,7 +493,7 @@
          <Group>Framework</Group>
          <SubGroup>Core::Log</SubGroup>
@@ -58,8 +81,20 @@
          </Setting>
      </ConfigItem>
      <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
+--- otrs-3.2.1/Kernel/Config/Files/Ticket.xml	2013-01-24 11:21:12.000000000 +0100
++++ otrs-3.2.1.new/Kernel/Config/Files/Ticket.xml	2013-02-08 12:50:32.791264354 +0100
+@@ -215,7 +215,7 @@
+         <Group>Ticket</Group>
+         <SubGroup>Core::Ticket</SubGroup>
+         <Setting>
+-            <String Regex="">&lt;OTRS_CONFIG_Home&gt;/var/log/TicketCounter.log</String>
++		<String Regex="">/var/log/otrs/TicketCounter.log</String>
+         </Setting>
+     </ConfigItem>
+     <ConfigItem Name="Ticket::IndexModule" Required="1" Valid="1">
+Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
 --- otrs-3.2.1/Kernel/Config.pm.dist	2012-11-22 12:43:05.000000000 +0100
-+++ otrs-3.2.1.new/Kernel/Config.pm.dist	2013-01-29 12:41:32.054324327 +0100
++++ otrs-3.2.1.new/Kernel/Config.pm.dist	2013-02-08 12:49:37.545377896 +0100
 @@ -63,7 +63,7 @@
      # ---------------------------------------------------- #
      # fs root directory
@@ -70,7 +105,7 @@
      # ---------------------------------------------------- #
      # insert your own config settings "here"               #
 --- otrs-3.2.1/scripts/apache2-httpd.include.conf	2013-01-17 10:06:55.000000000 +0100
-+++ otrs-3.2.1.new/scripts/apache2-httpd.include.conf	2013-01-29 12:42:41.307509300 +0100
++++ otrs-3.2.1.new/scripts/apache2-httpd.include.conf	2013-02-08 12:49:37.545377896 +0100
 @@ -3,8 +3,8 @@
  # $Id: apache2-httpd.include.conf,v 1.27 2013/01/04 13:03:06 mg Exp $
  # --
@@ -126,7 +161,7 @@
              Header set Cache-Control "max-age=2592000 must-revalidate"
          </FilesMatch>
 --- otrs-3.2.1/scripts/apache2-perl-startup.pl	2013-01-24 11:21:14.000000000 +0100
-+++ otrs-3.2.1.new/scripts/apache2-perl-startup.pl	2013-01-29 12:43:07.268703262 +0100
++++ otrs-3.2.1.new/scripts/apache2-perl-startup.pl	2013-02-08 12:49:37.545377896 +0100
 @@ -35,15 +35,15 @@
      # set $0 to index.pl because this is broken in mod_perl context;
      # apart from that, on Fedora, $0 is not a path which would break OTRS.
@@ -148,7 +183,7 @@
  # Preload frequently used modules to speed up client spawning.
  use CGI ();
 --- otrs-3.2.1/scripts/redhat-rcotrs-config	2012-10-11 09:11:09.000000000 +0200
-+++ otrs-3.2.1.new/scripts/redhat-rcotrs-config	2013-01-29 12:43:27.239621730 +0100
++++ otrs-3.2.1.new/scripts/redhat-rcotrs-config	2013-02-08 12:49:37.545377896 +0100
 @@ -12,7 +12,7 @@
  # 
  # OTRS home (root) directory
@@ -158,26 +193,3 @@
  
  # if one of this is false, it will not be checked at the startup!
  # Note: (may be the database isn't on the same host! --> DB_RUNNING=0) 
---- otrs-3.2.1/bin/Cron.sh	2012-11-22 12:43:09.000000000 +0100
-+++ otrs-3.2.1.new/bin/Cron.sh	2013-01-31 09:29:55.308734799 +0100
-@@ -45,16 +45,16 @@
- OTRS_HOME="`pwd`"
- cd -
- 
--#OTRS_ROOT=/opt/OpenTRS
--if test -e $OTRS_HOME/var/cron; then
-+#OTRS_ROOT=/usr/share/otrs
-+if test -e /etc/cron.d; then
-     OTRS_ROOT=$OTRS_HOME
- else
--    echo "No cronjobs in $OTRS_HOME/var/cron found!";
-+    echo "No cronjobs in /etc/cron.d found!";
-     echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /opt/otrs). ";
-     exit 5;
- fi
- 
--CRON_DIR=$OTRS_ROOT/var/cron
-+CRON_DIR=/etc/cron.d
- CRON_TMP_FILE=$OTRS_ROOT/var/tmp/otrs-cron-tmp.$$
- 
- echo "Cron.sh - start/stop OTRS cronjobs - <\$Revision: 1.22 $> "
