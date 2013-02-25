@@ -2,18 +2,18 @@
 # - separate 3 subpackages: common files, administration and client frontend
 # - all otrs-var into /var/lib/otrs
 # - write not so brain-damage init-script...
-#   VERIFY .... rpm -qp .../foo.rpm --provides
+#   VERIFY .... rpm -qp .../foo.rpm --provides // DONE
 %include    /usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.2.1
+Version:	3.2.2
 Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	9f096d37d6c4842680962676ef32a2f7
+# Source0-md5:	31a402aa4352c7e1df10ca0a9aa578a2
 Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
