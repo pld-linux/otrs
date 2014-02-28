@@ -7,13 +7,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.2.2
+Version:	3.3.5
 Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	31a402aa4352c7e1df10ca0a9aa578a2
+# Source0-md5:	1bd5a0a8fac9a2348c668cbb485d666e
 Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
@@ -227,7 +227,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ARCHIVE CHANGES  COPYING  COPYING-Third-Party CREDITS doc/ README README.database README.webserver RELEASE UPGRADING
+%doc ARCHIVE COPYING  COPYING-Third-Party doc/ INSTALL.md README.md README.database.md README.webserver.md RELEASE UPGRADING.md
 %doc scripts/test Kernel/Config/GenericAgent.pm.examples
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/otrs
 %attr(751,otrs,http) %dir %{_sysconfdir}/%{name}
@@ -284,17 +284,22 @@ fi
 %dir %{otrsdir}/Kernel/Scheduler/TaskHandler
 %dir %{otrsdir}/Kernel/System
 %{otrsdir}/Kernel/System/*.pm
+%dir %{otrsdir}/Kernel/System/ACL
+%dir %{otrsdir}/Kernel/System/ACL/DB
 %dir %{otrsdir}/Kernel/System/Auth
 %dir %{otrsdir}/Kernel/System/Auth/Sync
 %dir %{otrsdir}/Kernel/System/AuthSession
 %dir %{otrsdir}/Kernel/System/Cache
 %dir %{otrsdir}/Kernel/System/Crypt
 %dir %{otrsdir}/Kernel/System/CustomerAuth
+%dir %{otrsdir}/Kernel/System/CustomerCompany
+%dir %{otrsdir}/Kernel/System/CustomerCompany/Event
 %dir %{otrsdir}/Kernel/System/CustomerUser
+%dir %{otrsdir}/Kernel/System/CustomerUser/Event
 %dir %{otrsdir}/Kernel/System/CustomerUser/Preferences
 %dir %{otrsdir}/Kernel/System/DB
 %dir %{otrsdir}/Kernel/System/DynamicField
-%dir %{otrsdir}/Kernel/System/DynamicField/Backend
+%dir %{otrsdir}/Kernel/System/DynamicField/Driver
 %dir %{otrsdir}/Kernel/System/DynamicField/ObjectType
 %dir %{otrsdir}/Kernel/System/Email
 %dir %{otrsdir}/Kernel/System/GenericAgent
@@ -339,14 +344,13 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/Apache
 %dir %{otrsdir}/Kernel/cpan-lib/Apache2
 %dir %{otrsdir}/Kernel/cpan-lib/CGI
+%dir %{otrsdir}/Kernel/cpan-lib/CGI/Emulate
+%dir %{otrsdir}/Kernel/cpan-lib/CGI/Parse
 %dir %{otrsdir}/Kernel/cpan-lib/Class
 %dir %{otrsdir}/Kernel/cpan-lib/Class/Inspector
 %dir %{otrsdir}/Kernel/cpan-lib/Crypt
 %dir %{otrsdir}/Kernel/cpan-lib/CSS
-%dir %{otrsdir}/Kernel/cpan-lib/Digest
-%dir %{otrsdir}/Kernel/cpan-lib/Digest/SHA
 %dir %{otrsdir}/Kernel/cpan-lib/Encode
-%dir %{otrsdir}/Kernel/cpan-lib/File
 %dir %{otrsdir}/Kernel/cpan-lib/HTTP
 %dir %{otrsdir}/Kernel/cpan-lib/HTTP/Headers
 %dir %{otrsdir}/Kernel/cpan-lib/HTTP/Request
@@ -357,19 +361,19 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/LWP
 %dir %{otrsdir}/Kernel/cpan-lib/LWP/Authen
 %dir %{otrsdir}/Kernel/cpan-lib/LWP/Protocol
+%dir %{otrsdir}/Kernel/cpan-lib/Linux
 %dir %{otrsdir}/Kernel/cpan-lib/Locale
 %dir %{otrsdir}/Kernel/cpan-lib/Locale/Codes
+%dir %{otrsdir}/Kernel/cpan-lib/Module
 %dir %{otrsdir}/Kernel/cpan-lib/Mozilla
 %dir %{otrsdir}/Kernel/cpan-lib/Mozilla/CA
 %{otrsdir}/Kernel/cpan-lib/Mozilla/CA/cacert.pem
 %dir %{otrsdir}/Kernel/cpan-lib/Net
+%dir %{otrsdir}/Kernel/cpan-lib/Net/HTTP
 %dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP
 %dir %{otrsdir}/Kernel/cpan-lib/Net/IMAP/Simple
 %{otrsdir}/Kernel/cpan-lib/Net/IMAP/Simple/*.pm
-%dir %{otrsdir}/Kernel/cpan-lib/Net/POP3
-%dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP
-%dir %{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS
-%{otrsdir}/Kernel/cpan-lib/Net/SMTP/TLS/*.pm
+%dir %{otrsdir}/Kernel/cpan-lib/Net/SSLGlue
 %dir %{otrsdir}/Kernel/cpan-lib/Proc
 %{otrsdir}/Kernel/cpan-lib/Proc/Daemon.pod
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP
@@ -377,6 +381,8 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP/Lite/Deserializer
 %{otrsdir}/Kernel/cpan-lib/SOAP/Lite/Deserializer/*.pm
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP/Transport
+%dir %{otrsdir}/Kernel/cpan-lib/Sys
+%dir %{otrsdir}/Kernel/cpan-lib/Sys/Hostname
 %dir %{otrsdir}/Kernel/cpan-lib/Text
 %dir %{otrsdir}/Kernel/cpan-lib/Text/Diff
 %dir %{otrsdir}/Kernel/cpan-lib/URI
@@ -385,6 +391,7 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/YAML
 %dir %{otrsdir}/Kernel/cpan-lib/YAML/Dumper
 %dir %{otrsdir}/Kernel/cpan-lib/YAML/Loader
+#%dir %{otrsdir}/Kernel/cpan-lib/version
 %dir %{otrsdir}/bin
 %attr(700,otrs,root) %{otrsdir}/bin/*.sh
 %attr(700,otrs,root) %{otrsdir}/bin/otrs.*
@@ -392,7 +399,6 @@ fi
 %attr(750,root,http) %{otrsdir}/bin/cgi-bin/*.pl
 %dir %{otrsdir}/bin/fcgi-bin/
 %attr(750,root,http) %{otrsdir}/bin/fcgi-bin/*.pl
-%{otrsdir}/INSTALL
 %dir %{otrsdir}/scripts
 %dir %{otrsdir}/scripts/database
 %{otrsdir}/scripts/*.sql
@@ -405,13 +411,13 @@ fi
 # This entries should be changed into links and proper trigger to move data:
 %attr(751,otrs,http) %dir %{otrsdir}/var/
 %{otrsdir}/var/*.png
-%attr(2775,otrs,http) %{otrsdir}/var/article
+#%attr(2775,otrs,http) %{otrsdir}/var/article
 %attr(755,otrs,http) %{otrsdir}/var/fonts
 %attr(755,otrs,http) %{otrsdir}/var/httpd
 %attr(755,otrs,http) %{otrsdir}/var/sessions
-%attr(755,otrs,http) %{otrsdir}/var/spool
+#%attr(755,otrs,http) %{otrsdir}/var/spool
 %attr(755,otrs,http) %{otrsdir}/var/stats
-%attr(2775,otrs,http) %{otrsdir}/var/tmp
+#%attr(2775,otrs,http) %{otrsdir}/var/tmp
 # attempt to move to /var/lib:
 %attr(751,otrs,http) %dir /var/lib/%{name}
 %attr(2775,otrs,http) %dir /var/lib/%{name}/article
@@ -425,5 +431,5 @@ fi
 %defattr(644,root,root,755)
 %attr(700,otrs,http) %{otrsdir}/scripts/*.pl
 %attr(700,otrs,http) %{otrsdir}/scripts/tools/*.pl
-%{otrsdir}/scripts/*.pm
+#%{otrsdir}/scripts/*.pm
 %dir %{otrsdir}/scripts/tools
