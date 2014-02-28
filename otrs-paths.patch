@@ -1,18 +1,20 @@
---- otrs-3.2.1/bin/Cron.sh	2012-11-22 12:43:09.000000000 +0100
-+++ otrs-3.2.1.new/bin/Cron.sh	2013-02-08 12:49:37.545377896 +0100
-@@ -45,16 +45,16 @@
+diff -ur otrs-3.3.5/bin/Cron.sh otrs-3.3.5.new/bin/Cron.sh
+--- otrs-3.3.5/bin/Cron.sh	2014-02-20 09:22:07.000000000 +0100
++++ otrs-3.3.5.new/bin/Cron.sh	2014-02-28 13:44:49.814960681 +0100
+@@ -43,16 +43,16 @@
  OTRS_HOME="`pwd`"
  cd -
  
--#OTRS_ROOT=/opt/OpenTRS
+-#OTRS_ROOT=/opt/otrs
 -if test -e $OTRS_HOME/var/cron; then
 +#OTRS_ROOT=/usr/share/otrs
 +if test -e /etc/cron.d; then
      OTRS_ROOT=$OTRS_HOME
  else
 -    echo "No cronjobs in $OTRS_HOME/var/cron found!";
+-    echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /opt/otrs). ";
 +    echo "No cronjobs in /etc/cron.d found!";
-     echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /opt/otrs). ";
++    echo " * Check the \$HOME (/etc/passwd) of the OTRS user. It must be the root dir of your OTRS system (e. g. /usr/share/otrs). ";
      exit 5;
  fi
  
@@ -20,10 +22,12 @@
 +CRON_DIR=/etc/cron.d
  CRON_TMP_FILE=$OTRS_ROOT/var/tmp/otrs-cron-tmp.$$
  
- echo "Cron.sh - start/stop OTRS cronjobs - <\$Revision: 1.22 $> "
---- otrs-3.2.1/bin/otrs.SetPermissions.pl	2013-01-24 11:21:14.000000000 +0100
-+++ otrs-3.2.1.new/bin/otrs.SetPermissions.pl	2013-02-08 12:49:37.538710921 +0100
-@@ -82,7 +82,7 @@
+ echo "Cron.sh - start/stop OTRS cronjobs"
+Tylko w otrs-3.3.5.new/bin: Cron.sh~
+diff -ur otrs-3.3.5/bin/otrs.SetPermissions.pl otrs-3.3.5.new/bin/otrs.SetPermissions.pl
+--- otrs-3.3.5/bin/otrs.SetPermissions.pl	2014-02-20 09:22:07.000000000 +0100
++++ otrs-3.3.5.new/bin/otrs.SetPermissions.pl	2014-02-28 13:46:22.849207187 +0100
+@@ -77,7 +77,7 @@
      [--not-root]
      <OTRS_HOME>
  
@@ -32,9 +36,11 @@
  EOF
  
      if ( $#ARGV < 0 ) {
---- otrs-3.2.1/Kernel/Config/Defaults.pm	2013-01-17 10:06:52.000000000 +0100
-+++ otrs-3.2.1.new/Kernel/Config/Defaults.pm	2013-02-08 12:49:37.542044408 +0100
-@@ -297,7 +297,7 @@
+Tylko w otrs-3.3.5.new/bin: otrs.SetPermissions.pl~
+diff -ur otrs-3.3.5/Kernel/Config/Defaults.pm otrs-3.3.5.new/Kernel/Config/Defaults.pm
+--- otrs-3.3.5/Kernel/Config/Defaults.pm	2014-02-20 09:22:11.000000000 +0100
++++ otrs-3.3.5.new/Kernel/Config/Defaults.pm	2014-02-28 13:47:21.181869809 +0100
+@@ -292,7 +292,7 @@
  #    $Self->{'LogModule::SysLog::Charset'} = 'utf-8';
  
      # param for LogModule Kernel::System::Log::File (required!)
@@ -43,7 +49,7 @@
  
      # param if the date (yyyy-mm) should be added as suffix to
      # logfile [0|1]
-@@ -824,7 +824,7 @@
+@@ -803,7 +803,7 @@
      # directories                                         #
      # --------------------------------------------------- #
      # root directory
@@ -52,7 +58,7 @@
  
      # tmp dir
      $Self->{TempDir} = '<OTRS_CONFIG_Home>/var/tmp';
-@@ -965,7 +965,7 @@
+@@ -966,7 +966,7 @@
      # --------------------------------------------------- #
      $Self->{PGP}          = 0;
      $Self->{'PGP::Bin'}     = '/usr/bin/gpg';
@@ -61,9 +67,11 @@
  
  #    $Self->{'PGP::Options'} = '--batch --no-tty --yes';
  #    $Self->{'PGP::Key::Password'}->{'D2DF79FA'} = 1234;
---- otrs-3.2.1/Kernel/Config/Files/Framework.xml	2013-01-03 10:12:36.000000000 +0100
-+++ otrs-3.2.1.new/Kernel/Config/Files/Framework.xml	2013-02-08 12:49:37.545377896 +0100
-@@ -493,7 +493,7 @@
+Tylko w otrs-3.3.5.new/Kernel/Config: Defaults.pm~
+diff -ur otrs-3.3.5/Kernel/Config/Files/Framework.xml otrs-3.3.5.new/Kernel/Config/Files/Framework.xml
+--- otrs-3.3.5/Kernel/Config/Files/Framework.xml	2014-02-20 09:22:11.000000000 +0100
++++ otrs-3.3.5.new/Kernel/Config/Files/Framework.xml	2014-02-28 13:48:17.254429304 +0100
+@@ -507,7 +507,7 @@
          <Group>Framework</Group>
          <SubGroup>Core::Log</SubGroup>
          <Setting>
@@ -72,7 +80,7 @@
          </Setting>
      </ConfigItem>
      <ConfigItem Name="LogModule::LogFile::Date" Required="1" Valid="1">
-@@ -2834,7 +2834,7 @@
+@@ -2867,7 +2867,7 @@
          <Group>Framework</Group>
          <SubGroup>Crypt::PGP</SubGroup>
          <Setting>
@@ -81,21 +89,24 @@
          </Setting>
      </ConfigItem>
      <ConfigItem Name="PGP::Key::Password" Required="1" Valid="1">
---- otrs-3.2.1/Kernel/Config/Files/Ticket.xml	2013-01-24 11:21:12.000000000 +0100
-+++ otrs-3.2.1.new/Kernel/Config/Files/Ticket.xml	2013-02-08 12:50:32.791264354 +0100
-@@ -215,7 +215,7 @@
+Tylko w otrs-3.3.5.new/Kernel/Config/Files: Framework.xml~
+diff -ur otrs-3.3.5/Kernel/Config/Files/Ticket.xml otrs-3.3.5.new/Kernel/Config/Files/Ticket.xml
+--- otrs-3.3.5/Kernel/Config/Files/Ticket.xml	2014-02-20 09:22:11.000000000 +0100
++++ otrs-3.3.5.new/Kernel/Config/Files/Ticket.xml	2014-02-28 13:48:32.905143705 +0100
+@@ -225,7 +225,7 @@
          <Group>Ticket</Group>
          <SubGroup>Core::Ticket</SubGroup>
          <Setting>
 -            <String Regex="">&lt;OTRS_CONFIG_Home&gt;/var/log/TicketCounter.log</String>
-+		<String Regex="">/var/log/otrs/TicketCounter.log</String>
++		<String Regex="">&lt;OTRS_CONFIG_Home&gt;/var/log/otrs/TicketCounter.log</String>
          </Setting>
      </ConfigItem>
      <ConfigItem Name="Ticket::IndexModule" Required="1" Valid="1">
-Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
---- otrs-3.2.1/Kernel/Config.pm.dist	2012-11-22 12:43:05.000000000 +0100
-+++ otrs-3.2.1.new/Kernel/Config.pm.dist	2013-02-08 12:49:37.545377896 +0100
-@@ -63,7 +63,7 @@
+Tylko w otrs-3.3.5.new/Kernel/Config/Files: Ticket.xml~
+diff -ur otrs-3.3.5/Kernel/Config.pm.dist otrs-3.3.5.new/Kernel/Config.pm.dist
+--- otrs-3.3.5/Kernel/Config.pm.dist	2014-02-20 09:22:06.000000000 +0100
++++ otrs-3.3.5.new/Kernel/Config.pm.dist	2014-02-28 13:48:55.052821342 +0100
+@@ -67,7 +67,7 @@
      # ---------------------------------------------------- #
      # fs root directory
      # ---------------------------------------------------- #
@@ -104,10 +115,12 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
  
      # ---------------------------------------------------- #
      # insert your own config settings "here"               #
---- otrs-3.2.1/scripts/apache2-httpd.include.conf	2013-01-17 10:06:55.000000000 +0100
-+++ otrs-3.2.1.new/scripts/apache2-httpd.include.conf	2013-02-08 12:49:37.545377896 +0100
-@@ -3,8 +3,8 @@
- # $Id: apache2-httpd.include.conf,v 1.27 2013/01/04 13:03:06 mg Exp $
+Tylko w otrs-3.3.5.new/Kernel: Config.pm.dist~
+diff -ur otrs-3.3.5/scripts/apache2-httpd.include.conf otrs-3.3.5.new/scripts/apache2-httpd.include.conf
+--- otrs-3.3.5/scripts/apache2-httpd.include.conf	2014-02-20 09:22:07.000000000 +0100
++++ otrs-3.3.5.new/scripts/apache2-httpd.include.conf	2014-02-28 13:50:28.093735087 +0100
+@@ -2,8 +2,8 @@
+ # added for OTRS (http://otrs.org/)
  # --
  
 -ScriptAlias /otrs/ "/opt/otrs/bin/cgi-bin/"
@@ -117,7 +130,7 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
  
  # activate this if you are using an Oracle database
  #SetEnv ORACLE_HOME /path/to/your/oracle/
-@@ -15,7 +15,7 @@
+@@ -14,7 +14,7 @@
  <IfModule mod_perl.c>
  
      # Setup environment and preload modules
@@ -126,7 +139,7 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
  
      # Reload Perl modules when changed on disk
      PerlModule Apache2::Reload
-@@ -41,7 +41,7 @@
+@@ -52,7 +52,7 @@
  
  </IfModule>
  
@@ -134,20 +147,20 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
 +<Directory "/usr/share/otrs/bin/cgi-bin/">
      AllowOverride None
      Options +ExecCGI -Includes
-     Order allow,deny
-@@ -52,7 +52,7 @@
+ 
+@@ -75,7 +75,7 @@
      </IfModule>
  </Directory>
  
 -<Directory "/opt/otrs/var/httpd/htdocs/">
 +<Directory "/usr/share/otrs/var/httpd/htdocs/">
      AllowOverride None
-     Order allow,deny
-     Allow from all
-@@ -63,13 +63,13 @@
- </Directory>
+ 
+     <IfModule mod_version.c>
+@@ -107,28 +107,28 @@
  
  <IfModule mod_headers.c>
+     # Cache css-cache for 30 days
 -    <Directory "/opt/otrs/var/httpd/htdocs/skins/*/*/css-cache">
 +    <Directory "/usr/share/otrs/var/httpd/htdocs/skins/*/*/css-cache">
          <FilesMatch "\.(css|CSS)$">
@@ -155,19 +168,45 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
          </FilesMatch>
      </Directory>
  
+     # Cache css thirdparty for 4 hours, including icon fonts
+-    <Directory "/opt/otrs/var/httpd/htdocs/skins/*/*/css/thirdparty">
++    <Directory "/usr/share/otrs/var/httpd/htdocs/skins/*/*/css/thirdparty">
+         <FilesMatch "\.(css|CSS|woff|svg)$">
+             Header set Cache-Control "max-age=14400 must-revalidate"
+         </FilesMatch>
+     </Directory>
+ 
+     # Cache js-cache for 30 days
 -    <Directory "/opt/otrs/var/httpd/htdocs/js/js-cache">
 +    <Directory "/usr/share/otrs/var/httpd/htdocs/js/js-cache">
          <FilesMatch "\.(js|JS)$">
              Header set Cache-Control "max-age=2592000 must-revalidate"
          </FilesMatch>
---- otrs-3.2.1/scripts/apache2-perl-startup.pl	2013-01-24 11:21:14.000000000 +0100
-+++ otrs-3.2.1.new/scripts/apache2-perl-startup.pl	2013-02-08 12:49:37.545377896 +0100
-@@ -35,15 +35,15 @@
-     # set $0 to index.pl because this is broken in mod_perl context;
-     # apart from that, on Fedora, $0 is not a path which would break OTRS.
+     </Directory>
+ 
+     # Cache js thirdparty for 4 hours
+-    <Directory "/opt/otrs/var/httpd/htdocs/js/thirdparty/">
++    <Directory "/usr/share/otrs/var/httpd/htdocs/js/thirdparty/">
+         <FilesMatch "\.(js|JS)$">
+             Header set Cache-Control "max-age=14400 must-revalidate"
+         </FilesMatch>
+@@ -136,4 +136,4 @@
+ </IfModule>
+ 
+ # Limit the number of requests per child to avoid excessive memory usage
+-MaxRequestsPerChild 4000
++MaxRequestsPerChild 4000`
+Tylko w otrs-3.3.5.new/scripts: apache2-httpd.include.conf~
+diff -ur otrs-3.3.5/scripts/apache2-perl-startup.pl otrs-3.3.5.new/scripts/apache2-perl-startup.pl
+--- otrs-3.3.5/scripts/apache2-perl-startup.pl	2014-02-20 09:22:07.000000000 +0100
++++ otrs-3.3.5.new/scripts/apache2-perl-startup.pl	2014-02-28 13:51:10.749017805 +0100
+@@ -35,16 +35,16 @@
+     # on Fedora, $0 is not a path which would break OTRS.
      # see bug # 8533
--    $0 = '/opt/otrs/bin/cgi-bin/index.pl';
-+    $0 = '/usr/share/otrs/bin/cgi-bin/index.pl';
+     if ( !-e $0 ) {
+-        $0 = '/opt/otrs/bin/cgi-bin/index.pl';
++        $0 = '/usr/share/otrs/bin/cgi-bin/index.pl';
+     }
  }
  
  use Apache2::RequestRec;
@@ -182,9 +221,11 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
  
  # Preload frequently used modules to speed up client spawning.
  use CGI ();
---- otrs-3.2.1/scripts/redhat-rcotrs-config	2012-10-11 09:11:09.000000000 +0200
-+++ otrs-3.2.1.new/scripts/redhat-rcotrs-config	2013-02-08 12:49:37.545377896 +0100
-@@ -12,7 +12,7 @@
+Tylko w otrs-3.3.5.new/scripts: apache2-perl-startup.pl~
+diff -ur otrs-3.3.5/scripts/redhat-rcotrs-config otrs-3.3.5.new/scripts/redhat-rcotrs-config
+--- otrs-3.3.5/scripts/redhat-rcotrs-config	2014-02-20 09:14:42.000000000 +0100
++++ otrs-3.3.5.new/scripts/redhat-rcotrs-config	2014-02-28 13:51:27.989807583 +0100
+@@ -10,7 +10,7 @@
  # 
  # OTRS home (root) directory
  #
@@ -193,3 +234,4 @@ Tylko w otrs-3.2.1.new/Kernel/Config/Files: Ticket.xml~
  
  # if one of this is false, it will not be checked at the startup!
  # Note: (may be the database isn't on the same host! --> DB_RUNNING=0) 
+Tylko w otrs-3.3.5.new/scripts: redhat-rcotrs-config~
