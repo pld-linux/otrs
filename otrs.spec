@@ -7,13 +7,13 @@
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
-Version:	3.3.5
+Version:	3.3.7
 Release:	0.1
 Epoch:		1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://ftp.otrs.org/pub/otrs/%{name}-%{version}.tar.bz2
-# Source0-md5:	1bd5a0a8fac9a2348c668cbb485d666e
+# Source0-md5:	c8f70e564d4ddd73394232ca2e392c21
 Source1:	%{name}-logrotate
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-paths.patch
@@ -307,6 +307,8 @@ fi
 %dir %{otrsdir}/Kernel/System/LinkObject
 %dir %{otrsdir}/Kernel/System/Log
 %dir %{otrsdir}/Kernel/System/MailAccount
+%dir %{otrsdir}/Kernel/System/Package
+%dir %{otrsdir}/Kernel/System/Package/Event
 %dir %{otrsdir}/Kernel/System/PostMaster
 %dir %{otrsdir}/Kernel/System/PostMaster/LoopProtection
 %dir %{otrsdir}/Kernel/System/PostMaster/Filter
@@ -323,6 +325,30 @@ fi
 %dir %{otrsdir}/Kernel/System/Stats
 %dir %{otrsdir}/Kernel/System/Stats/Static
 %dir %{otrsdir}/Kernel/System/Stats/Dynamic
+%dir %{otrsdir}/Kernel/System/SupportDataCollector
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/mssql
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/mssql/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/mysql
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/mysql/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/oracle
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/oracle/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/postgresql
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Database/postgresql/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/OS
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/OS/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/OTRS
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/OTRS/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/OTRS/Ticket
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/OTRS/Ticket/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Webserver
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Webserver/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Webserver/Apache
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Webserver/Apache/*.pm
+%dir %{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Webserver/IIS
+%{otrsdir}/Kernel/System/SupportDataCollector/Plugin/Webserver/IIS/*.pm
 %dir %{otrsdir}/Kernel/System/SysConfig
 %dir %{otrsdir}/Kernel/System/Ticket
 %dir %{otrsdir}/Kernel/System/Ticket/Acl
@@ -343,6 +369,8 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/Algorithm
 %dir %{otrsdir}/Kernel/cpan-lib/Apache
 %dir %{otrsdir}/Kernel/cpan-lib/Apache2
+%dir %{otrsdir}/Kernel/cpan-lib/Archive
+%dir %{otrsdir}/Kernel/cpan-lib/Archive/Tar
 %dir %{otrsdir}/Kernel/cpan-lib/CGI
 %dir %{otrsdir}/Kernel/cpan-lib/CGI/Emulate
 %dir %{otrsdir}/Kernel/cpan-lib/CGI/Parse
@@ -376,6 +404,8 @@ fi
 %dir %{otrsdir}/Kernel/cpan-lib/Net/SSLGlue
 %dir %{otrsdir}/Kernel/cpan-lib/Proc
 %{otrsdir}/Kernel/cpan-lib/Proc/Daemon.pod
+%dir %{otrsdir}/Kernel/cpan-lib/Selenium
+%dir %{otrsdir}/Kernel/cpan-lib/Selenium/Remote
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP/Lite
 %dir %{otrsdir}/Kernel/cpan-lib/SOAP/Lite/Deserializer
@@ -397,6 +427,7 @@ fi
 %attr(700,otrs,root) %{otrsdir}/bin/otrs.*
 %dir %{otrsdir}/bin/cgi-bin/
 %attr(750,root,http) %{otrsdir}/bin/cgi-bin/*.pl
+%attr(750,root,http) %{otrsdir}/bin/cgi-bin/app.psgi
 %dir %{otrsdir}/bin/fcgi-bin/
 %attr(750,root,http) %{otrsdir}/bin/fcgi-bin/*.pl
 %dir %{otrsdir}/scripts
