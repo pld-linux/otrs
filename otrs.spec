@@ -3,7 +3,6 @@
 # - all otrs-var into /var/lib/otrs
 # - write not so brain-damage init-script...
 #   VERIFY .... rpm -qp .../foo.rpm --provides // DONE
-%include    /usr/lib/rpm/macros.perl
 Summary:	The Open Ticket Request System
 Summary(pl.UTF-8):	Open Ticket Request System - otwarty system zgłaszania żądań
 Name:		otrs
