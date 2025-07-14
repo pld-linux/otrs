@@ -114,7 +114,7 @@ Różne skrypty dla OTRS.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 # copy config file
 cp Kernel/Config/GenericAgent.pm.dist Kernel/Config/GenericAgent.pm
